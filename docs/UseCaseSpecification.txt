@@ -1,0 +1,56 @@
+Conference-microservises-training
+=================================
+
+Attendee:
+1. register in a conference
+	- first last name
+	- job title
+	- which conference from list/schedule
+2. pay for a tiket
+	- use credit card
+	- coupon
+3. refund payment (and cancell the ticket)
+4. change attendee
+	- swap to an other attendee
+5. see (ticket) registration status
+	- in progress/registered/declined
+
+Speaker:
+1. register in the system
+	- first last name
+	- job title
+2. propose a presentation (topic)
+	- category
+	- Talk/topic name
+	- required time
+
+Organizer:
+1. accept/reject presentations
+	- conference
+	- Speaker
+	- presentation
+2. create/edit a schedule for a conference
+	- conference
+	- hall
+	- presentation
+	- timeslot
+3. accept/rejact sponsor
+4. see how much tickets were sold
+	- how much free space/tickets
+5. notify all registered attendees/speakers/sponsors about new conferences
+6. notify attendees/speakers/sponsors that are registered for a particular conference about changes in its schedule
+
+Sponsor:
+1. apply for marketing plan
+	- conference
+	- category (general/middle/starter)
+2. get info about sponsorship (sponsor plan, benefits...)
+
+
+All external users see a schedule
+	- conference name
+	- halls with max capacity
+	- topics with timeslot
+
+
+Domain model link: https://www.draw.io/#G1P20WFOuNW7gVgDTievh1k250bUXlVibV
