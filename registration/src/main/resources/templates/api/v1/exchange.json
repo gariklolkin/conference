@@ -1,0 +1,13 @@
+{
+  "newTicketOwner": {
+    "firstName": "Ivan",
+    "lastName": "Sidorov",
+    "email": "ivan.sid@gmail.com",
+    "mobilePhone": "+375991234567",
+    "job": {
+      "company": "Kyriba Corp.",
+      "position": "Senior Software Engineer",
+      "city": "Minsk"
+    }
+  }
+}
