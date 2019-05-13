@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class JobTransition
+public class JobRequest
 {
   private String company;
   private String position;

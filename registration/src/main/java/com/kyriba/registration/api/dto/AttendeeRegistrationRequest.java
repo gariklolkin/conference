@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AttendeeTransition
+public class AttendeeRegistrationRequest
 {
   private String firstName;
   private String lastName;
   private String email;
   private String mobilePhone;
-  private JobTransition job;
+  private JobRequest job;
 }

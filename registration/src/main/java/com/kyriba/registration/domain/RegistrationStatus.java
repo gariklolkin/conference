@@ -1,17 +1,15 @@
 package com.kyriba.registration.domain;
 
-public enum TicketStatus
+public enum RegistrationStatus
 {
-  NOT_PAID("Not paid"),
-  PAID("Registered"),
-  CANCELLED("Cancelled"),
-  REFUNDED("Refunded"),
-  GRANTED("Granted");
+  IN_PROGRESS("In progress"),
+  REGISTERED("Registered"),
+  CANCELLED("Cancelled");
 
   private final String message;
 
 
-  TicketStatus(String message)
+  RegistrationStatus(String message)
   {
     this.message = message;
   }

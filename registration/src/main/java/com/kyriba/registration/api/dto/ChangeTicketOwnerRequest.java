@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ExchangeTransition
+public class ChangeTicketOwnerRequest
 {
-  private AttendeeTransition newTicketOwner;
+  private String ticketOwner;
 }

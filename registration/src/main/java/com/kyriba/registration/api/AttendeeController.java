@@ -1,8 +1,7 @@
 package com.kyriba.registration.api;
 
-import com.kyriba.registration.api.dto.AttendeeTransition;
-import com.kyriba.registration.api.dto.ExchangeTransition;
-import com.kyriba.registration.domain.TicketStatus;
+import com.kyriba.registration.api.dto.AttendeeRegistrationRequest;
+import com.kyriba.registration.domain.RegistrationStatus;
 import lombok.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +24,9 @@ public class AttendeeController
    * @return registered attendee output API DTO
    */
   @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  AttendeeResponse register(@RequestBody AttendeeTransition attendee)
+  AttendeeRegistrationResponse register(@RequestBody AttendeeRegistrationRequest attendee)
   {
-    return new AttendeeResponse("123");
+    return new AttendeeRegistrationResponse("123");
   }
 
 
@@ -40,25 +39,12 @@ public class AttendeeController
   @GetMapping(value = "/{id}/status", produces = APPLICATION_JSON_UTF8_VALUE)
   StatusResponse status(@PathVariable String id)
   {
-    return new StatusResponse(TicketStatus.NOT_PAID);
-  }
-
-
-  /**
-   * UCS: Attendee: 4. change attendee
-   *
-   * @param exchange input API DTO for exchanging ticket
-   * @return registered attendee output API DTO
-   */
-  @PostMapping(value = "/{id}/exchange", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  AttendeeResponse exchange(@PathVariable String id, @RequestBody ExchangeTransition exchange)
-  {
-    return new AttendeeResponse("456");
+    return new StatusResponse(RegistrationStatus.REGISTERED);
   }
 
 
   @Value
-  private static class AttendeeResponse
+  private static class AttendeeRegistrationResponse
   {
     private final String id;
   }
@@ -70,9 +56,9 @@ public class AttendeeController
     private final String message;
 
 
-    StatusResponse(TicketStatus ticketStatus)
+    StatusResponse(RegistrationStatus registrationStatus)
     {
-      message = "Your ticket is " + ticketStatus.getMessage();
+      message = "Your registration status is: " + registrationStatus.getMessage();
     }
   }
 }

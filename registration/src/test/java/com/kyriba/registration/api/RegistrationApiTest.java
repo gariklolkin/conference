@@ -48,39 +48,6 @@ public class RegistrationApiTest
 
 
   @Test
-  public void attendeeCanChangeTicketsOwner()
-  {
-    String newAttendeeId = given()
-        .contentType(APPLICATION_JSON_UTF8_VALUE)
-        .body("{\n" +
-            "  \"newTicketOwner\": {\n" +
-            "    \"firstName\": \"Ivan\",\n" +
-            "    \"lastName\": \"Sidorov\",\n" +
-            "    \"email\": \"ivan.sid@gmail.com\",\n" +
-            "    \"mobilePhone\": \"+375991234567\",\n" +
-            "    \"job\": {\n" +
-            "      \"company\": \"Kyriba Corp.\",\n" +
-            "      \"position\": \"Senior Software Engineer\",\n" +
-            "      \"city\": \"Minsk\"\n" +
-            "    }\n" +
-            "  }\n" +
-            "}")
-
-        .when()
-        .post("/api/v1/attendees/123456789/exchange")
-
-        .then()
-        .statusCode(HttpStatus.SC_OK)
-        .contentType(APPLICATION_JSON_UTF8_VALUE)
-
-        .extract()
-        .jsonPath().get("id");
-
-    assertNotNull(newAttendeeId);
-  }
-
-
-  @Test
   public void attendeeCanSeeRegistrationStatus()
   {
     String status = given()
