@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author M-ASL
- * @since 19.2
+ * @since v1.0
  */
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author M-ASL
- * @since 19.2
+ * @since v1.0
  */
 @Data
 @Builder
