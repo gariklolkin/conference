@@ -2,6 +2,11 @@ package com.kyriba.registration.api;
 
 
 import com.kyriba.registration.api.dto.ChangeTicketOwnerRequest;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.Value;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 
+@Api(value = "Ticket management endpoint")
 @RestController
 @RequestMapping("/api/v1/tickets")
 public class TicketController
@@ -23,16 +29,21 @@ public class TicketController
    * @param exchange input API DTO for exchanging ticket
    * @return ticket output API DTO
    */
+  @ApiOperation(value = "Change ticket owner to an other attendee", response = TicketResponse.class)
   @PatchMapping(value = "/{id}/exchange", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  TicketResponse exchange(@PathVariable String id, @RequestBody ChangeTicketOwnerRequest exchange)
+  TicketResponse exchange(
+      @ApiParam(value = "Ticket identity", required = true) @PathVariable String id,
+      @ApiParam(value = "Ticket change owner object", required = true) @RequestBody ChangeTicketOwnerRequest exchange)
   {
     return new TicketResponse("324");
   }
 
 
+  @ApiModel(description = "Ticket response")
   @Value
   private static class TicketResponse
   {
+    @ApiModelProperty(value = "The identity of ticket")
     private final String id;
   }
 }
