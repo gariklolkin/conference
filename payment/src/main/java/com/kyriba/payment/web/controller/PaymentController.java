@@ -48,6 +48,7 @@ public class PaymentController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Receipt> createPayment(@RequestBody TicketDto ticket) {
         Receipt response = new Receipt(new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)),
+                new Amount(new BigDecimal(50), Currency.getInstance(Locale.FRANCE)),
                 LocalDateTime.of(2019, Month.MAY, 12, 20, 30), PENDING);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -85,6 +86,8 @@ public class PaymentController {
     @Value
     private static class Receipt {
         private Amount price;
+
+        private Amount discount;
 
         @JsonFormat(pattern = "dd::MM::yyyy HH:mm")
         LocalDateTime time;
