@@ -1,5 +1,6 @@
 package com.kyriba.conference.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,10 @@ public class PresentationRequest
   private TopicRequestResponse topic;
 
   @ApiModelProperty(value = "Presentation start time")
+  @JsonFormat(pattern = "HH:mm")
   private LocalTime startTime;
 
   @ApiModelProperty(value = "Presentation end time")
+  @JsonFormat(pattern = "HH:mm")
   private LocalTime endTime;
 }

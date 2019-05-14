@@ -68,6 +68,7 @@ public class HallController
   @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
   HallResponse removeHall(@ApiParam(value = "Hall identity", required = true) @PathVariable String id)
   {
-    return new HallResponse(hallService.deleteHall(Long.valueOf(id)));
+    hallService.deleteHall(Long.valueOf(id));
+    return new HallResponse();
   }
 }

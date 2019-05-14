@@ -20,22 +20,21 @@ public class HallServiceImpl implements HallService
 
 
   @Override
-  public Long createHall(HallRequest hall)
+  public Hall createHall(HallRequest hall)
   {
     return null;
   }
 
 
   @Override
-  public Long updateHall(Long id, HallRequest hall)
+  public Hall updateHall(Long id, HallRequest hall)
   {
     return null;
   }
 
 
   @Override
-  public Long deleteHall(Long id)
+  public void deleteHall(Long id)
   {
-    return null;
   }
 }

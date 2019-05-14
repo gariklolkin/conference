@@ -2,17 +2,24 @@ package com.kyriba.conference.api;
 
 import com.kyriba.conference.api.dto.PresentationResponse;
 import com.kyriba.conference.api.dto.ScheduleResponse;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 
 @RunWith(SpringRunner.class)
@@ -20,11 +27,26 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @AutoConfigureMockMvc
 public class ScheduleApiTest
 {
+  @Rule
+  public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
+
+  private RequestSpecification documentationSpec;
+
+
+  @Before
+  public void setUp()
+  {
+    documentationSpec = new RequestSpecBuilder()
+        .addFilter(documentationConfiguration(restDocumentation)).build();
+  }
+
+
   @Test
   public void showSchedule()
   {
-    ScheduleResponse schedule = given()
+    ScheduleResponse schedule = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/schedule/view"))
 
         .when()
         .get("/api/v1/schedule")
@@ -45,8 +67,9 @@ public class ScheduleApiTest
   @Test
   public void addPresentationInSchedule()
   {
-    Long presentationId = given()
+    Long presentationId = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/schedule/presentations/add"))
         .body("{\n" +
             "  \"hall\": \"1011\",\n" +
             "  \"topic\": {\n" +
@@ -74,8 +97,9 @@ public class ScheduleApiTest
   @Test
   public void viewPresentationInfo()
   {
-    PresentationResponse presentation = given()
+    PresentationResponse presentation = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/schedule/presentations/get"))
 
         .when()
         .get("/api/v1/schedule/presentations/44")
@@ -93,8 +117,9 @@ public class ScheduleApiTest
   @Test
   public void removePresentationFromSchedule()
   {
-    given()
+    given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/schedule/presentations/delete"))
 
         .when()
         .delete("/api/v1/schedule/presentations/55")
@@ -108,8 +133,9 @@ public class ScheduleApiTest
   @Test
   public void changePresentationTime()
   {
-    Long presentationId = given()
+    Long presentationId = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/schedule/presentations/updateTime"))
         .body("{\n" +
             "  \"startTime\": \"10:15 AM\",\n" +
             "  \"endTime\" : \"11:30 AM\"\n" +
@@ -132,8 +158,9 @@ public class ScheduleApiTest
   @Test
   public void rearrangePresentationToAnotherHall()
   {
-    Long presentationId = given()
+    Long presentationId = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/schedule/presentations/changeHall"))
         .body("{\n" +
             "  \"hall\": \"1011\"\n" +
             "}")

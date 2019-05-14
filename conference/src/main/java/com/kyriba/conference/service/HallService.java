@@ -11,9 +11,9 @@ public interface HallService
 {
   List<Hall> findAll();
 
-  Long createHall(HallRequest hall);
+  Hall createHall(HallRequest hall);
 
-  Long updateHall(Long id, HallRequest hall);
+  Hall updateHall(Long id, HallRequest hall);
 
-  Long deleteHall(Long id);
+  void deleteHall(Long id);
 }
