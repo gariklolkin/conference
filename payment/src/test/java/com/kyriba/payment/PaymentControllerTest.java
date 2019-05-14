@@ -82,8 +82,8 @@ public class PaymentControllerTest {
     @Test
     public void patchPayment() {
         int id = given()
+                .param("status", PaymentStatus.COMPLETED)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .body(getRequestJson())
                 .when()
                 .patch("/v1/payment/5")
                 .then()

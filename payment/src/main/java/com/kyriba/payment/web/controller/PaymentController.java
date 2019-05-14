@@ -73,7 +73,8 @@ public class PaymentController {
     }
 
     @PatchMapping(value = "/{paymentId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaymentResponse> patchPayment(@PathVariable int paymentId, @RequestBody PaymentDto payment) {
+    public ResponseEntity<PaymentResponse> patchPayment(@PathVariable int paymentId,
+                                                        @RequestParam("status") PaymentStatus status) {
         return new ResponseEntity<>(new PaymentResponse(5), HttpStatus.OK);
     }
 

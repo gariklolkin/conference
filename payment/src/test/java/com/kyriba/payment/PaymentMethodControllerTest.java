@@ -87,11 +87,8 @@ public class PaymentMethodControllerTest {
     @Test
     public void patchPaymentMethod() {
         String type = given()
+                .param("url", "https://webpay.by/en")
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .body("{\n" +
-                        "  \"type\": \"CREDIT_CARD\",\n" +
-                        "  \"url\": \"https://webpay.by/en/\"\n" +
-                        "}\n")
                 .when()
                 .patch("/v1/paymentMethod/wire_transfer")
                 .then()

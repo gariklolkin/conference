@@ -51,7 +51,7 @@ public class PaymentMethodController {
 
     @PatchMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PaymentMethodResponse> patchPaymentMethod(@PathVariable String type,
-                                                               @RequestBody PaymentMethodDto paymentMethod) {
+                                                                    @RequestParam("url") String url) {
         return new ResponseEntity<>(new PaymentMethodResponse(WIRE_TRANSFER), HttpStatus.OK);
     }
 
