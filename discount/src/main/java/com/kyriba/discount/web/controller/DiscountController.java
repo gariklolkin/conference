@@ -5,7 +5,6 @@ import com.kyriba.discount.domain.dto.DiscountDto;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,13 +42,13 @@ public class DiscountController {
     }
 
     @ResponseBody
-    @PutMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<DiscountResponse> updateDiscount(@RequestBody DiscountDto discount) {
         return new ResponseEntity<>(new DiscountResponse(STUDENT), HttpStatus.OK);
     }
 
     @ResponseBody
-    @DeleteMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> deleteDiscount(@PathVariable String type) {
         return ResponseEntity.noContent().build();
     }
