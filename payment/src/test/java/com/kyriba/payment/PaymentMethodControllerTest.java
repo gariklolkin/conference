@@ -2,10 +2,15 @@ package com.kyriba.payment;
 
 import com.kyriba.payment.domain.PaymentMethodType;
 import com.kyriba.payment.domain.dto.PaymentMethodDto;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -13,15 +18,31 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class PaymentMethodControllerTest {
+
+    private RequestSpecification spec;
+
+    @Rule
+    public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
+
+    @Before
+    public void setUp() {
+        this.spec = new RequestSpecBuilder().addFilter(
+                documentationConfiguration(this.restDocumentation))
+                .build();
+    }
+
     @Test
     public void getPaymentMethods() {
-        List<PaymentMethodDto> methods = given()
+        List<PaymentMethodDto> methods = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .filter(document("paymentMethod/getPaymentMethods"))
                 .when()
                 .get("/v1/paymentMethod")
                 .then()
@@ -36,8 +57,9 @@ public class PaymentMethodControllerTest {
 
     @Test
     public void createPaymentMethod() {
-        String type = given()
+        String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .filter(document("paymentMethod/createPaymentMethod"))
                 .body("{\n" +
                         "  \"type\": \"CREDIT_CARD\",\n" +
                         "  \"url\": \"https://webpay.by/en/\"\n" +
@@ -54,8 +76,9 @@ public class PaymentMethodControllerTest {
 
     @Test
     public void getPaymentMethod() {
-        String type = given()
+        String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .filter(document("paymentMethod/getPaymentMethod"))
                 .when()
                 .get("/v1/paymentMethod/wire_transfer")
                 .then()
@@ -68,8 +91,9 @@ public class PaymentMethodControllerTest {
 
     @Test
     public void updatePaymentMethod() {
-        String type = given()
+        String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .filter(document("paymentMethod/updatePaymentMethod"))
                 .body("{\n" +
                         "  \"type\": \"CREDIT_CARD\",\n" +
                         "  \"url\": \"https://webpay.by/en/\"\n" +
@@ -86,9 +110,10 @@ public class PaymentMethodControllerTest {
 
     @Test
     public void patchPaymentMethod() {
-        String type = given()
+        String type = given(this.spec)
                 .param("url", "https://webpay.by/en")
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .filter(document("paymentMethod/patchPaymentMethod"))
                 .when()
                 .patch("/v1/paymentMethod/wire_transfer")
                 .then()
@@ -101,7 +126,8 @@ public class PaymentMethodControllerTest {
 
     @Test
     public void deletePaymentMethod() {
-        given()
+        given(this.spec)
+                .filter(document("paymentMethod/deletePaymentMethod"))
                 .when()
                 .delete("/v1/paymentMethod/wire_transfer")
                 .then()
