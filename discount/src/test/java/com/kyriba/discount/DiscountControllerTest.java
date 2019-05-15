@@ -1,10 +1,15 @@
 package com.kyriba.discount;
 
 import com.kyriba.discount.domain.dto.DiscountDto;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -14,6 +19,8 @@ import static com.kyriba.discount.domain.DiscountType.STUDENT;
 import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 /**
  * @author Igor Lizura
@@ -21,10 +28,24 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class DiscountControllerTest {
+
+    private RequestSpecification spec;
+
+    @Rule
+    public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
+
+    @Before
+    public void setUp() {
+        this.spec = new RequestSpecBuilder().addFilter(
+                documentationConfiguration(this.restDocumentation))
+                .build();
+    }
+
     @Test
     public void getDiscounts() {
-        List<DiscountDto> discounts = given()
+        List<DiscountDto> discounts = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .filter(document("getDiscounts"))
                 .when()
                 .get("/v1/discount")
                 .then()
@@ -39,8 +60,9 @@ public class DiscountControllerTest {
 
     @Test
     public void createDiscount() {
-        String type = given()
+        String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .filter(document("createDiscount"))
                 .body("{\n" +
                         "  \"type\": \"STUDENT\",\n" +
                         "  \"percentage\": 50\n" +
@@ -57,8 +79,9 @@ public class DiscountControllerTest {
 
     @Test
     public void getDiscount() {
-        String type = given()
+        String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .filter(document("getDiscount"))
                 .when()
                 .get("/v1/discount/student")
                 .then()
@@ -71,8 +94,9 @@ public class DiscountControllerTest {
 
     @Test
     public void updateDiscount() {
-        String type = given()
+        String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .filter(document("updateDiscount"))
                 .body("{\n" +
                         "  \"type\": \"STUDENT\",\n" +
                         "  \"percentage\": 50\n" +
@@ -88,9 +112,10 @@ public class DiscountControllerTest {
     }
 
     @Test
-    public void deletePaymentMethod() {
-        given()
+    public void deleteDiscount() {
+        given(this.spec)
                 .when()
+                .filter(document("deleteDiscount"))
                 .delete("/v1/discount/junior")
                 .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
