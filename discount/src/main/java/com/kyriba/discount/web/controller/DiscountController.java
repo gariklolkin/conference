@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.kyriba.discount.domain.DiscountType.STUDENT;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 /**
  * @author Igor Lizura
@@ -22,7 +23,7 @@ import static com.kyriba.discount.domain.DiscountType.STUDENT;
 @RequestMapping("/v1/discount")
 public class DiscountController {
     @ResponseBody
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<DiscountDto>> getDiscounts() {
         List<DiscountDto> response = Arrays.asList(new DiscountDto(DiscountType.JUNIOR, 30),
                 new DiscountDto(STUDENT, 50));
@@ -30,25 +31,25 @@ public class DiscountController {
     }
 
     @ResponseBody
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<DiscountResponse> createDiscount(@RequestBody DiscountDto discount) {
         return new ResponseEntity<>(new DiscountResponse(STUDENT), HttpStatus.CREATED);
     }
 
     @ResponseBody
-    @GetMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<DiscountDto> getDiscount(@PathVariable String type) {
         return new ResponseEntity<>(new DiscountDto(STUDENT, 30), HttpStatus.OK);
     }
 
     @ResponseBody
-    @PutMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<DiscountResponse> updateDiscount(@RequestBody DiscountDto discount) {
         return new ResponseEntity<>(new DiscountResponse(STUDENT), HttpStatus.OK);
     }
 
     @ResponseBody
-    @DeleteMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> deleteDiscount(@PathVariable String type) {
         return ResponseEntity.noContent().build();
     }
