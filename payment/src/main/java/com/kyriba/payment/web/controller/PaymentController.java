@@ -9,7 +9,6 @@ import com.kyriba.payment.domain.dto.TicketDto;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.kyriba.payment.domain.PaymentStatus.PENDING;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 
 /**
@@ -32,7 +32,7 @@ import static com.kyriba.payment.domain.PaymentStatus.PENDING;
 @RequestMapping("/v1/payment")
 public class PaymentController {
     @ResponseBody
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<PaymentDto>> getPayments() {
         List<PaymentDto> response = Collections.singletonList(PaymentDto.builder()
                 .userId(123)
@@ -45,7 +45,7 @@ public class PaymentController {
     }
 
     @ResponseBody
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Receipt> createPayment(@RequestBody TicketDto ticket) {
         Receipt response = new Receipt(new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)),
                 new Amount(new BigDecimal(50), Currency.getInstance(Locale.FRANCE)),
@@ -54,8 +54,8 @@ public class PaymentController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/{paymentId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PaymentDto> getPayment(@PathVariable int paymentId) {
+    @GetMapping(value = "/{paymentId}", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PaymentDto> getPayment(@PathVariable long paymentId) {
         PaymentDto response = PaymentDto.builder()
                 .userId(123)
                 .type(PaymentMethodType.CREDIT_CARD)
@@ -67,20 +67,20 @@ public class PaymentController {
     }
 
     @ResponseBody
-    @PutMapping(value = "/{paymentId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaymentResponse> updatePayment(@PathVariable int paymentId, @RequestBody PaymentDto payment) {
+    @PutMapping(value = "/{paymentId}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PaymentResponse> updatePayment(@PathVariable long paymentId, @RequestBody PaymentDto payment) {
         return new ResponseEntity<>(new PaymentResponse(3), HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/{paymentId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaymentResponse> patchPayment(@PathVariable int paymentId,
+    @PatchMapping(value = "/{paymentId}", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PaymentResponse> patchPayment(@PathVariable long paymentId,
                                                         @RequestParam("status") PaymentStatus status) {
         return new ResponseEntity<>(new PaymentResponse(5), HttpStatus.OK);
     }
 
     @ResponseBody
-    @DeleteMapping(value = "/{paymentId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deletePayment(@PathVariable String paymentId) {
+    @DeleteMapping(value = "/{paymentId}", produces = APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> deletePayment(@PathVariable long paymentId) {
         return ResponseEntity.noContent().build();
     }
 

@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.kyriba.payment.domain.PaymentMethodType.CREDIT_CARD;
 import static com.kyriba.payment.domain.PaymentMethodType.WIRE_TRANSFER;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 /**
  * @author Garik Lizura
@@ -23,7 +24,7 @@ import static com.kyriba.payment.domain.PaymentMethodType.WIRE_TRANSFER;
 @RequestMapping("/v1/paymentMethod")
 public class PaymentMethodController {
     @ResponseBody
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<PaymentMethodDto>> getPaymentMethods() {
         PaymentMethodDto transfer = new PaymentMethodDto(WIRE_TRANSFER, "http://wrtransfer.com");
         PaymentMethodDto creditCard = new PaymentMethodDto(CREDIT_CARD,"https://webpay.by/en/");
@@ -31,19 +32,19 @@ public class PaymentMethodController {
     }
 
     @ResponseBody
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<PaymentMethodResponse> createPaymentMethod(@RequestBody PaymentMethodDto paymentMethod) {
         return new ResponseEntity<>(new PaymentMethodResponse(CREDIT_CARD), HttpStatus.CREATED);
     }
 
     @ResponseBody
-    @GetMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<PaymentMethodDto> getPaymentMethod(@PathVariable String type) {
         return new ResponseEntity<>(new PaymentMethodDto(WIRE_TRANSFER, "http://wrtransfer.com"), HttpStatus.OK);
     }
 
     @ResponseBody
-    @PutMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<PaymentMethodResponse> updatePaymentMethod(@PathVariable String type,
                                                                 @RequestBody PaymentMethodDto paymentMethod) {
         return new ResponseEntity<>(new PaymentMethodResponse(CREDIT_CARD), HttpStatus.OK);
