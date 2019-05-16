@@ -20,7 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author M-ASL
- * @since 19.2
+ * @since v1.0
  */
 @Configuration
 @EnableSwagger2

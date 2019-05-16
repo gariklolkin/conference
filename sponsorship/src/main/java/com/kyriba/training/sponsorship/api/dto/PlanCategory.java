@@ -12,7 +12,7 @@ package com.kyriba.training.sponsorship.api.dto;
 
 /**
  * @author M-ASL
- * @since 19.2
+ * @since v1.0
  */
 public enum PlanCategory
 {

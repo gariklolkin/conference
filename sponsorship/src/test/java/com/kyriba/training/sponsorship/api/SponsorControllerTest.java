@@ -13,7 +13,7 @@ import static io.restassured.RestAssured.given;
 
 /**
  * @author M-ASL
- * @since 19.2
+ * @since v1.0
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
