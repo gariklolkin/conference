@@ -64,16 +64,16 @@ Igor Lizura
 [[resources]]
 = Resources
 
-[[ads]]
-== DiscountDto
+[[discount]]
+== Discount
 
-The Discount resource / 'discount' relation is used to create and list ads.
+The Discount resource / 'discount' relation is used to create and list discounts.
 
-[[resources-ads-create]]
+[[resources-discount-create]]
 
-=== Creating an ad
+=== Creating the discount
 
-A `POST` request is used to create an ad
+A `POST` request is used to create the discount
 
 ==== Example curl request
 
