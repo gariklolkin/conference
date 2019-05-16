@@ -1,4 +1,4 @@
-package com.kyriba.training.sponsorship;
+package com.kyriba.conference.sponsorship;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

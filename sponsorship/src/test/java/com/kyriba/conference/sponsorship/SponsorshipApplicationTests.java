@@ -1,4 +1,4 @@
-package com.kyriba.training.sponsorship;
+package com.kyriba.conference.sponsorship;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

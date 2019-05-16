@@ -8,10 +8,10 @@
  * 2019-05-13    M-ASL          Created                                     *
  *                                                                          *
  ****************************************************************************/
-package com.kyriba.training.sponsorship.api;
+package com.kyriba.conference.sponsorship.api;
 
-import com.kyriba.training.sponsorship.api.dto.SponsorRegistrationRequest;
-import com.kyriba.training.sponsorship.services.SponsorService;
+import com.kyriba.conference.sponsorship.api.dto.SponsorRegistrationRequest;
+import com.kyriba.conference.sponsorship.service.SponsorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
