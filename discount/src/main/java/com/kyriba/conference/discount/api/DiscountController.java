@@ -1,7 +1,7 @@
-package com.kyriba.discount.web.controller;
+package com.kyriba.conference.discount.api;
 
-import com.kyriba.discount.domain.DiscountType;
-import com.kyriba.discount.domain.dto.DiscountDto;
+import com.kyriba.conference.discount.domain.DiscountType;
+import com.kyriba.conference.discount.domain.dto.DiscountDto;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.kyriba.discount.domain.DiscountType.STUDENT;
+import static com.kyriba.conference.discount.domain.DiscountType.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 /**
@@ -24,7 +24,7 @@ public class DiscountController {
     @ResponseBody
     @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<DiscountDto>> getDiscounts() {
-        List<DiscountDto> response = Arrays.asList(new DiscountDto(DiscountType.JUNIOR, 30),
+        List<DiscountDto> response = Arrays.asList(new DiscountDto(JUNIOR, 30),
                 new DiscountDto(STUDENT, 50));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

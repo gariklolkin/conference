@@ -1,6 +1,7 @@
-package com.kyriba.discount;
+package com.kyriba.conference.discount;
 
-import com.kyriba.discount.domain.dto.DiscountDto;
+import com.kyriba.conference.discount.domain.DiscountType;
+import com.kyriba.conference.discount.domain.dto.DiscountDto;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -8,14 +9,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.kyriba.discount.domain.DiscountType.JUNIOR;
-import static com.kyriba.discount.domain.DiscountType.STUDENT;
+import static com.kyriba.conference.discount.domain.DiscountType.STUDENT;
 import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
@@ -26,6 +27,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  * @author Igor Lizura
  */
 @RunWith(SpringRunner.class)
+@AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class DiscountControllerTest {
 
@@ -54,7 +56,7 @@ public class DiscountControllerTest {
                 .body()
                 .jsonPath().getList(".", DiscountDto.class);
         assertEquals(2, discounts.size());
-        assertEquals(JUNIOR, discounts.get(0).getType());
+        assertEquals(DiscountType.JUNIOR, discounts.get(0).getType());
         assertEquals(STUDENT, discounts.get(1).getType());
     }
 

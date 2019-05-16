@@ -1,4 +1,4 @@
-package com.kyriba.discount;
+package com.kyriba.conference.discount;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

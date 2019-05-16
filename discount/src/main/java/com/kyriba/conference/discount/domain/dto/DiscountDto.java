@@ -1,7 +1,7 @@
-package com.kyriba.discount.domain.dto;
+package com.kyriba.conference.discount.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.kyriba.discount.domain.DiscountType;
+import com.kyriba.conference.discount.domain.DiscountType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

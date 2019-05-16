@@ -1,4 +1,4 @@
-package com.kyriba.discount.domain;
+package com.kyriba.conference.discount.domain;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 

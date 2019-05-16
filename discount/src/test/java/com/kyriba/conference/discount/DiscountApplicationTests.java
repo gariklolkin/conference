@@ -1,4 +1,4 @@
-package com.kyriba.discount;
+package com.kyriba.conference.discount;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

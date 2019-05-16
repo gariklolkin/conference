@@ -30,10 +30,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	runtimeOnly 'com.h2database:h2'
-	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'io.rest-assured:rest-assured:3.3.0'
 	testCompile 'org.springframework.restdocs:spring-restdocs-restassured'
@@ -44,6 +44,9 @@ test {
 }
 
 asciidoctor {
+	attributes 'snippets': snippetsDir
 	inputs.dir snippetsDir
+	outputDir("build/asciidoc")
+	sourceDir("src/main/asciidoc")
 	dependsOn test
 }
