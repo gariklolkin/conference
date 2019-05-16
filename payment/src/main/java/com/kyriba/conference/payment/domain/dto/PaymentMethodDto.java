@@ -1,7 +1,7 @@
-package com.kyriba.payment.domain.dto;
+package com.kyriba.conference.payment.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.kyriba.payment.domain.PaymentMethodType;
+import com.kyriba.conference.payment.domain.PaymentMethodType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

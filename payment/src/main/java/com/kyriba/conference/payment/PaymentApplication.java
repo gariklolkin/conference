@@ -1,4 +1,4 @@
-package com.kyriba.payment;
+package com.kyriba.conference.payment;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,7 +29,7 @@ public class PaymentApplication {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.directModelSubstitute(LocalDateTime.class, String.class)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.kyriba.payment.web.controller"))
+				.apis(RequestHandlerSelectors.basePackage("com.kyriba.conference.payment.api"))
 				.build();
 	}
 }

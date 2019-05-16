@@ -1,10 +1,10 @@
-package com.kyriba.payment.domain.dto;
+package com.kyriba.conference.payment.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.kyriba.payment.domain.DiscountType;
-import com.kyriba.payment.domain.PaymentMethodType;
-import com.kyriba.payment.domain.vo.Amount;
+import com.kyriba.conference.payment.domain.PaymentMethodType;
+import com.kyriba.conference.payment.domain.PaymentStatus;
+import com.kyriba.conference.payment.domain.vo.Amount;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,15 +17,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class TicketDto {
-
-    private int userId;
-
-    @NonNull
-    PaymentMethodType type;
+public class PaymentDto {
+    private long userId;
 
     @NonNull
-    DiscountType discountType;
+    private PaymentMethodType type;
 
     @NonNull
     @JsonFormat(pattern = "dd::MM::yyyy HH:mm")
@@ -33,4 +29,7 @@ public class TicketDto {
 
     @NonNull
     private Amount price;
+
+    @NonNull
+    private PaymentStatus status;
 }

@@ -1,7 +1,7 @@
-package com.kyriba.payment;
+package com.kyriba.conference.payment;
 
-import com.kyriba.payment.domain.PaymentStatus;
-import com.kyriba.payment.domain.dto.PaymentDto;
+import com.kyriba.conference.payment.domain.PaymentMethodType;
+import com.kyriba.conference.payment.domain.dto.PaymentMethodDto;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,17 +17,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
-/**
- * @author Igor Lizura
- */
+
 @RunWith(SpringRunner.class)
+@AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class PaymentControllerTest {
+public class PaymentMethodControllerTest {
 
     private RequestSpecification spec;
 
@@ -41,104 +41,98 @@ public class PaymentControllerTest {
     }
 
     @Test
-    public void getPayments() {
-        List<PaymentDto> payments = given(this.spec)
+    public void getPaymentMethods() {
+        List<PaymentMethodDto> methods = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/getPayments"))
+                .filter(document("paymentMethod/getPaymentMethods"))
                 .when()
-                .get("/v1/payment")
+                .get("/v1/paymentMethod")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
                 .body()
-                .jsonPath().getList(".", PaymentDto.class);
-        assertEquals(1, payments.size());
-        assertEquals(PaymentStatus.PENDING, payments.get(0).getStatus());
+                .jsonPath().getList(".", PaymentMethodDto.class);
+        assertEquals(2, methods.size());
+        assertEquals(PaymentMethodType.WIRE_TRANSFER, methods.get(0).getType());
+        assertEquals(PaymentMethodType.CREDIT_CARD, methods.get(1).getType());
     }
 
     @Test
-    public void createPayment() {
-        String status = given(this.spec)
+    public void createPaymentMethod() {
+        String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/createPayment"))
-                .body(getRequestJson())
+                .filter(document("paymentMethod/createPaymentMethod"))
+                .body("{\n" +
+                        "  \"type\": \"CREDIT_CARD\",\n" +
+                        "  \"url\": \"https://webpay.by/en/\"\n" +
+                        "}\n")
                 .when()
-                .post("/v1/payment")
+                .post("/v1/paymentMethod")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .extract()
-                .jsonPath().get("status");
-        assertEquals("PENDING", status);
+                .jsonPath().get("type");
+        assertEquals("CREDIT_CARD", type);
     }
 
     @Test
-    public void getPayment() {
-        String status = given(this.spec)
+    public void getPaymentMethod() {
+        String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/getPayment"))
+                .filter(document("paymentMethod/getPaymentMethod"))
                 .when()
-                .get("/v1/payment/3")
+                .get("/v1/paymentMethod/wire_transfer")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
                 .body()
-                .jsonPath().get("status");
-        assertEquals("PENDING", status);
+                .jsonPath().get("type");
+        assertEquals("WIRE_TRANSFER", type);
     }
 
     @Test
-    public void updatePayment() {
-        int id = given(this.spec)
+    public void updatePaymentMethod() {
+        String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/updatePayment"))
-                .body(getRequestJson())
+                .filter(document("paymentMethod/updatePaymentMethod"))
+                .body("{\n" +
+                        "  \"type\": \"CREDIT_CARD\",\n" +
+                        "  \"url\": \"https://webpay.by/en/\"\n" +
+                        "}\n")
                 .when()
-                .put("/v1/payment/5")
+                .put("/v1/paymentMethod/credit_card")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .extract()
-                .jsonPath().get("id");
-        assertEquals(3, id);
+                .jsonPath().get("type");
+        assertEquals("CREDIT_CARD", type);
     }
 
     @Test
-    public void patchPayment() {
-        int id = given(this.spec)
-                .param("status", PaymentStatus.COMPLETED)
+    public void patchPaymentMethod() {
+        String type = given(this.spec)
+                .param("url", "https://webpay.by/en")
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/patchPayment"))
+                .filter(document("paymentMethod/patchPaymentMethod"))
                 .when()
-                .patch("/v1/payment/5")
+                .patch("/v1/paymentMethod/wire_transfer")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .extract()
-                .jsonPath().get("id");
-        assertEquals(5, id);
+                .jsonPath().get("type");
+        assertEquals("WIRE_TRANSFER", type);
     }
 
     @Test
     public void deletePaymentMethod() {
         given(this.spec)
-                .filter(document("payment/deletePaymentMethod"))
+                .filter(document("paymentMethod/deletePaymentMethod"))
                 .when()
-                .delete("/v1/payment/5")
+                .delete("/v1/paymentMethod/wire_transfer")
                 .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
-    }
-
-    private String getRequestJson() {
-        //language=JSON
-        return  "{\n" +
-                "  \"userId\":123,\n" +
-                "  \"paymentMethodId\":3,\n" +
-                "  \"paymentDate\":\"12::05::2019 20:30\",\n" +
-                "  \"price\":{\n" +
-                "    \"value\":250.0,\n" +
-                "    \"currency\":\"EUR\"\n" +
-                "  }\n" +
-                "}";
     }
 }

@@ -1,6 +1,11 @@
 plugins {
+	id "org.asciidoctor.convert" version "2.2.0"
 	id 'org.springframework.boot' version '2.1.4.RELEASE'
 	id 'java'
+}
+
+ext {
+	snippetsDir = file('build/generated-snippets')
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -32,4 +37,16 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'io.rest-assured:rest-assured:3.3.0'
 	testCompile 'org.springframework.restdocs:spring-restdocs-restassured'
+}
+
+test {
+	outputs.dir snippetsDir
+}
+
+asciidoctor {
+	attributes 'snippets': snippetsDir
+	inputs.dir snippetsDir
+	outputDir("build/asciidoc")
+	sourceDir("src/docs/asciidoc")
+	dependsOn test
 }

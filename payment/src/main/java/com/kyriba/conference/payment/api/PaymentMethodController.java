@@ -1,7 +1,7 @@
-package com.kyriba.payment.web.controller;
+package com.kyriba.conference.payment.api;
 
-import com.kyriba.payment.domain.PaymentMethodType;
-import com.kyriba.payment.domain.dto.PaymentMethodDto;
+import com.kyriba.conference.payment.domain.PaymentMethodType;
+import com.kyriba.conference.payment.domain.dto.PaymentMethodDto;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.kyriba.payment.domain.PaymentMethodType.CREDIT_CARD;
-import static com.kyriba.payment.domain.PaymentMethodType.WIRE_TRANSFER;
+import static com.kyriba.conference.payment.domain.PaymentMethodType.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 /**

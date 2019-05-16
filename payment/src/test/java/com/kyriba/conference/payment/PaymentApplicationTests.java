@@ -1,4 +1,4 @@
-package com.kyriba.payment;
+package com.kyriba.conference.payment;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

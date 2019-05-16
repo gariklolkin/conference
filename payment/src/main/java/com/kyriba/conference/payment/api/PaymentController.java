@@ -1,11 +1,11 @@
-package com.kyriba.payment.web.controller;
+package com.kyriba.conference.payment.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.kyriba.payment.domain.PaymentMethodType;
-import com.kyriba.payment.domain.PaymentStatus;
-import com.kyriba.payment.domain.dto.PaymentDto;
-import com.kyriba.payment.domain.vo.Amount;
-import com.kyriba.payment.domain.dto.TicketDto;
+import com.kyriba.conference.payment.domain.PaymentMethodType;
+import com.kyriba.conference.payment.domain.PaymentStatus;
+import com.kyriba.conference.payment.domain.dto.PaymentDto;
+import com.kyriba.conference.payment.domain.vo.Amount;
+import com.kyriba.conference.payment.domain.dto.TicketDto;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-import static com.kyriba.payment.domain.PaymentStatus.PENDING;
+import static com.kyriba.conference.payment.domain.PaymentStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 

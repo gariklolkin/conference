@@ -1,4 +1,4 @@
-package com.kyriba.payment.domain;
+package com.kyriba.conference.payment.domain;
 
 /**
  * @author Igor Lizura

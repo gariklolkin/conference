@@ -1,4 +1,4 @@
-package com.kyriba.payment.domain.vo;
+package com.kyriba.conference.payment.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
