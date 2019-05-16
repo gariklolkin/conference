@@ -20,7 +20,7 @@ public class DiscountApplication {
 	public Docket discountApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.kyriba.discount.web.controller"))
+				.apis(RequestHandlerSelectors.basePackage("com.kyriba.conference.discount.api"))
 				.build();
 	}
 }
