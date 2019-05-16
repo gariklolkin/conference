@@ -8,7 +8,7 @@
  * 2019-05-13    M-ASL          Created                                     *
  *                                                                          *
  ****************************************************************************/
-package com.kyriba.training.sponsorship.domain;
+package com.kyriba.conference.sponsorship.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,9 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Sponsor
+public class PlanCancellationRequest
 {
   private String id;
-  private String name;
-  private String email;
 }

@@ -8,15 +8,24 @@
  * 2019-05-13    M-ASL          Created                                     *
  *                                                                          *
  ****************************************************************************/
-package com.kyriba.training.sponsorship.api.dto;
+package com.kyriba.conference.sponsorship.api.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 /**
  * @author M-ASL
  * @since v1.0
  */
-public enum PlanCategory
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class SponsorRegistrationRequest
 {
-  GENERAL,
-  MIDDLE,
-  STARTER
+  private String name;
+  private String email;
 }

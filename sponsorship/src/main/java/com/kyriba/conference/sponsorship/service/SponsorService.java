@@ -8,15 +8,11 @@
  * 2019-05-13    M-ASL          Created                                     *
  *                                                                          *
  ****************************************************************************/
-package com.kyriba.training.sponsorship.services;
+package com.kyriba.conference.sponsorship.service;
 
-import com.kyriba.training.sponsorship.api.dto.PlanCategory;
-import com.kyriba.training.sponsorship.api.dto.PlanRegistrationRequest;
-import com.kyriba.training.sponsorship.domain.Plan;
+import com.kyriba.conference.sponsorship.api.dto.SponsorRegistrationRequest;
+import com.kyriba.conference.sponsorship.domain.Sponsor;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.Map;
 
 
 /**
@@ -24,32 +20,14 @@ import java.util.Map;
  * @since v1.0
  */
 @Service
-public class PlanService
+public class SponsorService
 {
-  public Collection<Plan> getAvailablePackagesPackages()
+  public Sponsor registerSponsor(SponsorRegistrationRequest sponsorRegistrationRequest)
   {
-    return null;
-  }
-
-
-  public Map<PlanCategory, Integer> getAvailablePackagesPackageTypes()
-  {
-    return null;
-  }
-
-
-  public Plan registerPlan(PlanRegistrationRequest sponsorRegistrationRequest)
-  {
-    final String randomId = "234";
-    return Plan.builder().id(randomId)
-        .category(sponsorRegistrationRequest.getCategory())
-        .sponsorId(sponsorRegistrationRequest.getSponsorId())
+    final String randomId = "123";
+    return Sponsor.builder().id(randomId)
+        .name(sponsorRegistrationRequest.getName())
+        .email(sponsorRegistrationRequest.getEmail())
         .build();
-  }
-
-
-  public String cancelPlan(String planId)
-  {
-    return planId;
   }
 }

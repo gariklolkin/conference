@@ -8,26 +8,15 @@
  * 2019-05-13    M-ASL          Created                                     *
  *                                                                          *
  ****************************************************************************/
-package com.kyriba.training.sponsorship.services;
-
-import com.kyriba.training.sponsorship.api.dto.SponsorRegistrationRequest;
-import com.kyriba.training.sponsorship.domain.Sponsor;
-import org.springframework.stereotype.Service;
-
+package com.kyriba.conference.sponsorship.domain;
 
 /**
  * @author M-ASL
  * @since v1.0
  */
-@Service
-public class SponsorService
+public enum PlanCategory
 {
-  public Sponsor registerSponsor(SponsorRegistrationRequest sponsorRegistrationRequest)
-  {
-    final String randomId = "123";
-    return Sponsor.builder().id(randomId)
-        .name(sponsorRegistrationRequest.getName())
-        .email(sponsorRegistrationRequest.getEmail())
-        .build();
-  }
+  GENERAL,
+  MIDDLE,
+  STARTER
 }

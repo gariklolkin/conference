@@ -8,9 +8,9 @@
  * 2019-05-13    M-ASL          Created                                     *
  *                                                                          *
  ****************************************************************************/
-package com.kyriba.training.sponsorship.domain;
+package com.kyriba.conference.sponsorship.api.dto;
 
-import com.kyriba.training.sponsorship.api.dto.PlanCategory;
+import com.kyriba.conference.sponsorship.domain.PlanCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,9 +25,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Plan
+public class PlanRegistrationRequest
 {
-  private String id;
   private PlanCategory category;
   private String sponsorId;
 }
