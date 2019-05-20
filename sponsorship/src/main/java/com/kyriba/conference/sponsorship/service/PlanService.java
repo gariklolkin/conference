@@ -33,7 +33,7 @@ public class PlanService
     final String randomId = "234";
     return Plan.builder().id(randomId)
         .category(sponsorRegistrationRequest.getCategory())
-        .sponsorId(sponsorRegistrationRequest.getSponsorId())
+        .sponsorId(sponsorRegistrationRequest.getSponsorEmail())
         .build();
   }
 

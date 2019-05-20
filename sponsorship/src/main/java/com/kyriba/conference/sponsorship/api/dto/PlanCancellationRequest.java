@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 
 /**
  * @author M-ASL
@@ -14,5 +16,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlanCancellationRequest
 {
-  private String id;
+  private @NotNull String id;
 }

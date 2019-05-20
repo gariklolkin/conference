@@ -26,7 +26,7 @@ public class PlanControllerTest
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         .body("{\n" +
             "  \"category\": \"GENERAL\" ,\n" +
-            "  \"sponsorId\": \"123\"\n" +
+            "  \"sponsorEmail\": \"aaa@bbb.by\"\n" +
             "}")
         .when()
         .post("/api/v1/sponsorship/plans")

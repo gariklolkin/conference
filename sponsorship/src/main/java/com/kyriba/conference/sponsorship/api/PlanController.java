@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 
 /**
  * @author M-ASL
@@ -39,7 +41,7 @@ public class PlanController
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 401, message = "Failed to register a new plan", response = String.class)
   })
-  PlanRegistered register(@RequestBody PlanRegistrationRequest plan)
+  PlanRegistered register(@Valid @RequestBody PlanRegistrationRequest plan)
   {
     return new PlanRegistered(planService.registerPlan(plan).getId());
   }
@@ -52,7 +54,7 @@ public class PlanController
       @ApiResponse(code = 200, message = "OK", response = String.class),
       @ApiResponse(code = 401, message = "Failed to cancel the plan", response = PlanRegistered.class)
   })
-  PlanRegistered cancel(@ApiParam(value = "Id of the plan to cancel", required = true) @PathVariable(name = "id") String id)
+  PlanRegistered cancel(@ApiParam(value = "Id of the plan to cancel", required = true) @PathVariable String id)
   {
     return new PlanRegistered(planService.cancelPlan(id));
   }
