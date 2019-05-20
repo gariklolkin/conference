@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 
 /**
  * @author M-ASL
@@ -15,6 +18,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlanRegistrationRequest
 {
-  private PlanCategory category;
-  private String sponsorId;
+  private @NotNull PlanCategory category;
+  private @Email String sponsorEmail;
 }

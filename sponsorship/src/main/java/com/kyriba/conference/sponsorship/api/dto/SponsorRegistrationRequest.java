@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 
 /**
  * @author M-ASL
@@ -14,6 +17,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SponsorRegistrationRequest
 {
-  private String name;
-  private String email;
+  private @NotEmpty String name;
+  private @Email String email;
 }

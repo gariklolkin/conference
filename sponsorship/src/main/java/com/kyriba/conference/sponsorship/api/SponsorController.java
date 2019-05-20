@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 
 /**
  * @author M-ASL
@@ -36,7 +38,7 @@ public class SponsorController
       @ApiResponse(code = 200, message = "OK", response = SponsorRegistered.class),
       @ApiResponse(code = 401, message = "Failed", response = String.class)
   })
-  SponsorRegistered register(@RequestBody SponsorRegistrationRequest sponsor)
+  SponsorRegistered register(@Valid @RequestBody SponsorRegistrationRequest sponsor)
   {
     return new SponsorRegistered(sponsorService.registerSponsor(sponsor).getId());
   }
