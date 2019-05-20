@@ -6,7 +6,7 @@ plugins {
 
 apply plugin: 'io.spring.dependency-management'
 
-group = 'com.kyriba.training'
+group = 'com.kyriba'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -46,8 +46,12 @@ test {
 }
 
 asciidoctor {
+	attributes 'snippets': snippetsDir
 	inputs.dir snippetsDir
+	outputDir("build/apidoc")
+	sourceDir("src/docs/asciidoc")
 	dependsOn test
+
 }
 
 bootJar {
