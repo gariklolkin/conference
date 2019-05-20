@@ -1,7 +1,7 @@
-package com.kyriba.registration.api;
+package com.kyriba.conference.registration.api;
 
-import com.kyriba.registration.api.dto.AttendeeRegistrationRequest;
-import com.kyriba.registration.domain.RegistrationStatus;
+import com.kyriba.conference.registration.api.dto.AttendeeRegistrationRequest;
+import com.kyriba.conference.registration.domain.RegistrationStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

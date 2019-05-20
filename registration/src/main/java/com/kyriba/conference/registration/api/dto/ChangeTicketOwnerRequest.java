@@ -1,4 +1,4 @@
-package com.kyriba.registration.api.dto;
+package com.kyriba.conference.registration.api.dto;
 
 
 import io.swagger.annotations.ApiModel;

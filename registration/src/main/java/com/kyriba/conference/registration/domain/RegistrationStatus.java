@@ -1,4 +1,4 @@
-package com.kyriba.registration.domain;
+package com.kyriba.conference.registration.domain;
 
 public enum RegistrationStatus
 {

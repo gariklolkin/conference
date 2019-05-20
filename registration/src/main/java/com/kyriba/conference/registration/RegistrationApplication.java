@@ -1,4 +1,4 @@
-package com.kyriba.registration;
+package com.kyriba.conference.registration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

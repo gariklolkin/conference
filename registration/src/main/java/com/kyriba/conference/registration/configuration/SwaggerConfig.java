@@ -1,4 +1,4 @@
-package com.kyriba.registration.configuration;
+package com.kyriba.conference.registration.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class SwaggerConfig
   {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("com.kyriba.registration.api"))
+        .apis(RequestHandlerSelectors.basePackage("com.kyriba.conference.registration.api"))
         .build();
   }
 }

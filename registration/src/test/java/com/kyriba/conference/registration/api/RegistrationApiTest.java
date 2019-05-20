@@ -1,4 +1,4 @@
-package com.kyriba.registration.api;
+package com.kyriba.conference.registration.api;
 
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -23,9 +23,8 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
-public class ChangeTicketOwnerApiTest
+public class RegistrationApiTest
 {
-
   @Rule
   public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
 
@@ -38,17 +37,25 @@ public class ChangeTicketOwnerApiTest
   }
 
   @Test
-  public void attendeeCanChangeTicketsOwner()
+  public void attendeeCanBeRegistered()
   {
-    String ticketId = given(documentationSpec)
+    String attendeeId = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("api/v1/tickets/exchange"))
+        .filter(document("api/v1/attendees/registration"))
         .body("{\n" +
-            "  \"ticketOwner\": \"1234\"\n" +
+            "  \"firstName\": \"Ilya\",\n" +
+            "  \"lastName\": \"Abashkin\",\n" +
+            "  \"email\": \"ilya.a87@gmail.com\",\n" +
+            "  \"mobilePhone\": \"+375121234567\",\n" +
+            "  \"jobObject\": {\n" +
+            "    \"company\": \"Kyriba Corp.\",\n" +
+            "    \"position\": \"Senior Software Engineer\",\n" +
+            "    \"city\": \"Minsk\"\n" +
+            "  }\n" +
             "}")
 
         .when()
-        .patch("/api/v1/tickets/123456789/exchange")
+        .post("/api/v1/attendees")
 
         .then()
         .statusCode(HttpStatus.SC_OK)
@@ -57,7 +64,27 @@ public class ChangeTicketOwnerApiTest
         .extract()
         .jsonPath().get("id");
 
-    assertNotNull(ticketId);
+    assertNotNull(attendeeId);
   }
 
+
+  @Test
+  public void attendeeCanSeeRegistrationStatus()
+  {
+    String status = given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/attendees/status"))
+
+        .when()
+        .get("/api/v1/attendees/123456789/status")
+
+        .then()
+        .statusCode(HttpStatus.SC_OK)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .extract()
+        .jsonPath().get("message");
+
+    assertNotNull(status);
+  }
 }

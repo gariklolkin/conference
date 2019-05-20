@@ -1,7 +1,7 @@
-package com.kyriba.registration.api;
+package com.kyriba.conference.registration.api;
 
 
-import com.kyriba.registration.api.dto.ChangeTicketOwnerRequest;
+import com.kyriba.conference.registration.api.dto.ChangeTicketOwnerRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
