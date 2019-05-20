@@ -31,24 +31,27 @@ public class ChangeTicketOwnerApiTest
 
   private RequestSpecification documentationSpec;
 
+
   @Before
-  public void setUp() {
+  public void setUp()
+  {
     documentationSpec = new RequestSpecBuilder()
         .addFilter(documentationConfiguration(restDocumentation)).build();
   }
+
 
   @Test
   public void attendeeCanChangeTicketsOwner()
   {
     String ticketId = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("api/v1/tickets/exchange"))
+        .filter(document("api/v1/tickets/owner"))
         .body("{\n" +
             "  \"ticketOwner\": \"1234\"\n" +
             "}")
 
         .when()
-        .patch("/api/v1/tickets/123456789/exchange")
+        .put("/api/v1/tickets/123456789/owner")
 
         .then()
         .statusCode(HttpStatus.SC_OK)
@@ -58,6 +61,24 @@ public class ChangeTicketOwnerApiTest
         .jsonPath().get("id");
 
     assertNotNull(ticketId);
+  }
+
+
+  @Test
+  public void cantChangeTicketsOwnerToNoOne()
+  {
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/tickets/owner"))
+        .body("{\n" +
+            "  \"ticketOwner\": \"\"\n" +
+            "}")
+
+        .when()
+        .put("/api/v1/tickets/123456789/owner")
+
+        .then()
+        .statusCode(HttpStatus.SC_BAD_REQUEST);
   }
 
 }

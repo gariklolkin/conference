@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 
@@ -29,10 +31,10 @@ public class AttendeeController
    * @param attendee input API DTO for new attendee registration
    * @return registered attendee output API DTO
    */
-  @ApiOperation(value = "Register new attendee", response = AttendeeRegistrationResponse.class)
+  @ApiOperation(value = "Register new attendee")
   @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
   AttendeeRegistrationResponse register(
-      @ApiParam(value = "Attendee registration object", required = true) @RequestBody AttendeeRegistrationRequest attendee)
+      @Valid @ApiParam(value = "Attendee registration object", required = true) @RequestBody AttendeeRegistrationRequest attendee)
   {
     return new AttendeeRegistrationResponse("123");
   }
@@ -44,9 +46,9 @@ public class AttendeeController
    * @param id attendees id
    * @return registration status output API DTO
    */
-  @ApiOperation(value = "Check attendee registration status", response = StatusResponse.class)
+  @ApiOperation(value = "Check attendee registration status")
   @GetMapping(value = "/{id}/status", produces = APPLICATION_JSON_UTF8_VALUE)
-  StatusResponse status(@ApiParam(value = "Attendee identity", required = true) @PathVariable String id)
+  StatusResponse status(@Valid @ApiParam(value = "Attendee identity", required = true) @PathVariable String id)
   {
     return new StatusResponse(RegistrationStatus.REGISTERED);
   }

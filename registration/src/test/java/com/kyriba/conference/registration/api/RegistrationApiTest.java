@@ -30,11 +30,14 @@ public class RegistrationApiTest
 
   private RequestSpecification documentationSpec;
 
+
   @Before
-  public void setUp() {
+  public void setUp()
+  {
     documentationSpec = new RequestSpecBuilder()
         .addFilter(documentationConfiguration(restDocumentation)).build();
   }
+
 
   @Test
   public void attendeeCanBeRegistered()
@@ -47,7 +50,7 @@ public class RegistrationApiTest
             "  \"lastName\": \"Abashkin\",\n" +
             "  \"email\": \"ilya.a87@gmail.com\",\n" +
             "  \"mobilePhone\": \"+375121234567\",\n" +
-            "  \"jobObject\": {\n" +
+            "  \"job\": {\n" +
             "    \"company\": \"Kyriba Corp.\",\n" +
             "    \"position\": \"Senior Software Engineer\",\n" +
             "    \"city\": \"Minsk\"\n" +
@@ -65,6 +68,30 @@ public class RegistrationApiTest
         .jsonPath().get("id");
 
     assertNotNull(attendeeId);
+  }
+
+
+  @Test
+  public void cantRegisterAttendeeWithOutName()
+  {
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/attendees/registration"))
+        .body("{\n" +
+            "  \"email\": \"ilya.a87@gmail.com\",\n" +
+            "  \"mobilePhone\": \"+375121234567\",\n" +
+            "  \"job\": {\n" +
+            "    \"company\": \"Kyriba Corp.\",\n" +
+            "    \"position\": \"Senior Software Engineer\",\n" +
+            "    \"city\": \"Minsk\"\n" +
+            "  }\n" +
+            "}")
+
+        .when()
+        .post("/api/v1/attendees")
+
+        .then()
+        .statusCode(HttpStatus.SC_BAD_REQUEST);
   }
 
 
