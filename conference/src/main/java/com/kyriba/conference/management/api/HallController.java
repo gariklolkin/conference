@@ -1,9 +1,9 @@
-package com.kyriba.conference.api;
+package com.kyriba.conference.management.api;
 
 
-import com.kyriba.conference.api.dto.HallRequest;
-import com.kyriba.conference.api.dto.HallResponse;
-import com.kyriba.conference.service.HallService;
+import com.kyriba.conference.management.api.dto.HallRequest;
+import com.kyriba.conference.management.api.dto.HallResponse;
+import com.kyriba.conference.management.service.HallService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

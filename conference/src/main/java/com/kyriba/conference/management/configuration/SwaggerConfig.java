@@ -1,4 +1,4 @@
-package com.kyriba.conference.configuration;
+package com.kyriba.conference.management.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class SwaggerConfig
     return new Docket(DocumentationType.SWAGGER_2)
         .directModelSubstitute(LocalTime.class, String.class)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("com.kyriba.conference.api"))
+        .apis(RequestHandlerSelectors.basePackage("com.kyriba.conference.management.api"))
         .build();
   }
 }

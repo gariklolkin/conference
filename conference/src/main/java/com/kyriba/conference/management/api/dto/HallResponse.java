@@ -1,7 +1,7 @@
-package com.kyriba.conference.api.dto;
+package com.kyriba.conference.management.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.kyriba.conference.domain.Hall;
+import com.kyriba.conference.management.domain.Hall;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
-package com.kyriba.conference.service;
+package com.kyriba.conference.management.service;
 
-import com.kyriba.conference.api.dto.HallRequest;
-import com.kyriba.conference.domain.Hall;
+import com.kyriba.conference.management.api.dto.HallRequest;
+import com.kyriba.conference.management.domain.Hall;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

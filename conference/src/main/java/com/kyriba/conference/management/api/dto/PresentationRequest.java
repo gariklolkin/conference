@@ -1,4 +1,4 @@
-package com.kyriba.conference.api.dto;
+package com.kyriba.conference.management.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;

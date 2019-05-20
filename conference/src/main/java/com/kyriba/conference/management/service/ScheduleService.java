@@ -1,7 +1,7 @@
-package com.kyriba.conference.service;
+package com.kyriba.conference.management.service;
 
-import com.kyriba.conference.api.dto.PresentationRequest;
-import com.kyriba.conference.domain.Presentation;
+import com.kyriba.conference.management.api.dto.PresentationRequest;
+import com.kyriba.conference.management.domain.Presentation;
 
 import java.util.List;
 

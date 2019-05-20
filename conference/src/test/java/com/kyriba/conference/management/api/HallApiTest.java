@@ -1,10 +1,10 @@
-package com.kyriba.conference.api;
+package com.kyriba.conference.management.api;
 
 
-import com.kyriba.conference.api.dto.HallRequest;
-import com.kyriba.conference.api.dto.HallResponse;
-import com.kyriba.conference.domain.Hall;
-import com.kyriba.conference.service.HallServiceImpl;
+import com.kyriba.conference.management.api.dto.HallRequest;
+import com.kyriba.conference.management.api.dto.HallResponse;
+import com.kyriba.conference.management.domain.Hall;
+import com.kyriba.conference.management.service.HallServiceImpl;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;

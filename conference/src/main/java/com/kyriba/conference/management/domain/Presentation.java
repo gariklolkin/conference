@@ -1,4 +1,4 @@
-package com.kyriba.conference.domain;
+package com.kyriba.conference.management.domain;
 
 
 import lombok.EqualsAndHashCode;

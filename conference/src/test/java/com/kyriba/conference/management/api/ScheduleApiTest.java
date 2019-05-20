@@ -1,7 +1,7 @@
-package com.kyriba.conference.api;
+package com.kyriba.conference.management.api;
 
-import com.kyriba.conference.api.dto.PresentationResponse;
-import com.kyriba.conference.api.dto.ScheduleResponse;
+import com.kyriba.conference.management.api.dto.PresentationResponse;
+import com.kyriba.conference.management.api.dto.ScheduleResponse;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
