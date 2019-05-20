@@ -29,7 +29,7 @@ public class PlanControllerTest
             "  \"sponsorId\": \"123\"\n" +
             "}")
         .when()
-        .post("/api/v1/sponsorship/plan/register")
+        .post("/api/v1/sponsorship/plans")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -45,11 +45,8 @@ public class PlanControllerTest
   {
     String id = given()
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .body("{\n" +
-            "  \"id\": \"123\"\n" +
-            "}")
         .when()
-        .post("/api/v1/sponsorship/plan/cancel")
+        .put("/api/v1/sponsorship/plans/123/cancellation")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)

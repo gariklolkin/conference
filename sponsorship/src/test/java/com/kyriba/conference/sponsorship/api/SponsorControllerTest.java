@@ -26,10 +26,10 @@ public class SponsorControllerTest
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         .body("{\n" +
             "  \"name\": \"Alexander Samal\" ,\n" +
-            "  \"email\": \"a@b.by\"\n" +
+            "  \"email\": \"aaa@bbb.by\"\n" +
             "}")
         .when()
-        .post("/api/v1/sponsorship/sponsor/register")
+        .post("/api/v1/sponsorship/sponsors")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)

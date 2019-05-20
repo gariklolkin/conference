@@ -2,7 +2,6 @@ package com.kyriba.conference.sponsorship.api.dto;
 
 import com.kyriba.conference.sponsorship.domain.PlanCategory;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
  * @since v1.0
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlanRegistrationRequest
