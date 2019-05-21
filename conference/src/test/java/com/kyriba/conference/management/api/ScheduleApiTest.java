@@ -76,8 +76,8 @@ public class ScheduleApiTest
             "    \"title\": \"Spring Data REST\",\n" +
             "    \"author\" : \"Andy Wilkinson\"\n" +
             "  },\n" +
-            "  \"startTime\": \"10:00 AM\",\n" +
-            "  \"endTime\" : \"11:15 AM\"\n" +
+            "  \"startTime\": \"10:00\",\n" +
+            "  \"endTime\" : \"11:15\"\n" +
             "}")
 
         .when()
@@ -137,8 +137,8 @@ public class ScheduleApiTest
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/schedule/presentations/updateTime"))
         .body("{\n" +
-            "  \"startTime\": \"10:15 AM\",\n" +
-            "  \"endTime\" : \"11:30 AM\"\n" +
+            "  \"startTime\": \"10:15\",\n" +
+            "  \"endTime\" : \"11:30\"\n" +
             "}")
 
         .when()

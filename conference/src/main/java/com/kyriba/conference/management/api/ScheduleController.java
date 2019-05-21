@@ -4,7 +4,7 @@ package com.kyriba.conference.management.api;
 import com.kyriba.conference.management.api.dto.PresentationRequest;
 import com.kyriba.conference.management.api.dto.PresentationResponse;
 import com.kyriba.conference.management.api.dto.ScheduleResponse;
-import com.kyriba.conference.management.api.dto.TopicRequestResponse;
+import com.kyriba.conference.management.api.dto.TopicDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,7 +41,7 @@ public class ScheduleController
   @ApiOperation(value = "Add presentation in conference schedule", response = PresentationResponse.class)
   @PostMapping(value = "/presentations", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
   PresentationResponse addPresentation(
-      @ApiParam(value = "Presentation create object", required = true) PresentationRequest presentation)
+      @ApiParam(value = "Presentation create object", required = true) @RequestBody PresentationRequest presentation)
   {
     return PresentationResponse.builder()
         .id(55L)
@@ -74,7 +75,7 @@ public class ScheduleController
   @PatchMapping(value = "/presentations/{id}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
   PresentationResponse updatePresentation(
       @ApiParam(value = "Presentation identity", required = true) @PathVariable String id,
-      @ApiParam(value = "Presentation change object", required = true) PresentationRequest presentation)
+      @ApiParam(value = "Presentation change object", required = true) @RequestBody PresentationRequest presentation)
   {
     // update partially - only provided changes
     return PresentationResponse.builder()
@@ -88,19 +89,19 @@ public class ScheduleController
     return asList(
         PresentationResponse.builder()
             .hall(101L)
-            .topic(new TopicRequestResponse("Spring Data REST", "Andy Wilkinson"))
+            .topic(new TopicDto("Spring Data REST", "Andy Wilkinson"))
             .startTime(of(10, 00))
             .endTime(of(11, 15))
             .build(),
         PresentationResponse.builder()
             .hall(101L)
-            .topic(new TopicRequestResponse("Microservices in practice", "Mikalai Alimenkou"))
+            .topic(new TopicDto("Microservices in practice", "Mikalai Alimenkou"))
             .startTime(of(11, 45))
             .endTime(of(15, 00))
             .build(),
         PresentationResponse.builder()
             .hall(122L)
-            .topic(new TopicRequestResponse("All about Spring workshop", "Ivan Ivanou"))
+            .topic(new TopicDto("All about Spring workshop", "Ivan Ivanou"))
             .startTime(of(10, 0))
             .endTime(of(15, 15))
             .build()

@@ -96,11 +96,11 @@ public class HallApiTest
     doReturn(new Hall(hallId).withName(hallName).withPlaces(hallPlaces))
         .when(hallService).createHall(any(HallRequest.class));
 
-    HallResponse hall = given(documentationSpec)
+    Long responseHallId = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/halls/add"))
         .body("{\n" +
-            "  \"hallName\": \"" + hallName + "\",\n" +
+            "  \"name\": \"" + hallName + "\",\n" +
             "  \"places\": \"" + hallPlaces + "\"\n" +
             "}")
 
@@ -111,11 +111,9 @@ public class HallApiTest
         .statusCode(HttpStatus.SC_OK)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
 
-        .extract().body().as(HallResponse.class);
+        .extract().as(Long.class);
 
-    assertEquals(hallId, hall.getId());
-    assertEquals(hallName, hall.getName());
-    assertEquals(hallPlaces, hall.getPlaces().intValue());
+    assertEquals(hallId, responseHallId);
   }
 
 
@@ -132,7 +130,7 @@ public class HallApiTest
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/halls/update"))
         .body("{\n" +
-            "  \"hallName\": \"" + hallName + "\",\n" +
+            "  \"name\": \"" + hallName + "\",\n" +
             "  \"places\": \"" + hallPlaces + "\"\n" +
             "}")
 

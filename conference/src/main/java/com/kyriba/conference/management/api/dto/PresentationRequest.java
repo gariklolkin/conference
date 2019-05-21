@@ -20,7 +20,7 @@ public class PresentationRequest
   private Long hall;
 
   @ApiModelProperty(value = "Presentation topic")
-  private TopicRequestResponse topic;
+  private TopicDto topic;
 
   @ApiModelProperty(value = "Presentation start time")
   @JsonFormat(pattern = "HH:mm")

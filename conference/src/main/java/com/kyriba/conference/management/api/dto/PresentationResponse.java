@@ -31,7 +31,7 @@ public class PresentationResponse
 
   @ApiModelProperty(value = "Presentation topic")
   @JsonInclude(NON_EMPTY)
-  private TopicRequestResponse topic;
+  private TopicDto topic;
 
   @ApiModelProperty(value = "Presentation start time")
   @JsonFormat(pattern = "HH:mm")
