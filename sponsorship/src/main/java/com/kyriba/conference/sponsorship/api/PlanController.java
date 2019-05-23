@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -57,6 +58,19 @@ public class PlanController
   PlanRegistered cancel(@ApiParam(value = "Id of the plan to cancel", required = true) @PathVariable String id)
   {
     return new PlanRegistered(planService.cancelPlan(id));
+  }
+
+
+  @SuppressWarnings("unused")
+  @ApiOperation(value = "Get the sponsorship plan")
+  @GetMapping("/{id}")
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "OK", response = PlanRegistered.class),
+      @ApiResponse(code = 401, message = "Failed to cancel the plan", response = String.class)
+  })
+  PlanRegistered get(@ApiParam(value = "Id of the plan to get", required = true) @PathVariable String id)
+  {
+    return new PlanRegistered(id);
   }
 
 
