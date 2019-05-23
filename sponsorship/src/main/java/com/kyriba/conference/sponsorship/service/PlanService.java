@@ -2,11 +2,7 @@ package com.kyriba.conference.sponsorship.service;
 
 import com.kyriba.conference.sponsorship.api.dto.PlanRegistrationRequest;
 import com.kyriba.conference.sponsorship.domain.Plan;
-import com.kyriba.conference.sponsorship.domain.PlanCategory;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.Map;
 
 
 /**
@@ -16,18 +12,6 @@ import java.util.Map;
 @Service
 public class PlanService
 {
-  public Collection<Plan> getAvailablePackagesPackages()
-  {
-    return null;
-  }
-
-
-  public Map<PlanCategory, Integer> getAvailablePackagesPackageTypes()
-  {
-    return null;
-  }
-
-
   public Plan registerPlan(PlanRegistrationRequest sponsorRegistrationRequest)
   {
     final String randomId = "234";
