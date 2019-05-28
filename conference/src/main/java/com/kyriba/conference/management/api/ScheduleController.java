@@ -10,13 +10,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import static java.time.LocalTime.of;
@@ -30,7 +31,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 public class ScheduleController
 {
 
-  @ApiOperation(value = "Show conference schedule", response = ScheduleResponse.class)
+  @ApiOperation(value = "Show conference schedule")
   @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
   ScheduleResponse showSchedule()
   {
@@ -38,49 +39,45 @@ public class ScheduleController
   }
 
 
-  @ApiOperation(value = "Add presentation in conference schedule", response = PresentationResponse.class)
+  @ApiOperation(value = "Add presentation in conference schedule")
   @PostMapping(value = "/presentations", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  PresentationResponse addPresentation(
+  Long addPresentation(
       @ApiParam(value = "Presentation create object", required = true) @RequestBody PresentationRequest presentation)
   {
-    return PresentationResponse.builder()
-        .id(55L)
-        .build();
+    return 55L;
   }
 
 
-  @ApiOperation(value = "View presentation information", response = PresentationResponse.class)
+  @ApiOperation(value = "View presentation information")
   @GetMapping(value = "/presentations/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
   PresentationResponse getPresentation(
       @ApiParam(value = "Presentation identity", required = true) @PathVariable String id)
   {
     return PresentationResponse.builder()
-        .id(Long.valueOf(id))
+        .hall(123L)
+        .startTime(LocalTime.of(11, 30))
+        .endTime(LocalTime.of(12, 30))
+        .topic(new TopicDto("Spring Data REST", "Andy Wilkinson"))
         .build();
   }
 
 
-  @ApiOperation(value = "Remove presentation from conference schedule", response = PresentationResponse.class)
+  @ApiOperation(value = "Remove presentation from conference schedule")
   @DeleteMapping(value = "/presentations/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
-  PresentationResponse removePresentation(
+  void removePresentation(
       @ApiParam(value = "Presentation identity", required = true) @PathVariable String id)
   {
-    return PresentationResponse.builder()
-        .id(55L)
-        .build();
+
   }
 
 
-  @ApiOperation(value = "Change presentations parameters", response = PresentationResponse.class)
-  @PatchMapping(value = "/presentations/{id}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  PresentationResponse updatePresentation(
+  @ApiOperation(value = "Change presentations parameters")
+  @PutMapping(value = "/presentations/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
+  void updatePresentation(
       @ApiParam(value = "Presentation identity", required = true) @PathVariable String id,
       @ApiParam(value = "Presentation change object", required = true) @RequestBody PresentationRequest presentation)
   {
-    // update partially - only provided changes
-    return PresentationResponse.builder()
-        .id(55L)
-        .build();
+
   }
 
 

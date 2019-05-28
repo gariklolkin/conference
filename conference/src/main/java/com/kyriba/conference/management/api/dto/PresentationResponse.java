@@ -22,9 +22,6 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @Builder
 public class PresentationResponse
 {
-  @ApiModelProperty(value = "Presentation identity")
-  private Long id;
-
   @ApiModelProperty(value = "Hall identity")
   @JsonInclude(NON_EMPTY)
   private Long hall;

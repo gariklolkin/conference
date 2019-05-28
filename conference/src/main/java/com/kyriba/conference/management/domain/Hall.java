@@ -14,7 +14,7 @@ public class Hall
 {
   private Long id;
   private String name;
-  private int places;
+  private Integer places;
 
 
   public Hall(Long id)

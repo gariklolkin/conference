@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 
@@ -19,9 +17,6 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @AllArgsConstructor
 public class HallResponse
 {
-  @ApiModelProperty(value = "Hall identity")
-  private Long id;
-
   @ApiModelProperty(value = "Name or number of the hall")
   @JsonInclude(NON_EMPTY)
   private String name;
@@ -33,7 +28,6 @@ public class HallResponse
 
   public HallResponse(Hall hall)
   {
-    id = hall.getId();
     name = hall.getName();
     places = hall.getPlaces();
   }

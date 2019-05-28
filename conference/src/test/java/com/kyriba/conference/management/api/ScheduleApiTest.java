@@ -2,6 +2,7 @@ package com.kyriba.conference.management.api;
 
 import com.kyriba.conference.management.api.dto.PresentationResponse;
 import com.kyriba.conference.management.api.dto.ScheduleResponse;
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -9,8 +10,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,8 +24,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ScheduleApiTest
 {
   @Rule
@@ -32,10 +32,14 @@ public class ScheduleApiTest
 
   private RequestSpecification documentationSpec;
 
+  @LocalServerPort
+  int port;
+
 
   @Before
   public void setUp()
   {
+    RestAssured.port = port;
     documentationSpec = new RequestSpecBuilder()
         .addFilter(documentationConfiguration(restDocumentation)).build();
   }
@@ -87,8 +91,7 @@ public class ScheduleApiTest
         .statusCode(HttpStatus.SC_OK)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
 
-        .extract()
-        .jsonPath().getLong("id");
+        .extract().as(Long.class);
 
     assertEquals(55L, presentationId.longValue());
   }
@@ -110,7 +113,7 @@ public class ScheduleApiTest
 
         .extract().body().as(PresentationResponse.class);
 
-    assertEquals(44L, presentation.getId().longValue());
+    assertEquals("Spring Data REST", presentation.getTopic().getTitle());
   }
 
 
@@ -125,57 +128,54 @@ public class ScheduleApiTest
         .delete("/api/v1/schedule/presentations/55")
         .then()
         .statusCode(HttpStatus.SC_OK);
-
-    // check that the presentation was removed from schedule
   }
 
 
   @Test
   public void changePresentationTime()
   {
-    Long presentationId = given(documentationSpec)
+    given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/schedule/presentations/updateTime"))
         .body("{\n" +
+            "  \"hall\": \"1011\",\n" +
+            "  \"topic\": {\n" +
+            "    \"title\": \"Spring Data REST\",\n" +
+            "    \"author\" : \"Andy Wilkinson\"\n" +
+            "  },\n" +
             "  \"startTime\": \"10:15\",\n" +
-            "  \"endTime\" : \"11:30\"\n" +
+            "  \"endTime\" : \"11:55\"\n" +
             "}")
 
         .when()
-        .patch("/api/v1/schedule/presentations/55")
+        .put("/api/v1/schedule/presentations/55")
 
         .then()
-        .statusCode(HttpStatus.SC_OK)
-        .contentType(APPLICATION_JSON_UTF8_VALUE)
-
-        .extract()
-        .jsonPath().getLong("id");
-
-    assertEquals(55L, presentationId.longValue());
+        .statusCode(HttpStatus.SC_OK);
   }
 
 
   @Test
   public void rearrangePresentationToAnotherHall()
   {
-    Long presentationId = given(documentationSpec)
+    given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/schedule/presentations/changeHall"))
         .body("{\n" +
-            "  \"hall\": \"1011\"\n" +
+            "  \"hall\": \"301\",\n" +
+            "  \"topic\": {\n" +
+            "    \"title\": \"Spring Data REST\",\n" +
+            "    \"author\" : \"Andy Wilkinson\"\n" +
+            "  },\n" +
+            "  \"startTime\": \"10:15\",\n" +
+            "  \"endTime\" : \"11:55\"\n" +
             "}")
 
         .when()
-        .patch("/api/v1/schedule/presentations/55")
+        .put("/api/v1/schedule/presentations/55")
 
         .then()
-        .statusCode(HttpStatus.SC_OK)
-        .contentType(APPLICATION_JSON_UTF8_VALUE)
-
-        .extract()
-        .jsonPath().getLong("id");
-
-    assertEquals(55L, presentationId.longValue());
+        .statusCode(HttpStatus.SC_OK);
   }
 
 }

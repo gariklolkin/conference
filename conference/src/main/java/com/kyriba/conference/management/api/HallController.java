@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -39,6 +41,16 @@ public class HallController
   }
 
 
+  @ApiOperation(value = "Get a conference hall if exists")
+  @GetMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
+  HallResponse findHall(@Valid @ApiParam(value = "Hall identity", required = true) @PathVariable Long id)
+  {
+    return hallService.find(id)
+        .map(HallResponse::new)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hall not found"));
+  }
+
+
   @ApiOperation(value = "Show all conference halls", responseContainer = "List")
   @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
   List<HallResponse> findAllHalls()
@@ -59,18 +71,17 @@ public class HallController
 
   @ApiOperation(value = "Change conference hall parameters")
   @PutMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  HallResponse updateHall(@Valid @ApiParam(value = "Hall identity", required = true) @PathVariable String id,
-                          @Valid @ApiParam(value = "Hall change object", required = true) @RequestBody HallRequest hall)
+  void updateHall(@Valid @ApiParam(value = "Hall identity", required = true) @PathVariable String id,
+                  @Valid @ApiParam(value = "Hall change object", required = true) @RequestBody HallRequest hall)
   {
-    return new HallResponse(hallService.updateHall(Long.valueOf(id), hall));
+    hallService.updateHall(Long.valueOf(id), hall);
   }
 
 
   @ApiOperation(value = "Remove conference hall")
   @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-  HallResponse removeHall(@Valid @ApiParam(value = "Hall identity", required = true) @PathVariable String id)
+  void removeHall(@Valid @ApiParam(value = "Hall identity", required = true) @PathVariable String id)
   {
     hallService.deleteHall(Long.valueOf(id));
-    return new HallResponse();
   }
 }

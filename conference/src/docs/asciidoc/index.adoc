@@ -1,0 +1,261 @@
+= Conference management microservice
+Ilya Abashkin
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[overview]]
+= Overview
+
+[[overview-http-verbs]]
+== HTTP verbs
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PUT`
+| Used to create a new resource as well as replace existing resource
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+== HTTP status codes
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `201 Created`
+| A new resource has been created successfully. The resource's URI is available from the response's
+`Location` header
+
+| `204 No Content`
+| An update to an existing resource has been applied successfully
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `404 Not Found`
+| The requested resource did not exist
+
+| `405 Method Not Allowed`
+| The requested resource does not support method
+
+| `409 Conflict`
+| The request tries to put the resource into a conflicting state
+|===
+
+[[schedule]]
+== Schedule
+
+Manage conference schedule
+
+[[schedule-view]]
+
+=== View conference schedule
+
+A `GET` request is used to get the schedule
+
+==== Example curl request
+
+include::{snippets}/api/v1/schedule/view/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/schedule/view/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/schedule/view/http-response.adoc[]
+
+
+[[schedule-add-presentation]]
+
+=== Add presentation to schedule
+
+A `POST` request is used to add presentation
+
+==== Example curl request
+
+include::{snippets}/api/v1/schedule/presentations/add/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/schedule/presentations/add/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/schedule/presentations/add/http-response.adoc[]
+
+
+[[schedule-update-presentation]]
+
+=== Update presentation in schedule
+
+A `PUT` request is used to update presentation
+
+==== Example curl request
+
+include::{snippets}/api/v1/schedule/presentations/changeHall/curl-request.adoc[]
+include::{snippets}/api/v1/schedule/presentations/updateTime/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/schedule/presentations/changeHall/http-request.adoc[]
+include::{snippets}/api/v1/schedule/presentations/updateTime/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/schedule/presentations/changeHall/http-response.adoc[]
+include::{snippets}/api/v1/schedule/presentations/updateTime/http-response.adoc[]
+
+
+[[schedule-view-presentation]]
+
+=== View presentation info
+
+A `GET` request is used to view presentation information
+
+==== Example curl request
+
+include::{snippets}/api/v1/schedule/presentations/get/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/schedule/presentations/get/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/schedule/presentations/get/http-response.adoc[]
+
+[[schedule-delete-presentation]]
+
+=== Remove presentation from schedule
+
+A `DELETE` request is used to remove presentation from schedule
+
+==== Example curl request
+
+include::{snippets}/api/v1/schedule/presentations/delete/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/schedule/presentations/delete/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/schedule/presentations/delete/http-response.adoc[]
+
+
+[[hall]]
+== Halls
+
+Manage conference halls
+
+[[hall-find]]
+
+=== View a conference hall information
+
+A `GET` request is used to get hall information
+
+==== Example curl request
+
+include::{snippets}/api/v1/halls/getOne/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/halls/getOne/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/halls/getOne/http-response.adoc[]
+
+
+[[halls-view]]
+
+=== View conference halls information
+
+A `GET` request is used to get halls information
+
+==== Example curl request
+
+include::{snippets}/api/v1/halls/getAll/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/halls/getAll/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/halls/getAll/http-response.adoc[]
+
+
+[[hall-add]]
+
+=== Add halls to conference
+
+A `POST` request is used to add hall
+
+==== Example curl request
+
+include::{snippets}/api/v1/halls/add/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/halls/add/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/halls/add/http-response.adoc[]
+
+
+[[hall-update]]
+
+=== Update hall
+
+A `PUT` request is used to update hall information
+
+==== Example curl request
+
+include::{snippets}/api/v1/halls/update/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/halls/update/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/halls/update/http-response.adoc[]
+
+
+[[hall-delete]]
+
+=== Remove hall from conference
+
+A `DELETE` request is used to remove hall
+
+==== Example curl request
+
+include::{snippets}/api/v1/halls/delete/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/halls/delete/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/halls/delete/http-response.adoc[]
+

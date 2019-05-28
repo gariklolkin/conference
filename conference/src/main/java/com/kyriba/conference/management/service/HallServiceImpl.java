@@ -6,12 +6,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 @Transactional
 public class HallServiceImpl implements HallService
 {
+  @Override
+  public Optional<Hall> find(Long id)
+  {
+    return Optional.empty();
+  }
+
+
   @Override
   public List<Hall> findAll()
   {
@@ -27,9 +35,8 @@ public class HallServiceImpl implements HallService
 
 
   @Override
-  public Hall updateHall(Long id, HallRequest hall)
+  public void updateHall(Long id, HallRequest hall)
   {
-    return null;
   }
 
 

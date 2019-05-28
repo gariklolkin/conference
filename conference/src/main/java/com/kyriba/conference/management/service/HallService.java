@@ -5,6 +5,7 @@ import com.kyriba.conference.management.api.dto.HallRequest;
 import com.kyriba.conference.management.domain.Hall;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface HallService
@@ -13,7 +14,9 @@ public interface HallService
 
   Hall createHall(HallRequest hall);
 
-  Hall updateHall(Long id, HallRequest hall);
+  void updateHall(Long id, HallRequest hall);
 
   void deleteHall(Long id);
+
+  Optional<Hall> find(Long id);
 }

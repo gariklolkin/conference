@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 
@@ -17,16 +18,20 @@ import java.time.LocalTime;
 public class PresentationRequest
 {
   @ApiModelProperty(value = "Hall identity")
+  @NotNull
   private Long hall;
 
   @ApiModelProperty(value = "Presentation topic")
+  @NotNull
   private TopicDto topic;
 
   @ApiModelProperty(value = "Presentation start time")
   @JsonFormat(pattern = "HH:mm")
+  @NotNull
   private LocalTime startTime;
 
   @ApiModelProperty(value = "Presentation end time")
   @JsonFormat(pattern = "HH:mm")
+  @NotNull
   private LocalTime endTime;
 }

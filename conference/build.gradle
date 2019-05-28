@@ -38,6 +38,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'io.rest-assured:rest-assured:3.3.0'
 	testCompile 'org.springframework.restdocs:spring-restdocs-restassured'
+	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE'
 }
 
 test {
@@ -45,6 +46,9 @@ test {
 }
 
 asciidoctor {
+	attributes 'snippets': snippetsDir
 	inputs.dir snippetsDir
+	outputDir("build/apidoc")
+	sourceDir("src/docs/asciidoc")
 	dependsOn test
 }
