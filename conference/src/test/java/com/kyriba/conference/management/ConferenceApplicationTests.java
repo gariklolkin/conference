@@ -1,4 +1,4 @@
-package com.kyriba.conference;
+package com.kyriba.conference.management;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

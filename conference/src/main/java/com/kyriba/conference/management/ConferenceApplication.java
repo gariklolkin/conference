@@ -1,4 +1,4 @@
-package com.kyriba.conference;
+package com.kyriba.conference.management;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
