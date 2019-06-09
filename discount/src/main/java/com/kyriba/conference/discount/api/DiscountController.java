@@ -1,60 +1,65 @@
 package com.kyriba.conference.discount.api;
 
+import com.kyriba.conference.discount.api.dto.DiscountDto;
+import com.kyriba.conference.discount.api.dto.DiscountPercentageDto;
 import com.kyriba.conference.discount.domain.DiscountType;
-import com.kyriba.conference.discount.domain.dto.DiscountDto;
-import lombok.AllArgsConstructor;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.kyriba.conference.discount.domain.DiscountType.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static com.kyriba.conference.discount.domain.DiscountType.JUNIOR;
+import static com.kyriba.conference.discount.domain.DiscountType.STUDENT;
 
 /**
  * @author Igor Lizura
  */
 @RestController
-@AllArgsConstructor
-@RequestMapping("/v1/discount")
+@RequestMapping(value = "/api/v1/discounts")
 public class DiscountController {
-    @ResponseBody
-    @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<DiscountDto>> getDiscounts() {
-        List<DiscountDto> response = Arrays.asList(new DiscountDto(JUNIOR, 30),
+    @ResponseStatus(value = HttpStatus.OK)
+    @GetMapping
+    List<DiscountDto> getDiscounts() {
+        return Arrays.asList(new DiscountDto(JUNIOR, 30),
                 new DiscountDto(STUDENT, 50));
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @ResponseBody
-    @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<DiscountResponse> createDiscount(@RequestBody DiscountDto discount) {
-        return new ResponseEntity<>(new DiscountResponse(STUDENT), HttpStatus.CREATED);
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @PostMapping
+    DiscountResponse createDiscount(
+            @ApiParam(value = "Discount creation object", required = true) @Valid @RequestBody DiscountDto discount) {
+        return new DiscountResponse(STUDENT);
     }
 
-    @ResponseBody
-    @GetMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<DiscountDto> getDiscount(@PathVariable String type) {
-        return new ResponseEntity<>(new DiscountDto(STUDENT, 30), HttpStatus.OK);
+    @ResponseStatus(value = HttpStatus.OK)
+    @GetMapping("/{type}")
+    DiscountDto getDiscount(@ApiParam(value = "Discount type", required = true) @PathVariable String type) {
+        return new DiscountDto(STUDENT, 30);
     }
 
-    @ResponseBody
-    @PutMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<DiscountResponse> updateDiscount(@RequestBody DiscountDto discount) {
-        return new ResponseEntity<>(new DiscountResponse(STUDENT), HttpStatus.OK);
+    @ResponseStatus(value = HttpStatus.OK)
+    @PutMapping("/{type}")
+    void updateDiscount(@PathVariable String type, @ApiParam(value = "Discount percentage object", required = true)
+    @Valid @RequestBody DiscountPercentageDto discountUpdateRequest) {
     }
 
-    @ResponseBody
-    @DeleteMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> deleteDiscount(@PathVariable String type) {
-        return ResponseEntity.noContent().build();
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{type}")
+    void deleteDiscount(@ApiParam(value = "Discount type", required = true) @PathVariable String type) {
     }
 
+    @ApiModel(value = "DiscountType", description = "Discount response")
     @Value
     private class DiscountResponse {
+        @ApiModelProperty(value = "Discount type")
+        @NotNull
         DiscountType type;
     }
 }

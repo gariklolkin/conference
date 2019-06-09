@@ -1,7 +1,7 @@
 package com.kyriba.conference.discount;
 
 import com.kyriba.conference.discount.domain.DiscountType;
-import com.kyriba.conference.discount.domain.dto.DiscountDto;
+import com.kyriba.conference.discount.api.dto.DiscountDto;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -49,7 +49,7 @@ public class DiscountControllerTest {
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("getDiscounts"))
                 .when()
-                .get("/v1/discount")
+                .get("/api/v1/discounts")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
@@ -70,7 +70,7 @@ public class DiscountControllerTest {
                         "  \"percentage\": 50\n" +
                         "}")
                 .when()
-                .post("/v1/discount")
+                .post("/api/v1/discounts")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
@@ -85,7 +85,7 @@ public class DiscountControllerTest {
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("getDiscount"))
                 .when()
-                .get("/v1/discount/student")
+                .get("/api/v1/discounts/student")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
@@ -96,21 +96,17 @@ public class DiscountControllerTest {
 
     @Test
     public void updateDiscount() {
-        String type = given(this.spec)
+        given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("updateDiscount"))
                 .body("{\n" +
-                        "  \"type\": \"STUDENT\",\n" +
                         "  \"percentage\": 50\n" +
                         "}")
                 .when()
-                .put("/v1/discount/student")
+                .put("/api/v1/discounts/student")
                 .then()
-                .statusCode(HttpStatus.SC_OK)
-                .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .extract()
-                .jsonPath().get("type");
-        assertEquals(STUDENT.toString(), type);
+                .log().body()
+                .statusCode(HttpStatus.SC_OK);
     }
 
     @Test
@@ -118,7 +114,7 @@ public class DiscountControllerTest {
         given(this.spec)
                 .when()
                 .filter(document("deleteDiscount"))
-                .delete("/v1/discount/junior")
+                .delete("/api/v1/discounts/junior")
                 .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
     }
