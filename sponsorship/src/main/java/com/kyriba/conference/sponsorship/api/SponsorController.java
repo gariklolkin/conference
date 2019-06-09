@@ -1,13 +1,14 @@
 package com.kyriba.conference.sponsorship.api;
 
 import com.kyriba.conference.sponsorship.api.dto.SponsorRegistrationRequest;
+import com.kyriba.conference.sponsorship.api.dto.SponsorRegistrationResponse;
+import com.kyriba.conference.sponsorship.domain.Sponsor;
 import com.kyriba.conference.sponsorship.service.SponsorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/sponsorship/sponsors",
+@RequestMapping(value = "${api.version}/sponsorship/sponsors",
     consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 @Api(value = "Register a new sponsor")
 public class SponsorController
@@ -32,21 +33,19 @@ public class SponsorController
 
 
   @SuppressWarnings("unused")
-  @ApiOperation(value = "Register a new sponsor")
+  @ApiOperation(value = "Register the sponsor")
   @PostMapping
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "OK", response = SponsorRegistered.class),
-      @ApiResponse(code = 401, message = "Failed", response = String.class)
+      @ApiResponse(code = 200, message = "OK", response = SponsorRegistrationResponse.class),
+      @ApiResponse(code = 401, message = "Failed to register the sponsor", response = SponsorRegistrationResponse.class)
   })
-  SponsorRegistered register(@Valid @RequestBody SponsorRegistrationRequest sponsor)
+  SponsorRegistrationResponse register(@Valid @RequestBody SponsorRegistrationRequest request)
   {
-    return new SponsorRegistered(sponsorService.registerSponsor(sponsor).getId());
-  }
-
-
-  @Value
-  public static class SponsorRegistered
-  {
-    private String id;
+    final String randomId = "123";
+    final Sponsor sponsor = Sponsor.builder().id(randomId)
+        .name(request.getName())
+        .email(request.getEmail())
+        .build();
+    return new SponsorRegistrationResponse(sponsor.getId());
   }
 }

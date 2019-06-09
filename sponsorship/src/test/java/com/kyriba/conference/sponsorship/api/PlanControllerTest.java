@@ -1,32 +1,52 @@
 package com.kyriba.conference.sponsorship.api;
 
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.given;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 
 /**
  * @author M-ASL
  * @since v1.0
  */
-@RunWith(SpringRunner.class)
+@ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class PlanControllerTest
+class PlanControllerTest
 {
-  @Test
-  public void registerPlan()
+  private RequestSpecification specification;
+
+
+  @BeforeEach
+  void setUp(RestDocumentationContextProvider restDocumentationContextProvider)
   {
-    String id = given()
+    specification = new RequestSpecBuilder()
+        .addFilter(documentationConfiguration(restDocumentationContextProvider))
+        .build();
+  }
+
+
+  @Test
+  void registerPlan()
+  {
+    String id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/sponsorship/plans"))
         .body("{\n" +
             "  \"category\": \"GENERAL\" ,\n" +
-            "  \"sponsorEmail\": \"aaa@bbb.by\"\n" +
+            "  \"sponsorEmail\": \"aaa@bbb.org\"\n" +
             "}")
         .when()
         .post("/api/v1/sponsorship/plans")
@@ -36,15 +56,16 @@ public class PlanControllerTest
         .extract()
         .jsonPath()
         .get("id");
-    Assert.assertNotNull(id);
+    Assertions.assertNotNull(id);
   }
 
 
   @Test
-  public void cancelPlan()
+  void cancelPlan()
   {
-    String id = given()
+    String id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/sponsorship/plans/{id}/cancellation"))
         .when()
         .put("/api/v1/sponsorship/plans/123/cancellation")
         .then()
@@ -53,6 +74,24 @@ public class PlanControllerTest
         .extract()
         .jsonPath()
         .get("id");
-    Assert.assertNotNull(id);
+    Assertions.assertNotNull(id);
+  }
+
+
+  @Test
+  void getPlan()
+  {
+    String id = given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/sponsorship/plans/{id}"))
+        .when()
+        .get("/api/v1/sponsorship/plans/123")
+        .then()
+        .statusCode(HttpStatus.SC_OK)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .extract()
+        .jsonPath()
+        .get("id");
+    Assertions.assertNotNull(id);
   }
 }
