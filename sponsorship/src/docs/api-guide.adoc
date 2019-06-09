@@ -1,0 +1,111 @@
+= Sponsorship microservice
+Alexander Samal
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+[[overview]]
+= Overview
+
+[[overview-http-verbs]]
+== HTTP verbs
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PUT`
+| Used to create a new resource as well as replace existing resource
+
+| `PATCH`
+| Used to update an existing resource, including partial updates
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+== HTTP status codes
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `201 Created`
+| A new resource has been created successfully. The resource's URI is available from the response's
+`Location` header
+
+| `204 No Content`
+| An update to an existing resource has been applied successfully
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `404 Not Found`
+| The requested resource did not exist
+
+| `405 Method Not Allowed`
+| The requested resource does not support method
+
+| `409 Conflict`
+| The request tries to put the resource into a conflicting state
+|===
+
+[[resources]]
+= Resources
+
+[[sponsor]]
+== Sponsor
+
+The Sponsor resource is used to register sponsors.
+
+[[resources-sponsor-create]]
+
+=== Registering the sponsor
+
+A `POST` request is used to register the sponsor
+
+==== Example curl request
+
+include::{snippets}/api/v1/sponsorship/sponsors/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/sponsorship/sponsors/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/sponsorship/sponsors/http-response.adoc[]
+
+[[plan]]
+== Plan
+
+The Plan is used to create and list sponsorship plans and associate them with sponsors.
+
+[[resources-plan-create]]
+
+=== Creating the plan
+
+A `POST` request is used to create the plan
+
+==== Example curl request
+
+include::{snippets}/api/v1/sponsorship/plans/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/sponsorship/plans/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/sponsorship/plans/http-response.adoc[]

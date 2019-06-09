@@ -4,7 +4,12 @@ plugins {
     id 'java'
 }
 
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
 apply plugin: 'io.spring.dependency-management'
+
 
 group = 'com.kyriba.training'
 version = '0.0.1-SNAPSHOT'
@@ -37,6 +42,15 @@ dependencies {
     testCompile 'org.springframework.restdocs:spring-restdocs-restassured'
 }
 
+test {
+    useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+
 asciidoctor {
-    sourceDir = file('build/generated-snippets')
+    attributes 'snippets': snippetsDir
+    inputs.dir snippetsDir
+    outputDir("build/asciidoc")
+    sourceDir("src/docs")
+    dependsOn test
 }
