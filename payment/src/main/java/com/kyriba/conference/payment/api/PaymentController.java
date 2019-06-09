@@ -1,17 +1,19 @@
 package com.kyriba.conference.payment.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.kyriba.conference.payment.domain.PaymentMethodType;
+import com.kyriba.conference.payment.api.dto.PaymentDto;
+import com.kyriba.conference.payment.api.dto.PaymentUpdateParamsDto;
+import com.kyriba.conference.payment.api.dto.TicketDto;
 import com.kyriba.conference.payment.domain.PaymentStatus;
-import com.kyriba.conference.payment.domain.dto.PaymentDto;
-import com.kyriba.conference.payment.domain.vo.Amount;
-import com.kyriba.conference.payment.domain.dto.TicketDto;
-import lombok.AllArgsConstructor;
+import com.kyriba.conference.payment.domain.dto.Amount;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiParam;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -20,7 +22,8 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-import static com.kyriba.conference.payment.domain.PaymentStatus.*;
+import static com.kyriba.conference.payment.domain.PaymentMethodType.CREDIT_CARD;
+import static com.kyriba.conference.payment.domain.PaymentStatus.PENDING;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 
@@ -28,76 +31,66 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
  * @author Igor Lizura
  */
 @RestController
-@AllArgsConstructor
-@RequestMapping("/v1/payment")
+@RequestMapping("/api/v1/payments")
 public class PaymentController {
-    @ResponseBody
-    @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<PaymentDto>> getPayments() {
-        List<PaymentDto> response = Collections.singletonList(PaymentDto.builder()
-                .userId(123)
-                .type(PaymentMethodType.CREDIT_CARD)
-                .paymentDate(LocalDateTime.of(2019, Month.MAY, 12, 20, 30))
-                .price(new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)))
-                .status(PENDING)
-                .build());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    @Valid List<PaymentDto> getPayments() {
+        return Collections.singletonList(
+                new PaymentDto(123,
+                        CREDIT_CARD,
+                        LocalDateTime.of(2019, Month.MAY, 12, 20, 30),
+                        new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)),
+                        PENDING));
     }
 
-    @ResponseBody
-    @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Receipt> createPayment(@RequestBody TicketDto ticket) {
-        Receipt response = new Receipt(new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)),
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    @Valid Receipt createPayment(@ApiParam(value = "Payment creation object", required = true)
+                                     @Valid @RequestBody TicketDto ticket) {
+        return new Receipt(
+                new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)),
                 new Amount(new BigDecimal(50), Currency.getInstance(Locale.FRANCE)),
-                LocalDateTime.of(2019, Month.MAY, 12, 20, 30), PENDING);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+                LocalDateTime.of(2019, Month.MAY, 12, 20, 30),
+                PENDING);
     }
 
-    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{paymentId}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PaymentDto> getPayment(@PathVariable long paymentId) {
-        PaymentDto response = PaymentDto.builder()
-                .userId(123)
-                .type(PaymentMethodType.CREDIT_CARD)
-                .paymentDate(LocalDateTime.of(2019, Month.MAY, 12, 20, 30))
-                .price(new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)))
-                .status(PENDING)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @Valid PaymentDto getPayment(@ApiParam(value = "Payment id", required = true) @PathVariable long paymentId) {
+        return new PaymentDto(123,
+                CREDIT_CARD,
+                LocalDateTime.of(2019, Month.MAY, 12, 20, 30),
+                new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)),
+                PENDING);
     }
 
-    @ResponseBody
-    @PutMapping(value = "/{paymentId}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PaymentResponse> updatePayment(@PathVariable long paymentId, @RequestBody PaymentDto payment) {
-        return new ResponseEntity<>(new PaymentResponse(3), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping(value = "/{paymentId}")
+    void updatePayment(@ApiParam(value = "Payment id", required = true) @PathVariable long paymentId,
+                              @ApiParam(value = "Payment updating parameters", required = true) @Valid @RequestBody PaymentUpdateParamsDto params) {
     }
 
-    @PatchMapping(value = "/{paymentId}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PaymentResponse> patchPayment(@PathVariable long paymentId,
-                                                        @RequestParam("status") PaymentStatus status) {
-        return new ResponseEntity<>(new PaymentResponse(5), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = "/{paymentId}")
+    void deletePayment(@ApiParam(value = "Payment id", required = true) @PathVariable long paymentId) {
     }
 
-    @ResponseBody
-    @DeleteMapping(value = "/{paymentId}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> deletePayment(@PathVariable long paymentId) {
-        return ResponseEntity.noContent().build();
-    }
-
+    @ApiModel(description = "Ticket")
     @Value
     private static class Receipt {
+        @Valid
+        @NotNull
         private Amount price;
 
+        @Valid
+        @NotNull
         private Amount discount;
 
         @JsonFormat(pattern = "dd::MM::yyyy HH:mm")
         LocalDateTime time;
 
+        @NotNull
         private PaymentStatus status;
-    }
-
-    @Value
-    private class PaymentResponse {
-        long id;
     }
 }

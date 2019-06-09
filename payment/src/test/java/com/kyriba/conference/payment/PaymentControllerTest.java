@@ -1,7 +1,7 @@
 package com.kyriba.conference.payment;
 
 import com.kyriba.conference.payment.domain.PaymentStatus;
-import com.kyriba.conference.payment.domain.dto.PaymentDto;
+import com.kyriba.conference.payment.api.dto.PaymentDto;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -46,9 +46,9 @@ public class PaymentControllerTest {
     public void getPayments() {
         List<PaymentDto> payments = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/getPayments"))
+                .filter(document("payments/getPayments"))
                 .when()
-                .get("/v1/payment")
+                .get("/api/v1/payments")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
@@ -62,10 +62,18 @@ public class PaymentControllerTest {
     public void createPayment() {
         String status = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/createPayment"))
-                .body(getRequestJson())
+                .filter(document("payments/createPayment"))
+                .body("{\n" +
+                        "  \"userId\":123,\n" +
+                        "  \"paymentMethodId\":3,\n" +
+                        "  \"paymentDate\":\"12::05::2019 20:30\",\n" +
+                        "  \"price\":{\n" +
+                        "    \"value\":250.0,\n" +
+                        "    \"currency\":\"EUR\"\n" +
+                        "  }\n" +
+                        "}")
                 .when()
-                .post("/v1/payment")
+                .post("/api/v1/payments")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
@@ -78,9 +86,9 @@ public class PaymentControllerTest {
     public void getPayment() {
         String status = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/getPayment"))
+                .filter(document("payments/getPayment"))
                 .when()
-                .get("/v1/payment/3")
+                .get("/api/v1/payments/3")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
@@ -91,56 +99,25 @@ public class PaymentControllerTest {
 
     @Test
     public void updatePayment() {
-        int id = given(this.spec)
+        given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/updatePayment"))
-                .body(getRequestJson())
+                .filter(document("payments/updatePayment"))
+                .body("{\n" +
+                        "  \"status\":\"COMPLETED\"\n" +
+                        "}")
                 .when()
-                .put("/v1/payment/5")
+                .put("/api/v1/payments/5")
                 .then()
-                .statusCode(HttpStatus.SC_OK)
-                .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .extract()
-                .jsonPath().get("id");
-        assertEquals(3, id);
-    }
-
-    @Test
-    public void patchPayment() {
-        int id = given(this.spec)
-                .param("status", PaymentStatus.COMPLETED)
-                .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("payment/patchPayment"))
-                .when()
-                .patch("/v1/payment/5")
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .extract()
-                .jsonPath().get("id");
-        assertEquals(5, id);
+                .statusCode(HttpStatus.SC_OK);
     }
 
     @Test
     public void deletePaymentMethod() {
         given(this.spec)
-                .filter(document("payment/deletePaymentMethod"))
+                .filter(document("payments/deletePayment"))
                 .when()
-                .delete("/v1/payment/5")
+                .delete("/api/v1/payments/5")
                 .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
-    }
-
-    private String getRequestJson() {
-        //language=JSON
-        return  "{\n" +
-                "  \"userId\":123,\n" +
-                "  \"paymentMethodId\":3,\n" +
-                "  \"paymentDate\":\"12::05::2019 20:30\",\n" +
-                "  \"price\":{\n" +
-                "    \"value\":250.0,\n" +
-                "    \"currency\":\"EUR\"\n" +
-                "  }\n" +
-                "}";
     }
 }

@@ -64,10 +64,10 @@ Igor Lizura
 [[resources]]
 = Resources
 
-[[payment]]
+[[payments]]
 == Payment
 
-The Payment resource / 'payment' relation is used to create and list payments.
+The Payment resource / 'payments' relation is used to create and list payments.
 
 [[resources-payment-create]]
 
@@ -77,20 +77,20 @@ A `POST` request is used to create the discount
 
 ==== Example curl request
 
-include::{snippets}/payment/createPayment/curl-request.adoc[]
+include::{snippets}/payments/createPayment/curl-request.adoc[]
 
 ==== Example HTTP request
 
-include::{snippets}/payment/createPayemnt/http-request.adoc[]
+include::{snippets}/payments/createPayment/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/payment/createPayment/http-response.adoc[]
+include::{snippets}/payments/createPayment/http-response.adoc[]
 
-[[paymentMethod]]
+[[paymentMethods]]
 == PaymentMethod
 
-The PaymentMethod resource / 'paymentMethod' relation is used to create and list payment methods.
+The PaymentMethod resource / 'paymentMethods' relation is used to create and list payment methods.
 
 [[resources-paymentMethod-create]]
 
@@ -100,12 +100,12 @@ A `POST` request is used to create the payment method
 
 ==== Example curl request
 
-include::{snippets}/paymentMethod/createPaymentMethod/curl-request.adoc[]
+include::{snippets}/paymentMethods/createPaymentMethod/curl-request.adoc[]
 
 ==== Example HTTP request
 
-include::{snippets}/paymentMethod/createPaymentMethod/http-request.adoc[]
+include::{snippets}/paymentMethods/createPaymentMethod/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/paymentMethod/createPaymentMethod/http-response.adoc[]
+include::{snippets}/paymentMethods/createPaymentMethod/http-response.adoc[]

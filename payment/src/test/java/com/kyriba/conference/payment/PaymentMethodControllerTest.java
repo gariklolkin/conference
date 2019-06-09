@@ -1,7 +1,7 @@
 package com.kyriba.conference.payment;
 
 import com.kyriba.conference.payment.domain.PaymentMethodType;
-import com.kyriba.conference.payment.domain.dto.PaymentMethodDto;
+import com.kyriba.conference.payment.api.dto.PaymentMethodDto;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -44,9 +44,9 @@ public class PaymentMethodControllerTest {
     public void getPaymentMethods() {
         List<PaymentMethodDto> methods = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("paymentMethod/getPaymentMethods"))
+                .filter(document("paymentMethods/getPaymentMethods"))
                 .when()
-                .get("/v1/paymentMethod")
+                .get("/api/v1/paymentMethods")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
@@ -61,13 +61,13 @@ public class PaymentMethodControllerTest {
     public void createPaymentMethod() {
         String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("paymentMethod/createPaymentMethod"))
+                .filter(document("paymentMethods/createPaymentMethod"))
                 .body("{\n" +
                         "  \"type\": \"CREDIT_CARD\",\n" +
                         "  \"url\": \"https://webpay.by/en/\"\n" +
                         "}\n")
                 .when()
-                .post("/v1/paymentMethod")
+                .post("/api/v1/paymentMethods")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
@@ -80,9 +80,9 @@ public class PaymentMethodControllerTest {
     public void getPaymentMethod() {
         String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("paymentMethod/getPaymentMethod"))
+                .filter(document("paymentMethods/getPaymentMethod"))
                 .when()
-                .get("/v1/paymentMethod/wire_transfer")
+                .get("/api/v1/paymentMethods/wire_transfer")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
@@ -93,45 +93,24 @@ public class PaymentMethodControllerTest {
 
     @Test
     public void updatePaymentMethod() {
-        String type = given(this.spec)
+        given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("paymentMethod/updatePaymentMethod"))
+                .filter(document("paymentMethods/updatePaymentMethod"))
                 .body("{\n" +
-                        "  \"type\": \"CREDIT_CARD\",\n" +
                         "  \"url\": \"https://webpay.by/en/\"\n" +
                         "}\n")
                 .when()
-                .put("/v1/paymentMethod/credit_card")
+                .put("/api/v1/paymentMethods/credit_card")
                 .then()
-                .statusCode(HttpStatus.SC_OK)
-                .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .extract()
-                .jsonPath().get("type");
-        assertEquals("CREDIT_CARD", type);
-    }
-
-    @Test
-    public void patchPaymentMethod() {
-        String type = given(this.spec)
-                .param("url", "https://webpay.by/en")
-                .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .filter(document("paymentMethod/patchPaymentMethod"))
-                .when()
-                .patch("/v1/paymentMethod/wire_transfer")
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .contentType(APPLICATION_JSON_UTF8_VALUE)
-                .extract()
-                .jsonPath().get("type");
-        assertEquals("WIRE_TRANSFER", type);
+                .statusCode(HttpStatus.SC_OK);
     }
 
     @Test
     public void deletePaymentMethod() {
         given(this.spec)
-                .filter(document("paymentMethod/deletePaymentMethod"))
+                .filter(document("paymentMethods/deletePaymentMethod"))
                 .when()
-                .delete("/v1/paymentMethod/wire_transfer")
+                .delete("/api/v1/paymentMethods/wire_transfer")
                 .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
     }

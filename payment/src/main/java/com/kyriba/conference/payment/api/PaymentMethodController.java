@@ -1,64 +1,59 @@
 package com.kyriba.conference.payment.api;
 
+import com.kyriba.conference.payment.api.dto.PaymentMethodUpdateParamsDto;
 import com.kyriba.conference.payment.domain.PaymentMethodType;
-import com.kyriba.conference.payment.domain.dto.PaymentMethodDto;
-import lombok.AllArgsConstructor;
+import com.kyriba.conference.payment.api.dto.PaymentMethodDto;
+import io.swagger.annotations.ApiParam;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.kyriba.conference.payment.domain.PaymentMethodType.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static com.kyriba.conference.payment.domain.PaymentMethodType.CREDIT_CARD;
+import static com.kyriba.conference.payment.domain.PaymentMethodType.WIRE_TRANSFER;
 
 /**
  * @author Garik Lizura
  */
 @RestController
-@AllArgsConstructor
-@RequestMapping("/v1/paymentMethod")
+@RequestMapping("/api/v1/paymentMethods")
 public class PaymentMethodController {
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<PaymentMethodDto>> getPaymentMethods() {
+    @GetMapping
+    public List<PaymentMethodDto> getPaymentMethods() {
         PaymentMethodDto transfer = new PaymentMethodDto(WIRE_TRANSFER, "http://wrtransfer.com");
         PaymentMethodDto creditCard = new PaymentMethodDto(CREDIT_CARD,"https://webpay.by/en/");
-        return new ResponseEntity<>(Arrays.asList(transfer, creditCard), HttpStatus.OK);
+        return Arrays.asList(transfer, creditCard);
     }
 
-    @ResponseBody
-    @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PaymentMethodResponse> createPaymentMethod(@RequestBody PaymentMethodDto paymentMethod) {
-        return new ResponseEntity<>(new PaymentMethodResponse(CREDIT_CARD), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public PaymentMethodResponse createPaymentMethod(@ApiParam(value = "Payment method creation object", required = true)
+                                                        @Valid @RequestBody PaymentMethodDto paymentMethod) {
+        return new PaymentMethodResponse(CREDIT_CARD);
     }
 
-    @ResponseBody
-    @GetMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PaymentMethodDto> getPaymentMethod(@PathVariable String type) {
-        return new ResponseEntity<>(new PaymentMethodDto(WIRE_TRANSFER, "http://wrtransfer.com"), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/{type}")
+    public PaymentMethodDto getPaymentMethod(@ApiParam(value = "Payment method type", required = true)
+                                                 @PathVariable String type) {
+        return new PaymentMethodDto(WIRE_TRANSFER, "http://wrtransfer.com");
     }
 
-    @ResponseBody
-    @PutMapping(value = "/{type}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PaymentMethodResponse> updatePaymentMethod(@PathVariable String type,
-                                                                @RequestBody PaymentMethodDto paymentMethod) {
-        return new ResponseEntity<>(new PaymentMethodResponse(CREDIT_CARD), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping(value = "/{type}")
+    public void updatePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable String type,
+                                    @ApiParam(value = "Payment method update parameters", required = true)
+                                    @Valid @RequestBody PaymentMethodUpdateParamsDto params) {
     }
 
-    @PatchMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaymentMethodResponse> patchPaymentMethod(@PathVariable String type,
-                                                                    @RequestParam("url") String url) {
-        return new ResponseEntity<>(new PaymentMethodResponse(WIRE_TRANSFER), HttpStatus.OK);
-    }
-
-    @ResponseBody
-    @DeleteMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaymentMethodDto> deletePaymentMethod(@PathVariable String type) {
-        return ResponseEntity.noContent().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = "/{type}")
+    public void deletePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable String type) {
     }
 
     @Value
