@@ -33,7 +33,7 @@ public class DiscountController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    DiscountResponse createDiscount(
+    @Valid DiscountResponse createDiscount(
             @ApiParam(value = "Discount creation object", required = true) @Valid @RequestBody DiscountDto discount) {
         return new DiscountResponse(STUDENT);
     }
@@ -46,8 +46,9 @@ public class DiscountController {
 
     @ResponseStatus(value = HttpStatus.OK)
     @PutMapping("/{type}")
-    void updateDiscount(@PathVariable String type, @ApiParam(value = "Discount percentage object", required = true)
-    @Valid @RequestBody DiscountPercentageDto discountUpdateRequest) {
+    void updateDiscount(@ApiParam(value = "Discount type", required = true) @PathVariable String type,
+                        @ApiParam(value = "Discount update parameters", required = true)
+                        @Valid @RequestBody DiscountPercentageDto params) {
     }
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)

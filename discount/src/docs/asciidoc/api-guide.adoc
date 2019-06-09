@@ -64,10 +64,10 @@ Igor Lizura
 [[resources]]
 = Resources
 
-[[discount]]
+[[discounts]]
 == Discount
 
-The Discount resource / 'discount' relation is used to create and list discounts.
+The Discount resource / 'discounts' relation is used to create and list discounts.
 
 [[resources-discount-create]]
 
