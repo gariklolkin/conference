@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlanRegistrationRequest
+public final class PlanRegistrationRequest
 {
   private @NotNull PlanCategory category;
   private @Email String sponsorEmail;

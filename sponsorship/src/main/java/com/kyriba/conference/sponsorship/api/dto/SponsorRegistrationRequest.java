@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SponsorRegistrationRequest
+public final class SponsorRegistrationRequest
 {
   private @NotEmpty String name;
   private @Email String email;
