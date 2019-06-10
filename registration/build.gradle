@@ -1,4 +1,5 @@
 plugins {
+	id 'org.asciidoctor.convert' version '1.5.3'
 	id 'org.springframework.boot' version '2.1.4.RELEASE'
 	id 'java'
 }
@@ -19,6 +20,10 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	set('snippetsDir', file('build/generated-snippets'))
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -27,7 +32,23 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'io.rest-assured:rest-assured:3.3.0'
+	testCompile 'org.springframework.restdocs:spring-restdocs-restassured'
+	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE'
+}
+
+test {
+	outputs.dir snippetsDir
+}
+
+asciidoctor {
+	attributes 'snippets': snippetsDir
+	dependsOn test
+	inputs.dir snippetsDir
+	outputDir("build/apidoc")
+	sourceDir("src/docs/asciidoc")
 }

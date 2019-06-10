@@ -6,10 +6,10 @@ Attendee:
 	- first last name
 	- job title
 	- which conference from list/schedule
-2. pay for a tiket
+2. pay for a ticket
 	- use credit card
 	- coupon
-3. refund payment (and cancell the ticket)
+3. refund payment (and cancel the ticket)
 4. change attendee
 	- swap to an other attendee
 5. see (ticket) registration status
