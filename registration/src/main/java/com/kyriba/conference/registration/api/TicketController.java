@@ -33,11 +33,11 @@ public class TicketController
    */
   @ApiOperation(value = "Change ticket owner to an other attendee")
   @PutMapping(value = "/{id}/owner", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  TicketResponse exchange(
+  void exchange(
       @Valid @ApiParam(value = "Ticket identity", required = true) @PathVariable String id,
       @Valid @ApiParam(value = "Ticket change owner object", required = true) @RequestBody ChangeTicketOwnerRequest exchange)
   {
-    return new TicketResponse("324");
+
   }
 
 

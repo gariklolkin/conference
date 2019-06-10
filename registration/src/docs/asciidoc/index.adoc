@@ -1,0 +1,120 @@
+= Conference registration microservice
+Ilya Abashkin
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:snippets: ../../../build/generated-snippets
+
+[[overview]]
+= Overview
+
+[[overview-http-verbs]]
+== HTTP verbs
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PUT`
+| Used to create a new resource as well as replace existing resource
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+== HTTP status codes
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `201 Created`
+| A new resource has been created successfully. The resource's URI is available from the response's
+`Location` header
+
+| `204 No Content`
+| An update to an existing resource has been applied successfully
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `404 Not Found`
+| The requested resource did not exist
+
+| `405 Method Not Allowed`
+| The requested resource does not support method
+
+| `409 Conflict`
+| The request tries to put the resource into a conflicting state
+|===
+
+[[attendee]]
+== Attendee
+
+Register conference attendees
+
+[[attendee-registration]]
+
+=== Register attendee
+
+A `POST` request is used to register attendee to a conference
+
+==== Example curl request
+
+include::{snippets}/api/v1/attendees/registration/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/attendees/registration/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/attendees/registration/http-response.adoc[]
+
+
+[[attendee-registration-status]]
+
+=== Check registration status
+
+A `GET` request is used to view registration status
+
+==== Example curl request
+
+include::{snippets}/api/v1/attendees/status/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/attendees/status/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/attendees/status/http-response.adoc[]
+
+[[attendee-ticket-exchange]]
+
+=== Change tickets owner to an other attendee
+
+A `PUT` request is used to change tickets owner
+
+==== Example curl request
+
+include::{snippets}/api/v1/tickets/owner/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/api/v1/tickets/owner/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/api/v1/tickets/owner/http-response.adoc[]

@@ -43,7 +43,7 @@ public class ChangeTicketOwnerApiTest
   @Test
   public void attendeeCanChangeTicketsOwner()
   {
-    String ticketId = given(documentationSpec)
+    given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/tickets/owner"))
         .body("{\n" +
@@ -54,13 +54,7 @@ public class ChangeTicketOwnerApiTest
         .put("/api/v1/tickets/123456789/owner")
 
         .then()
-        .statusCode(HttpStatus.SC_OK)
-        .contentType(APPLICATION_JSON_UTF8_VALUE)
-
-        .extract()
-        .jsonPath().get("id");
-
-    assertNotNull(ticketId);
+        .statusCode(HttpStatus.SC_OK);
   }
 
 
@@ -69,7 +63,6 @@ public class ChangeTicketOwnerApiTest
   {
     given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("api/v1/tickets/owner"))
         .body("{\n" +
             "  \"ticketOwner\": \"\"\n" +
             "}")
