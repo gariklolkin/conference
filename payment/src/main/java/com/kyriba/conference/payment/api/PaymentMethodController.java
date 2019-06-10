@@ -24,7 +24,7 @@ public class PaymentMethodController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @GetMapping
-    public List<PaymentMethodDto> getPaymentMethods() {
+    List<PaymentMethodDto> getPaymentMethods() {
         PaymentMethodDto transfer = new PaymentMethodDto(WIRE_TRANSFER, "http://wrtransfer.com");
         PaymentMethodDto creditCard = new PaymentMethodDto(CREDIT_CARD,"https://webpay.by/en/");
         return Arrays.asList(transfer, creditCard);
@@ -32,28 +32,28 @@ public class PaymentMethodController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public PaymentMethodResponse createPaymentMethod(@ApiParam(value = "Payment method creation object", required = true)
+    PaymentMethodResponse createPaymentMethod(@ApiParam(value = "Payment method creation object", required = true)
                                                         @Valid @RequestBody PaymentMethodDto paymentMethod) {
         return new PaymentMethodResponse(CREDIT_CARD);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{type}")
-    public PaymentMethodDto getPaymentMethod(@ApiParam(value = "Payment method type", required = true)
+    PaymentMethodDto getPaymentMethod(@ApiParam(value = "Payment method type", required = true)
                                                  @PathVariable String type) {
         return new PaymentMethodDto(WIRE_TRANSFER, "http://wrtransfer.com");
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{type}")
-    public void updatePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable String type,
+    void updatePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable String type,
                                     @ApiParam(value = "Payment method update parameters", required = true)
                                     @Valid @RequestBody PaymentMethodUpdateParamsDto params) {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{type}")
-    public void deletePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable String type) {
+    void deletePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable String type) {
     }
 
     @Value
