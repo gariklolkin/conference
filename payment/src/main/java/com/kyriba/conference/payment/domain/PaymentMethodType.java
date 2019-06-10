@@ -5,5 +5,5 @@ package com.kyriba.conference.payment.domain;
  */
 public enum PaymentMethodType {
     CREDIT_CARD,
-    WIRE_TRANSFER;
+    WIRE_TRANSFER
 }
