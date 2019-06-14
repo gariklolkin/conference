@@ -24,7 +24,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 
 @RunWith(SpringRunner.class)
-@AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class PaymentMethodControllerTest {
 
