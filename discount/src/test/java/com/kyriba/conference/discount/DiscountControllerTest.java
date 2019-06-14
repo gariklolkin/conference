@@ -27,7 +27,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  * @author Igor Lizura
  */
 @RunWith(SpringRunner.class)
-@AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class DiscountControllerTest {
 

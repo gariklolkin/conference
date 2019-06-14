@@ -1,7 +1,7 @@
 package com.kyriba.conference.discount.api;
 
 import com.kyriba.conference.discount.api.dto.DiscountDto;
-import com.kyriba.conference.discount.api.dto.DiscountPercentageDto;
+import com.kyriba.conference.discount.api.dto.DiscountUpdateParamsDto;
 import com.kyriba.conference.discount.domain.DiscountType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -48,7 +48,7 @@ public class DiscountController {
     @PutMapping("/{type}")
     void updateDiscount(@ApiParam(value = "Discount type", required = true) @PathVariable String type,
                         @ApiParam(value = "Discount update parameters", required = true)
-                        @Valid @RequestBody DiscountPercentageDto params) {
+                        @Valid @RequestBody DiscountUpdateParamsDto params) {
     }
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)

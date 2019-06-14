@@ -10,9 +10,9 @@ import javax.validation.constraints.Min;
 /**
  * @author Igor Lizura
  */
-@ApiModel(value = "DiscountPercentage", description = "Discount updation request")
+@ApiModel(value = "DiscountUpdateParams", description = "Discount update parameters")
 @Getter
-public class DiscountPercentageDto {
+public class DiscountUpdateParamsDto {
     @ApiModelProperty(value = "Discount percentage")
     @Min(0)
     @Max(100)
