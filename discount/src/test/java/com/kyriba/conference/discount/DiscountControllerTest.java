@@ -1,7 +1,9 @@
 package com.kyriba.conference.discount;
 
+import com.kyriba.conference.discount.api.dto.DiscountExternalDto;
+import com.kyriba.conference.discount.api.dto.DiscountResponse;
 import com.kyriba.conference.discount.domain.DiscountType;
-import com.kyriba.conference.discount.api.dto.DiscountDto;
+import com.kyriba.conference.discount.service.DiscountService;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -9,13 +11,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.List;
 
+import static com.kyriba.conference.discount.domain.DiscountType.JUNIOR;
 import static com.kyriba.conference.discount.domain.DiscountType.STUDENT;
 import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertEquals;
@@ -29,6 +34,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class DiscountControllerTest {
+
+    @MockBean
+    private DiscountService discountService;
 
     private RequestSpecification spec;
 
@@ -44,7 +52,9 @@ public class DiscountControllerTest {
 
     @Test
     public void getDiscounts() {
-        List<DiscountDto> discounts = given(this.spec)
+        Mockito.when(discountService.getAllDiscounts()).thenReturn(Arrays.asList(new DiscountExternalDto(JUNIOR, 30),
+                new DiscountExternalDto(STUDENT, 50)));
+        List<DiscountExternalDto> discounts = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("getDiscounts"))
                 .when()
@@ -53,7 +63,7 @@ public class DiscountControllerTest {
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
                 .body()
-                .jsonPath().getList(".", DiscountDto.class);
+                .jsonPath().getList(".", DiscountExternalDto.class);
         assertEquals(2, discounts.size());
         assertEquals(DiscountType.JUNIOR, discounts.get(0).getType());
         assertEquals(STUDENT, discounts.get(1).getType());
@@ -61,6 +71,8 @@ public class DiscountControllerTest {
 
     @Test
     public void createDiscount() {
+        Mockito.when(discountService.createDiscount(Mockito.any(DiscountExternalDto.class)))
+                .thenReturn(new DiscountResponse(STUDENT));
         String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("createDiscount"))
@@ -80,6 +92,8 @@ public class DiscountControllerTest {
 
     @Test
     public void getDiscount() {
+        Mockito.when(discountService.getDiscount(Mockito.anyString()))
+                .thenReturn(new DiscountExternalDto(STUDENT, 30));
         String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("getDiscount"))

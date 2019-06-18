@@ -1,5 +1,6 @@
 package com.kyriba.conference.discount.api.dto;
 
+import com.kyriba.conference.discount.domain.DiscountType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,15 +9,20 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Igor Lizura
  */
-@ApiModel(value = "DiscountUpdateParams", description = "Discount update parameters")
+@ApiModel(value = "Discount", description = "Discount creation request")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DiscountUpdateParamsDto {
+public class DiscountExternalDto {
+    @ApiModelProperty(value = "Discount type")
+    @NotNull
+    private DiscountType type;
+
     @ApiModelProperty(value = "Discount percentage")
     @Min(0)
     @Max(100)
