@@ -2,19 +2,21 @@ package com.kyriba.conference.management.service;
 
 import com.kyriba.conference.management.api.dto.PresentationRequest;
 import com.kyriba.conference.management.domain.Presentation;
+import com.kyriba.conference.management.domain.exception.EntityNotFound;
+import com.kyriba.conference.management.domain.exception.LinkedEntityNotFound;
 
-import java.util.List;
+import java.util.Optional;
 
 
 public interface ScheduleService
 {
-  List<Presentation> getSchedule();
+  Iterable<Presentation> getSchedule();
 
-  Long addPresentation(PresentationRequest presentation);
+  Long addPresentation(PresentationRequest presentation) throws LinkedEntityNotFound;
 
-  Presentation getPresentation();
+  Optional<Presentation> getPresentation(Long id);
 
-  Long updatePresentation(Long id, PresentationRequest presentation);
+  void updatePresentation(Long id, PresentationRequest presentation) throws EntityNotFound, LinkedEntityNotFound;
 
-  Long deletePresentation(Long id);
+  void deletePresentation(Long id);
 }

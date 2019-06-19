@@ -1,6 +1,7 @@
 package com.kyriba.conference.management.api.dto;
 
 
+import com.kyriba.conference.management.domain.Topic;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,4 +24,11 @@ public class TopicDto
   @ApiModelProperty(value = "Author")
   @NotBlank
   private String author;
+
+
+  public TopicDto(Topic topic)
+  {
+    title = topic.getTitle();
+    author = topic.getAuthor();
+  }
 }

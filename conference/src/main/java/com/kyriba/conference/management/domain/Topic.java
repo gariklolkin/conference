@@ -1,18 +1,21 @@
 package com.kyriba.conference.management.domain;
 
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 
-//@Entity
-@Getter
-@ToString
-@EqualsAndHashCode
+@Embeddable
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Topic
 {
-  private Long id;
+  @Column(unique = true)
   private String title;
   private String author;
 }

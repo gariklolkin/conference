@@ -1,8 +1,8 @@
 package com.kyriba.conference.management.service;
 
-
 import com.kyriba.conference.management.api.dto.HallRequest;
-import com.kyriba.conference.management.domain.Hall;
+import com.kyriba.conference.management.api.dto.HallResponse;
+import com.kyriba.conference.management.domain.exception.EntityNotFound;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public interface HallService
 {
-  List<Hall> findAll();
+  Optional<HallResponse> findHall(Long id);
 
-  Hall createHall(HallRequest hall);
+  List<HallResponse> findAllHalls();
 
-  void updateHall(Long id, HallRequest hall);
+  Long createHall(HallRequest hallRequest);
 
-  void deleteHall(Long id);
+  void updateHall(Long id, HallRequest hallRequest) throws EntityNotFound;
 
-  Optional<Hall> find(Long id);
+  void removeHall(Long id);
 }
