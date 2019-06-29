@@ -19,7 +19,7 @@ public class PresentationRequest
 {
   @ApiModelProperty(value = "Hall identity")
   @NotNull
-  private Long hall;
+  private long hall;
 
   @ApiModelProperty(value = "Presentation topic")
   @NotNull

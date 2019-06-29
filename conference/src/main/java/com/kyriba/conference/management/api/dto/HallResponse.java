@@ -23,7 +23,7 @@ public class HallResponse
 
   @ApiModelProperty(value = "Hall place count")
   @JsonInclude(NON_EMPTY)
-  private Integer places;
+  private int places;
 
 
   public HallResponse(Hall hall)

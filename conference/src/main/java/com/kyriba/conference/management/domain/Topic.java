@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 
@@ -15,7 +14,6 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 public class Topic
 {
-  @Column(unique = true)
   private String title;
   private String author;
 }

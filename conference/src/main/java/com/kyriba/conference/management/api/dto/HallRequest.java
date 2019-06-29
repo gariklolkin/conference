@@ -24,5 +24,5 @@ public class HallRequest
   @ApiModelProperty(value = "Hall place count")
   @NotNull
   @Min(10)
-  private Integer places;
+  private int places;
 }

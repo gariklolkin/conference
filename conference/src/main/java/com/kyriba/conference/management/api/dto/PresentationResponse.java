@@ -24,7 +24,7 @@ public class PresentationResponse
 {
   @ApiModelProperty(value = "Hall identity")
   @JsonInclude(NON_EMPTY)
-  private Long hall;
+  private long hall;
 
   @ApiModelProperty(value = "Presentation topic")
   @JsonInclude(NON_EMPTY)

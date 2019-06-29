@@ -1,39 +1,38 @@
 package com.kyriba.conference.management.service;
 
-import com.kyriba.conference.management.dao.HallRepository;
 import com.kyriba.conference.management.api.dto.HallRequest;
 import com.kyriba.conference.management.api.dto.HallResponse;
+import com.kyriba.conference.management.dao.HallRepository;
 import com.kyriba.conference.management.domain.Hall;
-import com.kyriba.conference.management.domain.exception.EntityNotFound;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.stream.StreamSupport.stream;
 
 
 @Service
+@Transactional
+@AllArgsConstructor
 public class HallServiceImpl implements HallService
 {
+  private static final String HALL_NOT_FOUND = "Hall not found.";
+
   private final HallRepository hallRepository;
 
 
-  @Autowired
-  public HallServiceImpl(HallRepository hallRepository)
-  {
-    this.hallRepository = hallRepository;
-  }
-
-
   @Override
-  public Optional<HallResponse> findHall(Long id)
+  public HallResponse findHall(long id)
   {
     return hallRepository.findById(id)
-        .map(HallResponse::new);
+        .map(HallResponse::new)
+        .orElseThrow(() -> new ResourceNotFoundException(HALL_NOT_FOUND));
   }
+
 
   @Override
   public List<HallResponse> findAllHalls()
@@ -45,33 +44,26 @@ public class HallServiceImpl implements HallService
 
 
   @Override
-  public Long createHall(HallRequest hallRequest)
+  public long createHall(HallRequest hallRequest)
   {
-    Hall hall = new Hall()
-        .withName(hallRequest.getName())
-        .withPlaces(hallRequest.getPlaces());
+    Hall hall = new Hall(hallRequest);
     return hallRepository.save(hall).getId();
   }
 
 
   @Override
-  public void updateHall(Long id, HallRequest hallRequest) throws EntityNotFound
+  public void updateHall(long id, HallRequest hallRequest)
   {
-    Optional<Hall> hall = hallRepository.findById(id);
-    if (hall.isPresent()) {
-      Hall updated = hall.get();
-      updated.setName(hallRequest.getName());
-      updated.setPlaces(hallRequest.getPlaces());
-      hallRepository.save(updated);
-    }
-    else {
-      throw new EntityNotFound("Hall not found");
-    }
+    Hall hall = hallRepository.findById(id)
+        .map(h -> h.update(hallRequest))
+        .orElseThrow(() -> new ResourceNotFoundException(HALL_NOT_FOUND));
+
+    hallRepository.save(hall);
   }
 
 
   @Override
-  public void removeHall(Long id)
+  public void removeHall(long id)
   {
     hallRepository.deleteById(id);
   }

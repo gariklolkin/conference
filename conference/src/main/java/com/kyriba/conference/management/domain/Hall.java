@@ -1,6 +1,8 @@
 package com.kyriba.conference.management.domain;
 
 
+import com.kyriba.conference.management.api.dto.HallRequest;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +15,7 @@ import javax.persistence.Id;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Hall
 {
   @Id
@@ -29,16 +32,16 @@ public class Hall
   }
 
 
-  public Hall withName(String name)
+  public Hall(HallRequest hallRequest)
   {
-    this.name = name;
-    return this;
+    update(hallRequest);
   }
 
 
-  public Hall withPlaces(int places)
+  public Hall update(HallRequest hallRequest)
   {
-    this.places = places;
+    name = hallRequest.getName();
+    places = hallRequest.getPlaces();
     return this;
   }
 }

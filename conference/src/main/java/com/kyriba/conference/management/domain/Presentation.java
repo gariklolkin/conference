@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.time.LocalTime;
 
 
@@ -20,6 +22,9 @@ import java.time.LocalTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(
+    uniqueConstraints = @UniqueConstraint(columnNames = { "title", "author" })
+)
 public class Presentation
 {
   @Id

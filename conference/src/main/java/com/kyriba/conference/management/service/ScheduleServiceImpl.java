@@ -7,20 +7,27 @@ import com.kyriba.conference.management.dao.PresentationRepository;
 import com.kyriba.conference.management.domain.Hall;
 import com.kyriba.conference.management.domain.Presentation;
 import com.kyriba.conference.management.domain.Topic;
-import com.kyriba.conference.management.domain.exception.EntityNotFound;
 import com.kyriba.conference.management.domain.exception.LinkedEntityNotFound;
-import com.kyriba.conference.management.domain.exception.TimeslotIsBooked;
+import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import static java.lang.String.format;
 
 
 @Service
+@Transactional
 public class ScheduleServiceImpl implements ScheduleService
 {
+  private static final String HALL_NOT_FOUND = "Hall not found.";
+
   private final PresentationRepository presentationRepository;
 
   private final HallRepository hallRepository;
@@ -42,44 +49,28 @@ public class ScheduleServiceImpl implements ScheduleService
   }
 
 
-  @Transactional
   @Override
-  public Long addPresentation(PresentationRequest presentationRequest) throws LinkedEntityNotFound
+  public long addPresentation(PresentationRequest presentationRequest)
   {
-    Optional<Hall> hall = hallRepository.findById(presentationRequest.getHall());
-    if (hall.isPresent()) {
-      TopicDto topic = presentationRequest.getTopic();
-      Presentation presentation = Presentation.builder()
-          .hall(hall.get())
-          .topic(new Topic(topic.getTitle(), topic.getAuthor()))
-          .startTime(presentationRequest.getStartTime())
-          .endTime(presentationRequest.getEndTime())
-          .build();
-      presentation.validate();
-      validateTimeIntersection(presentation);
+    Hall hall = hallRepository.findById(presentationRequest.getHall())
+        .orElseThrow(() -> new LinkedEntityNotFound(HALL_NOT_FOUND));
 
-      return presentationRepository.save(presentation).getId();
-    }
-    else {
-      throw new LinkedEntityNotFound("Hall not found");
-    }
-  }
+    TopicDto topic = presentationRequest.getTopic();
+    Presentation presentation = Presentation.builder()
+        .hall(hall)
+        .topic(new Topic(topic.getTitle(), topic.getAuthor()))
+        .startTime(presentationRequest.getStartTime())
+        .endTime(presentationRequest.getEndTime())
+        .build();
+    presentation.validate();
+    validateTimeIntersection(presentation);
 
-
-  private void validateTimeIntersection(Presentation presentation)
-  {
-    try (Stream<Presentation> intersections = presentationRepository
-        .findByStartTimeBetweenOrEndTimeBetween(presentation.getStartTime(), presentation.getEndTime(),
-            presentation.getStartTime(), presentation.getEndTime())) {
-      if (intersections.anyMatch(pr -> !pr.getId().equals(presentation.getId()))) {
-        throw new TimeslotIsBooked("Timeslot is booked");
-      }
-    }
+    return presentationRepository.save(presentation).getId();
   }
 
 
   @Override
-  public Optional<Presentation> getPresentation(Long id)
+  public Optional<Presentation> getPresentation(long id)
   {
     return presentationRepository.findById(id);
   }
@@ -87,34 +78,52 @@ public class ScheduleServiceImpl implements ScheduleService
 
   @Transactional
   @Override
-  public void updatePresentation(Long id, PresentationRequest presentationRequest) throws EntityNotFound,
-      LinkedEntityNotFound
+  public void updatePresentation(long id, PresentationRequest presentationRequest)
   {
-    Optional<Presentation> presentation = presentationRepository.findById(id);
-    if (presentation.isPresent()) {
-      Presentation updated = presentation.get();
+    Presentation presentation = presentationRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Presentation not found."));
 
-      Hall hall = hallRepository.findById(presentationRequest.getHall())
-          .orElseThrow(() -> new LinkedEntityNotFound("Hall not found"));
-      updated.setHall(hall);
-      updated
-          .setTopic(new Topic(presentationRequest.getTopic().getTitle(), presentationRequest.getTopic().getAuthor()));
-      updated.setStartTime(presentationRequest.getStartTime());
-      updated.setEndTime(presentationRequest.getEndTime());
-      updated.validate();
-      validateTimeIntersection(updated);
+    Hall hall = hallRepository.findById(presentationRequest.getHall())
+        .orElseThrow(() -> new LinkedEntityNotFound(HALL_NOT_FOUND));
 
-      presentationRepository.save(updated);
-    }
-    else {
-      throw new EntityNotFound("Presentation not found");
-    }
+    presentation.setHall(hall);
+    presentation
+        .setTopic(new Topic(presentationRequest.getTopic().getTitle(), presentationRequest.getTopic().getAuthor()));
+    presentation.setStartTime(presentationRequest.getStartTime());
+    presentation.setEndTime(presentationRequest.getEndTime());
+    presentation.validate();
+    validateTimeIntersection(presentation);
+
+    presentationRepository.save(presentation);
   }
 
 
   @Override
-  public void deletePresentation(Long id)
+  public void deletePresentation(long id)
   {
     presentationRepository.deleteById(id);
+  }
+
+
+  private void validateTimeIntersection(Presentation presentation)
+  {
+    final LocalTime startTime = presentation.getStartTime();
+    final LocalTime endTime = presentation.getEndTime();
+
+    try (Stream<Presentation> intersections = presentationRepository
+        .findByStartTimeBetweenOrEndTimeBetween(startTime, endTime, startTime, endTime)) {
+
+      Predicate<Presentation> anotherPresentation = pr -> !pr.getId().equals(presentation.getId());
+      intersections
+          .filter(anotherPresentation)
+          .findAny()
+          .ifPresent(pr -> {
+                throw new PresentationTimeIntersectionException(
+                    format("Presentation time intersection: wanted %s - %s, already reserved %s - %s.",
+                        presentation.getStartTime(), presentation.getEndTime(), pr.getStartTime(), pr.getEndTime()));
+              }
+          );
+
+    }
   }
 }
