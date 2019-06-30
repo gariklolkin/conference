@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,13 +22,18 @@ import javax.validation.Valid;
  * @since v1.0
  */
 @RestController
-@RequiredArgsConstructor
 @RequestMapping(value = "${api.version}/sponsorship/sponsors",
     consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 @Api(value = "Register a new sponsor")
 public class SponsorController
 {
   private final SponsorService sponsorService;
+
+
+  public SponsorController(SponsorService sponsorService)
+  {
+    this.sponsorService = sponsorService;
+  }
 
 
   @SuppressWarnings("unused")
@@ -41,11 +45,7 @@ public class SponsorController
   })
   SponsorRegistrationResponse register(@Valid @RequestBody SponsorRegistrationRequest request)
   {
-    final String randomId = "123";
-    final Sponsor sponsor = Sponsor.builder().id(randomId)
-        .name(request.getName())
-        .email(request.getEmail())
-        .build();
-    return new SponsorRegistrationResponse(sponsor.getId());
+    Sponsor sponsor = sponsorService.createSponsor(request.getName(), request.getEmail());
+    return new SponsorRegistrationResponse(sponsor.getId().toString());
   }
 }
