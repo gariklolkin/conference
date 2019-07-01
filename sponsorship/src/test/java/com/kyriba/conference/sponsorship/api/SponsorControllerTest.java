@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.given;
@@ -24,7 +25,8 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  */
 @ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class SponsorControllerTest
+@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
+class SponsorControllerTest extends AbstractContainerBaseTest
 {
   private RequestSpecification specification;
 
