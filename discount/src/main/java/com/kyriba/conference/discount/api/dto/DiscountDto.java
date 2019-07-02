@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DiscountExternalDto {
+public class DiscountDto {
     @ApiModelProperty(value = "Discount type")
     @NotNull
     private DiscountType type;

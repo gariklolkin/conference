@@ -1,6 +1,6 @@
 package com.kyriba.conference.discount;
 
-import com.kyriba.conference.discount.api.dto.DiscountExternalDto;
+import com.kyriba.conference.discount.api.dto.DiscountDto;
 import com.kyriba.conference.discount.api.dto.DiscountResponse;
 import com.kyriba.conference.discount.domain.DiscountType;
 import com.kyriba.conference.discount.service.DiscountService;
@@ -52,9 +52,9 @@ public class DiscountControllerTest {
 
     @Test
     public void getDiscounts() {
-        Mockito.when(discountService.getAllDiscounts()).thenReturn(Arrays.asList(new DiscountExternalDto(JUNIOR, 30),
-                new DiscountExternalDto(STUDENT, 50)));
-        List<DiscountExternalDto> discounts = given(this.spec)
+        Mockito.when(discountService.getAllDiscounts()).thenReturn(Arrays.asList(new DiscountDto(JUNIOR, 30),
+                new DiscountDto(STUDENT, 50)));
+        List<DiscountDto> discounts = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("getDiscounts"))
                 .when()
@@ -63,7 +63,7 @@ public class DiscountControllerTest {
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
                 .body()
-                .jsonPath().getList(".", DiscountExternalDto.class);
+                .jsonPath().getList(".", DiscountDto.class);
         assertEquals(2, discounts.size());
         assertEquals(DiscountType.JUNIOR, discounts.get(0).getType());
         assertEquals(STUDENT, discounts.get(1).getType());
@@ -71,7 +71,7 @@ public class DiscountControllerTest {
 
     @Test
     public void createDiscount() {
-        Mockito.when(discountService.createDiscount(Mockito.any(DiscountExternalDto.class)))
+        Mockito.when(discountService.createDiscount(Mockito.any(DiscountDto.class)))
                 .thenReturn(new DiscountResponse(STUDENT));
         String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
@@ -87,24 +87,24 @@ public class DiscountControllerTest {
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .extract()
                 .jsonPath().get("type");
-        assertEquals(STUDENT.toString(), type);
+        assertEquals(STUDENT.name(), type);
     }
 
     @Test
     public void getDiscount() {
-        Mockito.when(discountService.getDiscount(Mockito.anyString()))
-                .thenReturn(new DiscountExternalDto(STUDENT, 30));
+        Mockito.when(discountService.getDiscount(Mockito.any(DiscountType.class)))
+                .thenReturn(new DiscountDto(STUDENT, 30));
         String type = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("getDiscount"))
                 .when()
-                .get("/api/v1/discounts/student")
+                .get("/api/v1/discounts/STUDENT")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
                 .body()
                 .jsonPath().get("type");
-        assertEquals(STUDENT.toString(), type);
+        assertEquals(STUDENT.name(), type);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class DiscountControllerTest {
                         "  \"percentage\": 50\n" +
                         "}")
                 .when()
-                .put("/api/v1/discounts/student")
+                .put("/api/v1/discounts/STUDENT")
                 .then()
                 .log().body()
                 .statusCode(HttpStatus.SC_OK);
@@ -127,7 +127,7 @@ public class DiscountControllerTest {
         given(this.spec)
                 .when()
                 .filter(document("deleteDiscount"))
-                .delete("/api/v1/discounts/junior")
+                .delete("/api/v1/discounts/JUNIOR")
                 .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
     }

@@ -1,8 +1,6 @@
 package com.kyriba.conference.discount.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,7 +11,8 @@ import static com.kyriba.conference.discount.domain.DiscountType.WITHOUT_DISCOUN
  */
 @Entity
 @Table(name = "discount")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class DiscountEntity {
@@ -21,12 +20,12 @@ public class DiscountEntity {
     @SequenceGenerator(name = "seq_identity_id", sequenceName = "seq_identity_id", allocationSize = 1)
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    protected Long id;
+    private Long id;
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private DiscountType type = WITHOUT_DISCOUNT;
 
     @Column(name = "percentage")
-    int percentage;
+    private int percentage;
 }

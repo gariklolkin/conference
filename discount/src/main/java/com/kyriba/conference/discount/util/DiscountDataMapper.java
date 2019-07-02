@@ -1,8 +1,8 @@
 package com.kyriba.conference.discount.util;
 
-import com.kyriba.conference.discount.api.dto.DiscountExternalDto;
+import com.kyriba.conference.discount.api.dto.DiscountDto;
 import com.kyriba.conference.discount.api.dto.DiscountResponse;
-import com.kyriba.conference.discount.api.dto.DiscountUpdateParamsDto;
+import com.kyriba.conference.discount.api.dto.DiscountPercentageUpdateDto;
 import com.kyriba.conference.discount.domain.DiscountEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,14 +22,14 @@ public interface DiscountDataMapper {
 
     @Mapping(source = "type", target = "type")
     @Mapping(source = "percentage", target = "percentage")
-    DiscountEntity dtoToEntity(DiscountExternalDto discountInputDto);
+    DiscountEntity dtoToEntity(DiscountDto discountInputDto);
 
     @Mapping(source = "type", target = "type")
     @Mapping(source = "percentage", target = "percentage")
-    DiscountExternalDto entityToDto(DiscountEntity discountEntity);
+    DiscountDto entityToDto(DiscountEntity discountEntity);
 
     @Mapping(source = "percentage", target = "percentage")
-    DiscountEntity paramsToDto(DiscountUpdateParamsDto parameters);
+    DiscountEntity paramsToDto(DiscountPercentageUpdateDto parameters);
 
-    void updateDiscountEntityFromParams(DiscountUpdateParamsDto params, @MappingTarget DiscountEntity discountEntity);
+    void updateDiscountEntityFromParams(DiscountPercentageUpdateDto params, @MappingTarget DiscountEntity discountEntity);
 }

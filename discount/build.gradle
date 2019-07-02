@@ -2,6 +2,7 @@ plugins {
 	id 'org.asciidoctor.convert' version '1.5.3'
 	id 'org.springframework.boot' version '2.1.4.RELEASE'
 	id 'java'
+	id "com.palantir.docker" version "0.22.1"
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -55,4 +56,18 @@ asciidoctor {
 	outputDir("build/asciidoc")
 	sourceDir("src/docs/asciidoc")
 	dependsOn test
+}
+
+bootJar {
+	baseName = 'discount'
+	version = project.version
+}
+
+docker {
+	docker {
+		name "gariklolkin/garik-repository:discount-$project.version"
+		dependsOn bootJar
+		files bootJar.archivePath
+		buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+	}
 }

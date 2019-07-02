@@ -1,11 +1,11 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://${PGHOST:localhost}:${PORT:5432}/postgres
     username: postgres
     password: postgres
   liquibase.change-log: classpath:db/changelog/changelog-master.xml
 logging:
   level:
-    root: DEBUG
+    ROOT: DEBUG
     org.springframework.web: DEBUG
     org.hibernate: DEBUG
