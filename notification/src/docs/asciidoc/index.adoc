@@ -1,0 +1,168 @@
+= Notification microservice
+Siarhei Shvaiko
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[overview]]
+= Overview
+
+[[overview-http-verbs]]
+== HTTP verbs
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PUT`
+| Used to create a new resource as well as replace existing resource
+
+| `PATCH`
+| Used to update an existing resource, including partial updates
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+== HTTP status codes
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `201 Created`
+| A new resource has been created successfully. The resource's URI is available from the response's
+`Location` header
+
+| `204 No Content`
+| An update to an existing resource has been applied successfully
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `404 Not Found`
+| The requested resource did not exist
+
+| `405 Method Not Allowed`
+| The requested resource does not support method
+
+| `409 Conflict`
+| The request tries to put the resource into a conflicting state
+|===
+
+[[notification]]
+== Notification
+
+Send notifications
+
+[[notification-email-notify]]
+
+=== Send email notification
+
+A `POST` request is used to send notification
+
+==== Example curl request
+
+include::{snippets}/notification-email-notify/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/notification-email-notify/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/notification-email-notify/http-response.adoc[]
+
+
+[[notification-sms-notify]]
+
+=== Send sms notification
+
+A `POST` request is used to send notification
+
+==== Example curl request
+
+include::{snippets}/notification-sms-notify/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/notification-sms-notify/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/notification-sms-notify/http-response.adoc[]
+
+
+[[notification-telega-notify]]
+
+=== Send Telegram notification
+
+A `POST` request is used to send notification
+
+==== Example curl request
+
+include::{snippets}/notification-telega-notify/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/notification-telega-notify/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/notification-telega-notify/http-response.adoc[]
+
+
+
+[[status]]
+== Status
+
+Show notifications status
+
+[[notification-message-status]]
+
+=== Notification status
+
+Get notification status by notification id
+
+==== Example curl request
+
+include::{snippets}/notification-message-status/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/notification-message-status/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/notification-message-status/http-response.adoc[]
+
+
+
+[[notification-status-get]]
+
+=== Notifications by status
+
+Get notifications by status
+
+==== Example curl request
+
+include::{snippets}/notification-status-get/curl-request.adoc[]
+
+==== Example HTTP request
+
+include::{snippets}/notification-status-get/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/notification-status-get/http-response.adoc[]
