@@ -1,17 +1,22 @@
-version: "3.1"
+version: "3.7"
 services:
   sponsorship_db:
     container_name: "sponsorship_db"
     image: postgres
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - db-data:/var/lib/postgresql/data
   sponsorship_service:
     container_name: "sponsorship_service"
+    environment:
+      - SPONSORSHIP_DB_HOST=sponsorship_db
+      - SPONSORSHIP_DB_PORT=5432
+      - SPONSORSHIP_SERVICE_PORT=8080
+      - EUREKA_PORT=9090
     build: .
     ports:
-      - "8080:8080"
+      - 8080:8080
     depends_on:
       - sponsorship_db
 volumes:

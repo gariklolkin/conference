@@ -38,7 +38,7 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "${api.version}/sponsorship/plans",
+@RequestMapping(value = "${api.version.path}/sponsorship/plans",
     consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 @Api(value = "Register a new sponsorship plan")
 public class PlanController
