@@ -3,10 +3,9 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
   <changeSet id="1" author="Aliaksandr Samal">
-    <createSequence incrementBy="1" minValue="1" sequenceName="seq_identity_id" startValue="1000000"/>
-  </changeSet>
 
-  <changeSet id="2" author="Aliaksandr Samal">
+    <createSequence incrementBy="1" minValue="1" sequenceName="seq_identity_id" startValue="1000000"/>
+
     <createTable tableName="sponsor">
       <column name="id" type="bigint">
         <constraints primaryKey="true" nullable="false"/>
@@ -18,9 +17,7 @@
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
-  </changeSet>
 
-  <changeSet id="3" author="Aliaksandr Samal">
     <createTable tableName="plan">
       <column name="id" type="bigint">
         <constraints primaryKey="true" nullable="false"/>
@@ -32,17 +29,10 @@
         <constraints nullable="true" unique="false"/>
       </column>
     </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="sponsor_id" baseTableName="plan" constraintName="fk_plan_sponsor"
+                             deferrable="true" initiallyDeferred="true" onDelete="CASCADE" onUpdate="RESTRICT"
+                             referencedColumnNames="id" referencedTableName="sponsor"/>
   </changeSet>
 
-  <changeSet id="4" author="Aliaksandr Samal">
-    <addForeignKeyConstraint baseColumnNames="sponsor_id"
-                             baseTableName="plan"
-                             constraintName="fk_plan_sponsor"
-                             deferrable="true"
-                             initiallyDeferred="true"
-                             onDelete="CASCADE"
-                             onUpdate="RESTRICT"
-                             referencedColumnNames="id"
-                             referencedTableName="sponsor"/>
-  </changeSet>
 </databaseChangeLog>

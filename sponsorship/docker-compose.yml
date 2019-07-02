@@ -1,18 +1,18 @@
 version: "3.1"
 services:
-  postgres_db:
-    container_name: "sponsorship_postgres_db"
+  sponsorship_db:
+    container_name: "sponsorship_db"
     image: postgres
     ports:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
-  app:
-    container_name: "sponsorship_app"
+  sponsorship_service:
+    container_name: "sponsorship_service"
     build: .
     ports:
       - "8080:8080"
     depends_on:
-      - postgres_db
+      - sponsorship_db
 volumes:
   db-data:

@@ -1,62 +1,29 @@
+/****************************************************************************
+ * Copyright 2000 - 2019 Kyriba Corp. All Rights Reserved.                  *
+ * The content of this file is copyrighted by Kyriba Corporation            *
+ * and can not be reproduced, distributed, altered or used in any form,     *
+ * in whole or in part.                                                     *
+ *                                                                          *
+ * Date          Author         Changes                                     *
+ * 2019-07-09    M-ASL          Created                                     *
+ *                                                                          *
+ ****************************************************************************/
 package com.kyriba.conference.sponsorship.service;
 
-import com.kyriba.conference.sponsorship.dao.SponsorRepository;
 import com.kyriba.conference.sponsorship.domain.Sponsor;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
+import com.kyriba.conference.sponsorship.domain.dto.SponsorDto;
 
-import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.stream.StreamSupport;
+import java.util.Optional;
 
 
 /**
- * @author M-ASL
- * @since v1.0
+ * @author Aliaksandr Samal
  */
-@Service
-@Transactional
-public class SponsorService
+public interface SponsorService
 {
-  private final SponsorRepository sponsorRepository;
+  long createSponsor(String name, String email);
 
+  void sendEmailNotification(Sponsor sponsor);
 
-  public SponsorService(SponsorRepository sponsorRepository)
-  {
-    this.sponsorRepository = sponsorRepository;
-  }
-
-
-  public Sponsor createSponsor(String name, String email)
-  {
-    Sponsor sponsor = Sponsor.builder()
-        .name(name)
-        .email(email)
-        .build();
-    return sponsorRepository.save(sponsor);
-  }
-
-
-  @Nullable
-  public Sponsor readByEmail(String email)
-  {
-    return StreamSupport.stream(sponsorRepository.findAll().spliterator(), false)
-        .filter(x -> email.equals(x.getEmail()))
-        .findFirst()
-        .orElse(null);
-  }
-
-
-  public EmailMessage createSponsorEmailMessage(Sponsor sponsor)
-  {
-    Recipient recipient = Recipient.builder()
-        .name(sponsor.getName())
-        .address(sponsor.getEmail())
-        .build();
-    return EmailMessage.builder()
-        .recipients(Arrays.asList(recipient))
-        .emailMessageOptions(new HashSet<>(Arrays.asList(EmailMessage.Options.HIGH_PRIORITY)))
-        .build();
-  }
+  Optional<SponsorDto> readSponsor(long id);
 }

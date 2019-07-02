@@ -1,7 +1,0 @@
-spring:
-  liquibase.change-log: classpath:db/changelog/changelog-master.xml
-logging:
-  level:
-    root: info
-    org.springframework.web: info
-    org.hibernate: info

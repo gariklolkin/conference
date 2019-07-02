@@ -1,22 +1,30 @@
 package com.kyriba.conference.sponsorship.api;
 
-import com.kyriba.conference.sponsorship.api.dto.SponsorRegistrationRequest;
-import com.kyriba.conference.sponsorship.api.dto.SponsorRegistrationResponse;
-import com.kyriba.conference.sponsorship.domain.Sponsor;
-import com.kyriba.conference.sponsorship.service.EmailService;
+import com.kyriba.conference.sponsorship.domain.dto.SponsorDto;
 import com.kyriba.conference.sponsorship.service.SponsorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 
 /**
@@ -31,26 +39,48 @@ import javax.validation.Valid;
 public class SponsorController
 {
   private final SponsorService sponsorService;
-  private final EmailService emailService;
 
 
   @SuppressWarnings("unused")
   @ApiOperation(value = "Register the sponsor")
-  @PostMapping
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "OK", response = SponsorRegistrationResponse.class),
-      @ApiResponse(code = 401, message = "Failed to register the sponsor", response = SponsorRegistrationResponse.class)
+      @ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 401, message = "Failed to register the sponsor")
   })
+  @PostMapping
   SponsorRegistrationResponse register(@Valid @RequestBody SponsorRegistrationRequest request)
   {
-    Sponsor sponsor = sponsorService.createSponsor(request.getName(), request.getEmail());
-    try {
-      emailService.send(sponsorService.createSponsorEmailMessage(sponsor));
-    }
-    catch (Exception e) {
-      //todo it is workaround, what behavior is expected when the other service is not available?
-      e.printStackTrace();
-    }
-    return new SponsorRegistrationResponse(sponsor.getId().toString());
+    return new SponsorRegistrationResponse(sponsorService.createSponsor(request.getName(), request.getEmail()));
+  }
+
+
+  @SuppressWarnings("unused")
+  @ApiOperation(value = "Get the sponsor")
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 404, message = "Sponsor not found")
+  })
+  @GetMapping("/{id}")
+  SponsorDto get(@ApiParam(value = "Id of the sponsor to get", required = true) @PathVariable Long id)
+  {
+    return sponsorService.readSponsor(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sponsor Not Found"));
+  }
+
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  private static final class SponsorRegistrationRequest
+  {
+    private @NotEmpty String name;
+    private @Email String email;
+  }
+
+
+  @Value
+  private static class SponsorRegistrationResponse
+  {
+    private long id;
   }
 }

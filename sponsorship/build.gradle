@@ -51,8 +51,8 @@ dependencies {
     testCompile 'org.testcontainers:postgresql:1.11.3'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon'
-    //todo uncomment to enable eureka support
-    //compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server:'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
 test {
