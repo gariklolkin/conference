@@ -41,7 +41,6 @@ public class SponsorController
   private final SponsorService sponsorService;
 
 
-  @SuppressWarnings("unused")
   @ApiOperation(value = "Register the sponsor")
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "OK"),
@@ -54,7 +53,6 @@ public class SponsorController
   }
 
 
-  @SuppressWarnings("unused")
   @ApiOperation(value = "Get the sponsor")
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "OK"),

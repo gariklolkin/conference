@@ -17,7 +17,6 @@ public class EmailMessage
   private Set<Options> emailMessageOptions;
 
 
-  @SuppressWarnings("unused")
   public enum Options
   {
     HIGH_PRIORITY, HIDE_ADDRESS

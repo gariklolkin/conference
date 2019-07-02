@@ -7,7 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * @author Aliaksandr Samal
  */
-@SuppressWarnings("unused")
 public interface PlanRepository extends CrudRepository<Plan, Long>
 {
 }

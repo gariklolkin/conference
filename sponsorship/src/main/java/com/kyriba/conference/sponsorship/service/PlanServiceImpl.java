@@ -36,7 +36,7 @@ public class PlanServiceImpl implements PlanService
   @Override
   public long createPlan(PlanCategory category, String sponsorEmail)
   {
-    Sponsor sponsor = sponsorRepository.readByEmail(sponsorEmail);
+    Sponsor sponsor = sponsorRepository.findByEmail(sponsorEmail).orElse(null);
     Plan plan = new Plan();
     plan.setCategory(category);
     plan.setSponsor(sponsor);

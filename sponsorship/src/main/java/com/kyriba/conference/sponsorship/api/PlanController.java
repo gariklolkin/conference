@@ -46,7 +46,6 @@ public class PlanController
   private final PlanService planService;
 
 
-  @SuppressWarnings("unused")
   @ApiOperation(value = "Register the plan")
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "OK"),
@@ -59,7 +58,6 @@ public class PlanController
   }
 
 
-  @SuppressWarnings("unused")
   @ApiOperation(value = "Cancel the plan")
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "OK"),
@@ -72,7 +70,6 @@ public class PlanController
   }
 
 
-  @SuppressWarnings("unused")
   @ApiOperation(value = "Get the plan")
   @ApiResponses(value = {
       @ApiResponse(code = 200, message = "OK"),
