@@ -33,8 +33,8 @@ import javax.validation.constraints.NotEmpty;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "${api.version.path}/sponsorship/sponsors",
-    consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(value = "${api.version.path}/sponsors",
+    produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 @Api(value = "Register a new sponsor")
 public class SponsorController
 {

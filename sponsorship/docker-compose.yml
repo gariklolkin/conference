@@ -5,6 +5,8 @@ services:
     image: postgres
     ports:
       - 5432:5432
+    expose:
+      - 5432
     volumes:
       - db-data:/var/lib/postgresql/data
   sponsorship_service:
@@ -13,6 +15,7 @@ services:
       - SPONSORSHIP_DB_USERNAME=postgres
       - SPONSORSHIP_DB_PASSWORD=postgres
       - SPONSORSHIP_DB_HOST=sponsorship_db
+      - SPONSORSHIP_DB_NAME=postgres
       - SPONSORSHIP_DB_PORT=5432
       - SPONSORSHIP_SERVICE_PORT=8080
       - EUREKA_PORT=9090

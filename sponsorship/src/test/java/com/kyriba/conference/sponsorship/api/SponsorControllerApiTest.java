@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -27,8 +27,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  */
 @ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
-class SponsorControllerTest extends AbstractContainerBaseTest
+//@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
+@ActiveProfiles("test")
+class SponsorControllerApiTest extends AbstractContainerBaseTest
 {
   private RequestSpecification specification;
 
@@ -47,13 +48,13 @@ class SponsorControllerTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/sponsors"))
+        .filter(document("/api/v1/sponsors"))
         .body("{\n" +
             "  \"name\": \"Alexander Samal\" ,\n" +
             "  \"email\": \"aaa@bbb.by\"\n" +
             "}")
         .when()
-        .post("/api/v1/sponsorship/sponsors")
+        .post("/api/v1/sponsors")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -69,9 +70,9 @@ class SponsorControllerTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/sponsors/{id}"))
+        .filter(document("/api/v1/sponsors/{id}"))
         .when()
-        .get("/api/v1/sponsorship/sponsors/404")
+        .get("/api/v1/sponsors/404")
         .then()
         .statusCode(HttpStatus.SC_NOT_FOUND)
         .extract()
@@ -87,9 +88,9 @@ class SponsorControllerTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/sponsors/{id}"))
+        .filter(document("/api/v1/sponsors/{id}"))
         .when()
-        .get("/api/v1/sponsorship/sponsors/100")
+        .get("/api/v1/sponsors/100")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)

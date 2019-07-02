@@ -15,7 +15,7 @@ abstract class AbstractContainerBaseTest
 
   static {
     POSTGRE_SQL_CONTAINER = new PostgreSQLContainer()
-        .withDatabaseName("sponsorship_db")
+        .withDatabaseName("postgres")
         .withUsername("postgres")
         .withPassword("postgres");
     POSTGRE_SQL_CONTAINER.start();

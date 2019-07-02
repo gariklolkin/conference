@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -27,8 +27,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  */
 @ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
-class PlanControllerTest extends AbstractContainerBaseTest
+//@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
+@ActiveProfiles("test")
+class PlanControllerApiTest extends AbstractContainerBaseTest
 {
   private RequestSpecification specification;
 
@@ -47,13 +48,13 @@ class PlanControllerTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/plans"))
+        .filter(document("/api/v1/plans"))
         .body("{\n" +
             "  \"category\": \"GENERAL\" ,\n" +
             "  \"sponsorEmail\": \"aaa@bbb.org\"\n" +
             "}")
         .when()
-        .post("/api/v1/sponsorship/plans")
+        .post("/api/v1/plans")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -65,13 +66,42 @@ class PlanControllerTest extends AbstractContainerBaseTest
 
 
   @Test
-  void cancelPlan()
+  void registerAndRegisteredPlan()
+  {
+    Number id = given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/plans"))
+        .body("{\n" +
+            "  \"category\": \"GENERAL\" ,\n" +
+            "  \"sponsorEmail\": \"aaa@bbb.org\"\n" +
+            "}")
+        .when()
+        .post("/api/v1/plans")
+        .then()
+        .statusCode(HttpStatus.SC_OK)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .extract()
+        .jsonPath()
+        .get("id");
+
+    given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/plans/{id}"))
+        .when()
+        .delete("/api/v1/plans/" + id)
+        .then()
+        .statusCode(HttpStatus.SC_OK);
+  }
+
+
+  @Test
+  void cancelNotExistingPlan()
   {
     given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/plans/{id}"))
+        .filter(document("/api/v1/plans/{id}"))
         .when()
-        .delete("/api/v1/sponsorship/plans/123")
+        .delete("/api/v1/plans/123")
         .then()
         .statusCode(HttpStatus.SC_NOT_FOUND);
   }
@@ -82,9 +112,9 @@ class PlanControllerTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/plans/{id}"))
+        .filter(document("/api/v1/plans/{id}"))
         .when()
-        .get("/api/v1/sponsorship/plans/404")
+        .get("/api/v1/plans/404")
         .then()
         .statusCode(HttpStatus.SC_NOT_FOUND)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -101,9 +131,9 @@ class PlanControllerTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/plans/{id}"))
+        .filter(document("/api/v1/plans/{id}"))
         .when()
-        .get("/api/v1/sponsorship/plans/102")
+        .get("/api/v1/plans/102")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)

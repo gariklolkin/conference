@@ -1,9 +1,9 @@
 api.version.path: /api/v1
 spring:
   application:
-    name: sponsorship
+    name: sponsorship-service
   datasource:
-    url: jdbc:postgresql://${SPONSORSHIP_DB_HOST:sponsorship_db}:${SPONSORSHIP_DB_PORT:5432}/postgres
+    url: jdbc:postgresql://${SPONSORSHIP_DB_HOST:localhost}:${SPONSORSHIP_DB_PORT:5432}/${SPONSORSHIP_DB_NAME:postgres}
     username: ${SPONSORSHIP_DB_USERNAME}
     password: ${SPONSORSHIP_DB_PASSWORD}
   liquibase:

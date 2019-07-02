@@ -77,15 +77,15 @@ A `POST` request is used to register the sponsor
 
 ==== Example curl request
 
-include::{snippets}/api/v1/sponsorship/sponsors/curl-request.adoc[]
+include::{snippets}/api/v1/sponsors/curl-request.adoc[]
 
 ==== Example HTTP request
 
-include::{snippets}/api/v1/sponsorship/sponsors/http-request.adoc[]
+include::{snippets}/api/v1/sponsors/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/api/v1/sponsorship/sponsors/http-response.adoc[]
+include::{snippets}/api/v1/sponsors/http-response.adoc[]
 
 [[plan]]
 == Plan
@@ -100,12 +100,12 @@ A `POST` request is used to create the plan
 
 ==== Example curl request
 
-include::{snippets}/api/v1/sponsorship/plans/curl-request.adoc[]
+include::{snippets}/api/v1/plans/curl-request.adoc[]
 
 ==== Example HTTP request
 
-include::{snippets}/api/v1/sponsorship/plans/http-request.adoc[]
+include::{snippets}/api/v1/plans/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/api/v1/sponsorship/plans/http-response.adoc[]
+include::{snippets}/api/v1/plans/http-response.adoc[]

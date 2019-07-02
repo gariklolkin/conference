@@ -5,8 +5,10 @@ import com.kyriba.conference.sponsorship.domain.Sponsor;
 import com.kyriba.conference.sponsorship.domain.dto.SponsorDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
 
@@ -17,6 +19,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Validated // it works, but may be it should be moved to interface?
 public class SponsorServiceImpl implements SponsorService
 {
   private final SponsorRepository sponsorRepository;
@@ -24,7 +27,7 @@ public class SponsorServiceImpl implements SponsorService
 
 
   @Override
-  public long createSponsor(String name, String email)
+  public long createSponsor(@NotBlank String name, @NotBlank String email)
   {
     Sponsor sponsor = new Sponsor();
     sponsor.setName(name);

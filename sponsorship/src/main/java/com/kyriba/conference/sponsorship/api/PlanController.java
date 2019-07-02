@@ -2,6 +2,7 @@ package com.kyriba.conference.sponsorship.api;
 
 import com.kyriba.conference.sponsorship.domain.PlanCategory;
 import com.kyriba.conference.sponsorship.domain.dto.PlanDto;
+import com.kyriba.conference.sponsorship.service.exception.ObjectNotFoundException;
 import com.kyriba.conference.sponsorship.service.PlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +14,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +38,7 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "${api.version.path}/sponsorship/plans",
+@RequestMapping(value = "${api.version.path}/plans",
     consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 @Api(value = "Register a new sponsorship plan")
 public class PlanController
@@ -83,7 +83,7 @@ public class PlanController
   }
 
 
-  @ExceptionHandler(EmptyResultDataAccessException.class)
+  @ExceptionHandler(ObjectNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   void handleEmptyResultDataAccessException() { }
 
