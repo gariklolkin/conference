@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +35,7 @@ import java.util.Optional;
  * @since v1.0
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "${api.version}/sponsorship/plans",
     consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 @Api(value = "Register a new sponsorship plan")
@@ -41,13 +43,6 @@ public class PlanController
 {
   private final PlanService planService;
   private final SponsorService sponsorService;
-
-
-  public PlanController(PlanService planService, SponsorService sponsorService)
-  {
-    this.planService = planService;
-    this.sponsorService = sponsorService;
-  }
 
 
   @SuppressWarnings("unused")
