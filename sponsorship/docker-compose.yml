@@ -10,6 +10,8 @@ services:
   sponsorship_service:
     container_name: "sponsorship_service"
     environment:
+      - SPONSORSHIP_DB_USERNAME=postgres
+      - SPONSORSHIP_DB_PASSWORD=postgres
       - SPONSORSHIP_DB_HOST=sponsorship_db
       - SPONSORSHIP_DB_PORT=5432
       - SPONSORSHIP_SERVICE_PORT=8080

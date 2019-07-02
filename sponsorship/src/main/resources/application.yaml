@@ -4,8 +4,8 @@ spring:
     name: sponsorship
   datasource:
     url: jdbc:postgresql://${SPONSORSHIP_DB_HOST:sponsorship_db}:${SPONSORSHIP_DB_PORT:5432}/postgres
-    username: postgres
-    password: postgres
+    username: ${SPONSORSHIP_DB_USERNAME}
+    password: ${SPONSORSHIP_DB_PASSWORD}
   liquibase:
     change-log: classpath:db/changelog/changelog-master.xml
   jpa:
