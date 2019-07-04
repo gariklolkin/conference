@@ -1,8 +1,8 @@
 package com.kyriba.conference.notification.api;
 
-import com.kyriba.conference.notification.api.dto.NotificationStatus;
-import com.kyriba.conference.notification.api.dto.SmsNotificationMessage;
-import com.kyriba.conference.notification.services.SmsNotificationService;
+import com.kyriba.conference.notification.domain.dto.NotificationStatus;
+import com.kyriba.conference.notification.domain.dto.SmsNotificationMessage;
+import com.kyriba.conference.notification.services.SmsNotificationRequestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "SMS notification endpoint")
 public class SmsNotificationController
 {
-  private final SmsNotificationService smsNotificationService;
+  private final SmsNotificationRequestService smsNotificationRequestService;
 
   @ApiOperation(value = "Sends SMS notification message", response = NotificationStatus.class)
   @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string",
@@ -38,6 +38,6 @@ public class SmsNotificationController
   })
   @PostMapping(value = "/notify")
   public ResponseEntity<NotificationStatus> sendNotification(@Validated @RequestBody @ApiParam(value = "SMS notification message object", required = true) SmsNotificationMessage smsNotificationMessage) {
-    return ResponseEntity.ok(smsNotificationService.sendNotification(smsNotificationMessage));
+    return ResponseEntity.ok(smsNotificationRequestService.sendNotification(smsNotificationMessage));
   }
 }

@@ -1,4 +1,4 @@
-package com.kyriba.conference.notification.api.dto;
+package com.kyriba.conference.notification.domain.dto;
 
 
 public enum EmailMessageOptions

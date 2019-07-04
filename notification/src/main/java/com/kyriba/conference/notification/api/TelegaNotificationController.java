@@ -1,8 +1,8 @@
 package com.kyriba.conference.notification.api;
 
-import com.kyriba.conference.notification.api.dto.NotificationStatus;
-import com.kyriba.conference.notification.api.dto.TelegaNotificationMessage;
-import com.kyriba.conference.notification.services.TelegaNotificationService;
+import com.kyriba.conference.notification.domain.dto.NotificationStatus;
+import com.kyriba.conference.notification.domain.dto.TelegaNotificationMessage;
+import com.kyriba.conference.notification.services.TelegaNotificationRequestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "Telegram messenger notification endpoint")
 public class TelegaNotificationController
 {
-  private final TelegaNotificationService telegaNotificationService;
+  private final TelegaNotificationRequestService telegaNotificationRequestService;
 
   @ApiOperation(value = "Sends Telegram messenger notification message", response = NotificationStatus.class)
   @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string",
@@ -38,6 +38,6 @@ public class TelegaNotificationController
   })
   @PostMapping(value = "/notify")
   public ResponseEntity<NotificationStatus> sendNotification(@Validated @RequestBody @ApiParam(value = "Telegram notification message", required = true) TelegaNotificationMessage telegaNotificationMessage) {
-    return ResponseEntity.ok(telegaNotificationService.sendNotification(telegaNotificationMessage));
+    return ResponseEntity.ok(telegaNotificationRequestService.sendNotification(telegaNotificationMessage));
   }
 }
