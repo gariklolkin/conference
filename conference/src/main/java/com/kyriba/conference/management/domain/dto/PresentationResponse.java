@@ -1,11 +1,10 @@
-package com.kyriba.conference.management.api.dto;
+package com.kyriba.conference.management.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +18,6 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class PresentationResponse
 {
   @ApiModelProperty(value = "Hall identity")

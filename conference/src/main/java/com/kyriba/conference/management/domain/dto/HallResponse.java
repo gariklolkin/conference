@@ -1,4 +1,4 @@
-package com.kyriba.conference.management.api.dto;
+package com.kyriba.conference.management.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kyriba.conference.management.domain.Hall;

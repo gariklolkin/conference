@@ -1,27 +1,30 @@
 package com.kyriba.conference.management.domain;
 
 
-import com.kyriba.conference.management.api.dto.HallRequest;
+import com.kyriba.conference.management.domain.dto.HallRequest;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Hall
 {
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(length = 100, unique = true, nullable = false)
   private String name;
   private Integer places;
 
@@ -34,14 +37,17 @@ public class Hall
 
   public Hall(HallRequest hallRequest)
   {
+    checkNotNull(hallRequest);
+
     update(hallRequest);
   }
 
 
-  public Hall update(HallRequest hallRequest)
+  public void update(HallRequest hallRequest)
   {
+    checkNotNull(hallRequest);
+
     name = hallRequest.getName();
     places = hallRequest.getPlaces();
-    return this;
   }
 }

@@ -1,19 +1,19 @@
 package com.kyriba.conference.management.api;
 
 
-import com.kyriba.conference.management.api.dto.PresentationRequest;
-import com.kyriba.conference.management.api.dto.PresentationResponse;
-import com.kyriba.conference.management.api.dto.ScheduleResponse;
-import com.kyriba.conference.management.api.dto.TopicDto;
-import com.kyriba.conference.management.domain.Presentation;
+import com.kyriba.conference.management.domain.dto.PresentationRequest;
+import com.kyriba.conference.management.domain.dto.PresentationResponse;
 import com.kyriba.conference.management.domain.exception.InvalidPresentationTime;
 import com.kyriba.conference.management.domain.exception.LinkedEntityNotFound;
 import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
 import com.kyriba.conference.management.service.ScheduleService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,9 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.StreamSupport.stream;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -53,10 +51,7 @@ public class ScheduleController
   @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
   ScheduleResponse showSchedule()
   {
-    List<PresentationResponse> presentations = stream(scheduleService.getSchedule().spliterator(), false)
-        .map(this::toPresentationResponse)
-        .collect(Collectors.toList());
-    return ScheduleResponse.builder().presentations(presentations).build();
+    return new ScheduleResponse(scheduleService.getSchedule());
   }
 
 
@@ -75,7 +70,6 @@ public class ScheduleController
       @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
   {
     return scheduleService.getPresentation(id)
-        .map(this::toPresentationResponse)
         .orElseThrow(() -> new ResourceNotFoundException("Presentation not found."));
   }
 
@@ -100,18 +94,8 @@ public class ScheduleController
   }
 
 
-  private PresentationResponse toPresentationResponse(Presentation presentation)
-  {
-    return PresentationResponse.builder()
-        .topic(new TopicDto(presentation.getTopic()))
-        .hall(presentation.getHall().getId())
-        .startTime(presentation.getStartTime())
-        .endTime(presentation.getEndTime())
-        .build();
-  }
-
-
-  @ExceptionHandler({ LinkedEntityNotFound.class, InvalidPresentationTime.class, PresentationTimeIntersectionException.class })
+  @ExceptionHandler({ LinkedEntityNotFound.class, InvalidPresentationTime.class,
+      PresentationTimeIntersectionException.class })
   void handleException(HttpServletResponse response, RuntimeException e) throws IOException
   {
     response.sendError(BAD_REQUEST.value(), e.getMessage());
@@ -122,5 +106,14 @@ public class ScheduleController
   @ResponseStatus(value = CONFLICT, reason = "The same Topic already exists.")
   void handleDuplicateKeyException()
   {
+  }
+
+
+  @ApiModel(description = "Conference schedule response model")
+  @Value
+  static class ScheduleResponse
+  {
+    @ApiModelProperty(value = "List of presentation")
+    private List<PresentationResponse> presentations;
   }
 }

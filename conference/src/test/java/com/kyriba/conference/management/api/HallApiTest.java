@@ -1,7 +1,7 @@
 package com.kyriba.conference.management.api;
 
 
-import com.kyriba.conference.management.api.dto.HallResponse;
+import com.kyriba.conference.management.domain.dto.HallResponse;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;

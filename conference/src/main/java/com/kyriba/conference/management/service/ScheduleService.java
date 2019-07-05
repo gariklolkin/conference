@@ -1,18 +1,19 @@
 package com.kyriba.conference.management.service;
 
-import com.kyriba.conference.management.api.dto.PresentationRequest;
-import com.kyriba.conference.management.domain.Presentation;
+import com.kyriba.conference.management.domain.dto.PresentationRequest;
+import com.kyriba.conference.management.domain.dto.PresentationResponse;
 
+import java.util.List;
 import java.util.Optional;
 
 
 public interface ScheduleService
 {
-  Iterable<Presentation> getSchedule();
+  List<PresentationResponse> getSchedule();
 
   long addPresentation(PresentationRequest presentation);
 
-  Optional<Presentation> getPresentation(long id);
+  Optional<PresentationResponse> getPresentation(long id);
 
   void updatePresentation(long id, PresentationRequest presentation);
 

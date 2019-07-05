@@ -1,22 +1,23 @@
 package com.kyriba.conference.management.service;
 
-import com.kyriba.conference.management.api.dto.PresentationRequest;
-import com.kyriba.conference.management.api.dto.TopicDto;
+import com.kyriba.conference.management.domain.dto.PresentationRequest;
+import com.kyriba.conference.management.domain.dto.PresentationResponse;
 import com.kyriba.conference.management.dao.HallRepository;
 import com.kyriba.conference.management.dao.PresentationRepository;
 import com.kyriba.conference.management.domain.Hall;
 import com.kyriba.conference.management.domain.Presentation;
-import com.kyriba.conference.management.domain.Topic;
 import com.kyriba.conference.management.domain.exception.LinkedEntityNotFound;
 import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -24,6 +25,7 @@ import static java.lang.String.format;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService
 {
   private static final String HALL_NOT_FOUND = "Hall not found.";
@@ -33,36 +35,20 @@ public class ScheduleServiceImpl implements ScheduleService
   private final HallRepository hallRepository;
 
 
-  @Autowired
-  public ScheduleServiceImpl(PresentationRepository presentationRepository,
-                             HallRepository hallRepository)
-  {
-    this.presentationRepository = presentationRepository;
-    this.hallRepository = hallRepository;
-  }
-
-
   @Override
-  public Iterable<Presentation> getSchedule()
+  public List<PresentationResponse> getSchedule()
   {
-    return presentationRepository.findAll();
+    return presentationRepository.findAll().stream()
+        .map(Presentation::toDto)
+        .collect(Collectors.toList());
   }
 
 
   @Override
   public long addPresentation(PresentationRequest presentationRequest)
   {
-    Hall hall = hallRepository.findById(presentationRequest.getHall())
-        .orElseThrow(() -> new LinkedEntityNotFound(HALL_NOT_FOUND));
-
-    TopicDto topic = presentationRequest.getTopic();
-    Presentation presentation = Presentation.builder()
-        .hall(hall)
-        .topic(new Topic(topic.getTitle(), topic.getAuthor()))
-        .startTime(presentationRequest.getStartTime())
-        .endTime(presentationRequest.getEndTime())
-        .build();
-    presentation.validate();
+    Presentation presentation = new Presentation(presentationRequest);
+    setPresentationHall(presentation, presentationRequest.getHall());
     validateTimeIntersection(presentation);
 
     return presentationRepository.save(presentation).getId();
@@ -70,9 +56,10 @@ public class ScheduleServiceImpl implements ScheduleService
 
 
   @Override
-  public Optional<Presentation> getPresentation(long id)
+  public Optional<PresentationResponse> getPresentation(long id)
   {
-    return presentationRepository.findById(id);
+    return presentationRepository.findById(id)
+        .map(Presentation::toDto);
   }
 
 
@@ -82,19 +69,19 @@ public class ScheduleServiceImpl implements ScheduleService
   {
     Presentation presentation = presentationRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Presentation not found."));
-
-    Hall hall = hallRepository.findById(presentationRequest.getHall())
-        .orElseThrow(() -> new LinkedEntityNotFound(HALL_NOT_FOUND));
-
-    presentation.setHall(hall);
-    presentation
-        .setTopic(new Topic(presentationRequest.getTopic().getTitle(), presentationRequest.getTopic().getAuthor()));
-    presentation.setStartTime(presentationRequest.getStartTime());
-    presentation.setEndTime(presentationRequest.getEndTime());
-    presentation.validate();
+    presentation.update(presentationRequest);
+    setPresentationHall(presentation, presentationRequest.getHall());
     validateTimeIntersection(presentation);
 
     presentationRepository.save(presentation);
+  }
+
+
+  private void setPresentationHall(Presentation presentation, long hallId)
+  {
+    Hall hall = hallRepository.findById(hallId)
+        .orElseThrow(() -> new LinkedEntityNotFound(HALL_NOT_FOUND));
+    presentation.setHall(hall);
   }
 
 
@@ -111,7 +98,7 @@ public class ScheduleServiceImpl implements ScheduleService
     final LocalTime endTime = presentation.getEndTime();
 
     try (Stream<Presentation> intersections = presentationRepository
-        .findByStartTimeBetweenOrEndTimeBetween(startTime, endTime, startTime, endTime)) {
+        .findByHallAndStartTimeBetweenOrEndTimeBetween(presentation.getHall(), startTime, endTime, startTime, endTime)) {
 
       Predicate<Presentation> anotherPresentation = pr -> !pr.getId().equals(presentation.getId());
       intersections

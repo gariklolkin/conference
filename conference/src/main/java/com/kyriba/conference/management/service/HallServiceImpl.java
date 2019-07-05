@@ -1,9 +1,9 @@
 package com.kyriba.conference.management.service;
 
-import com.kyriba.conference.management.api.dto.HallRequest;
-import com.kyriba.conference.management.api.dto.HallResponse;
 import com.kyriba.conference.management.dao.HallRepository;
 import com.kyriba.conference.management.domain.Hall;
+import com.kyriba.conference.management.domain.dto.HallRequest;
+import com.kyriba.conference.management.domain.dto.HallResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.stream.StreamSupport.stream;
 
 
 @Service
@@ -37,7 +35,7 @@ public class HallServiceImpl implements HallService
   @Override
   public List<HallResponse> findAllHalls()
   {
-    return stream(hallRepository.findAll().spliterator(), false)
+    return hallRepository.findAll().stream()
         .map(HallResponse::new)
         .collect(Collectors.toList());
   }
@@ -55,9 +53,9 @@ public class HallServiceImpl implements HallService
   public void updateHall(long id, HallRequest hallRequest)
   {
     Hall hall = hallRepository.findById(id)
-        .map(h -> h.update(hallRequest))
         .orElseThrow(() -> new ResourceNotFoundException(HALL_NOT_FOUND));
 
+    hall.update(hallRequest);
     hallRepository.save(hall);
   }
 

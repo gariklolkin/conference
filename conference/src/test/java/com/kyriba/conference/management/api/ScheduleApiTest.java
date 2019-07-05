@@ -1,8 +1,7 @@
 package com.kyriba.conference.management.api;
 
-import com.kyriba.conference.management.api.dto.PresentationResponse;
-import com.kyriba.conference.management.api.dto.ScheduleResponse;
-import com.kyriba.conference.management.api.dto.TopicDto;
+import com.kyriba.conference.management.domain.dto.PresentationResponse;
+import com.kyriba.conference.management.domain.dto.TopicDto;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -65,7 +64,7 @@ public class ScheduleApiTest
   @Test
   public void showSchedule()
   {
-    ScheduleResponse schedule = given(documentationSpec)
+    ScheduleController.ScheduleResponse schedule = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/schedule/view"))
 
@@ -76,7 +75,7 @@ public class ScheduleApiTest
         .statusCode(SC_OK)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
 
-        .extract().body().as(ScheduleResponse.class);
+        .extract().body().as(ScheduleController.ScheduleResponse.class);
 
     assertThat(schedule).isNotNull();
     assertThat(schedule.getPresentations()).hasSize(3);

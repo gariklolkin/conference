@@ -1,7 +1,7 @@
 package com.kyriba.conference.management.service;
 
-import com.kyriba.conference.management.api.dto.HallRequest;
-import com.kyriba.conference.management.api.dto.HallResponse;
+import com.kyriba.conference.management.domain.dto.HallRequest;
+import com.kyriba.conference.management.domain.dto.HallResponse;
 
 import java.util.List;
 
