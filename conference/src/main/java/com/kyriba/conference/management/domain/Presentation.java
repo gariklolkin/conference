@@ -5,7 +5,6 @@ import com.kyriba.conference.management.domain.dto.PresentationRequest;
 import com.kyriba.conference.management.domain.dto.PresentationResponse;
 import com.kyriba.conference.management.domain.dto.TopicDto;
 import com.kyriba.conference.management.domain.exception.InvalidPresentationTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +26,6 @@ import static com.google.common.base.Preconditions.checkState;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(
     uniqueConstraints = @UniqueConstraint(columnNames = { "title", "author" })

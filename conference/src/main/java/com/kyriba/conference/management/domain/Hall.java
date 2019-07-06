@@ -2,7 +2,6 @@ package com.kyriba.conference.management.domain;
 
 
 import com.kyriba.conference.management.domain.dto.HallRequest;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +18,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Hall
 {
   @Id
