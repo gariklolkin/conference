@@ -1,16 +1,15 @@
 package com.kyriba.conference.management.service;
 
-import com.kyriba.conference.management.domain.dto.PresentationRequest;
-import com.kyriba.conference.management.domain.dto.PresentationResponse;
 import com.kyriba.conference.management.dao.HallRepository;
 import com.kyriba.conference.management.dao.PresentationRepository;
 import com.kyriba.conference.management.domain.Hall;
 import com.kyriba.conference.management.domain.Presentation;
+import com.kyriba.conference.management.domain.dto.PresentationRequest;
+import com.kyriba.conference.management.domain.dto.PresentationResponse;
 import com.kyriba.conference.management.domain.exception.EntityNotFound;
 import com.kyriba.conference.management.domain.exception.LinkedEntityNotFound;
 import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +28,6 @@ import static java.lang.String.format;
 @AllArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService
 {
-  private static final String HALL_NOT_FOUND = "Hall not found.";
-
   private final PresentationRepository presentationRepository;
 
   private final HallRepository hallRepository;
@@ -81,7 +78,7 @@ public class ScheduleServiceImpl implements ScheduleService
   private void setPresentationHall(Presentation presentation, long hallId)
   {
     Hall hall = hallRepository.findById(hallId)
-        .orElseThrow(() -> new LinkedEntityNotFound(HALL_NOT_FOUND));
+        .orElseThrow(() -> new LinkedEntityNotFound("Hall not found."));
     presentation.setHall(hall);
   }
 
