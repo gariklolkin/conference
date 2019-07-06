@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "api.version.path",
+      "type": "java.lang.String",
+      "description": "Config param for the API prefix."
+    }
+  ]
+}
