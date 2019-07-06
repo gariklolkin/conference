@@ -6,6 +6,7 @@ import com.kyriba.conference.management.dao.HallRepository;
 import com.kyriba.conference.management.dao.PresentationRepository;
 import com.kyriba.conference.management.domain.Hall;
 import com.kyriba.conference.management.domain.Presentation;
+import com.kyriba.conference.management.domain.exception.EntityNotFound;
 import com.kyriba.conference.management.domain.exception.LinkedEntityNotFound;
 import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
 import lombok.AllArgsConstructor;
@@ -68,7 +69,7 @@ public class ScheduleServiceImpl implements ScheduleService
   public void updatePresentation(long id, PresentationRequest presentationRequest)
   {
     Presentation presentation = presentationRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Presentation not found."));
+        .orElseThrow(() -> new EntityNotFound("Presentation not found."));
     presentation.update(presentationRequest);
     setPresentationHall(presentation, presentationRequest.getHall());
     validateTimeIntersection(presentation);

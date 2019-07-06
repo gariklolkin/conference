@@ -4,6 +4,7 @@ import com.kyriba.conference.management.dao.HallRepository;
 import com.kyriba.conference.management.domain.Hall;
 import com.kyriba.conference.management.domain.dto.HallRequest;
 import com.kyriba.conference.management.domain.dto.HallResponse;
+import com.kyriba.conference.management.domain.exception.EntityNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class HallServiceImpl implements HallService
   {
     return hallRepository.findById(id)
         .map(HallResponse::new)
-        .orElseThrow(() -> new ResourceNotFoundException(HALL_NOT_FOUND));
+        .orElseThrow(() -> new EntityNotFound(HALL_NOT_FOUND));
   }
 
 
@@ -53,7 +54,7 @@ public class HallServiceImpl implements HallService
   public void updateHall(long id, HallRequest hallRequest)
   {
     Hall hall = hallRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException(HALL_NOT_FOUND));
+        .orElseThrow(() -> new EntityNotFound(HALL_NOT_FOUND));
 
     hall.update(hallRequest);
     hallRepository.save(hall);

@@ -3,6 +3,7 @@ package com.kyriba.conference.management.api;
 
 import com.kyriba.conference.management.domain.dto.HallRequest;
 import com.kyriba.conference.management.domain.dto.HallResponse;
+import com.kyriba.conference.management.domain.exception.EntityNotFound;
 import com.kyriba.conference.management.service.HallService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -92,6 +94,13 @@ public class HallController
   @ExceptionHandler(DataIntegrityViolationException.class)
   @ResponseStatus(value = CONFLICT, reason = "Cannot remove Hall because it is used.")
   void handleInUseException()
+  {
+  }
+
+
+  @ExceptionHandler(EntityNotFound.class)
+  @ResponseStatus(value = NOT_FOUND, reason = "Hall not found.")
+  void handleEntityNotFound()
   {
   }
 }

@@ -3,6 +3,7 @@ package com.kyriba.conference.management.api;
 
 import com.kyriba.conference.management.domain.dto.PresentationRequest;
 import com.kyriba.conference.management.domain.dto.PresentationResponse;
+import com.kyriba.conference.management.domain.exception.EntityNotFound;
 import com.kyriba.conference.management.domain.exception.InvalidPresentationTime;
 import com.kyriba.conference.management.domain.exception.LinkedEntityNotFound;
 import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -105,6 +107,13 @@ public class ScheduleController
   @ExceptionHandler(ConstraintViolationException.class)
   @ResponseStatus(value = CONFLICT, reason = "The same Topic already exists.")
   void handleDuplicateKeyException()
+  {
+  }
+
+
+  @ExceptionHandler(EntityNotFound.class)
+  @ResponseStatus(value = NOT_FOUND, reason = "Presentation not found.")
+  void handleEntityNotFound()
   {
   }
 
