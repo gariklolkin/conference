@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
  */
 @ApiModel(value = "PaymentMethodUpdateParams", description = "Payment method update parameters")
 @Getter
-public class PaymentMethodUpdateParamsDto {
+public class PaymentMethodUrlUpdateDto {
     @ApiModelProperty(value = "Payment method url")
     @NotEmpty
     String url;

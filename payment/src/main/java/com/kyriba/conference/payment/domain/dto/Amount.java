@@ -2,6 +2,7 @@ package com.kyriba.conference.payment.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import java.util.Currency;
 /**
  * @author Igor Lizura
  */
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

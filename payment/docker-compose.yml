@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:latest
+    container_name: "payment_postgres"
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./build/db/payment:/var/lib/postgresql/data
+    networks:
+      - eureka-server_conference
+  payment:
+    environment:
+      - PGHOST=db
+      - PORT=5432
+      - APP_PORT=8083
+      - EUREKA=eureka-server
+    build: .
+    ports:
+      - "8083:8083"
+    depends_on:
+      - db
+    networks:
+      - eureka-server_conference
+networks:
+  eureka-server_conference:
+    external: true

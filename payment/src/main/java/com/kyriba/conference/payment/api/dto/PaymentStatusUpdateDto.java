@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 @ApiModel(value = "PaymentUpdateParameters", description = "Payment update parameters")
 @Getter
-public class PaymentUpdateParamsDto {
+public class PaymentStatusUpdateDto {
     @ApiModelProperty(value = "Payment status")
     @NotNull
     private PaymentStatus status;
