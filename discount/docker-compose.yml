@@ -11,6 +11,7 @@ services:
     environment:
       - PGHOST=db
       - PORT=5432
+      - APPPORT=8082
     build: .
     ports:
       - "8082:8080"
