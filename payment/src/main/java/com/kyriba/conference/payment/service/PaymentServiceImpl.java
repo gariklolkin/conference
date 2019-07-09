@@ -34,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Receipt createPayment(TicketDto ticketDto) {
         Discount discount = restTemplate.getForObject(
-                "http://discount/api/v1/discounts/" + ticketDto.getDiscountType(), Discount.class);
+                "http://discount:8082/api/v1/discounts/" + ticketDto.getDiscountType(), Discount.class);
         PaymentEntity entity = new PaymentEntity(discount, ticketDto);
         return paymentRepository.save(entity).toReceipt();
     }
