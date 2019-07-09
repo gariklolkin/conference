@@ -4,9 +4,10 @@ import com.kyriba.conference.payment.api.dto.PaymentDto;
 import com.kyriba.conference.payment.api.dto.Receipt;
 import com.kyriba.conference.payment.api.dto.TicketDto;
 import com.kyriba.conference.payment.domain.dto.Amount;
-import lombok.AllArgsConstructor;
+import com.kyriba.conference.payment.domain.dto.DiscountDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -22,13 +23,11 @@ import java.util.Currency;
 @Table(name = "payment")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class PaymentEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_identity_id")
     @SequenceGenerator(name = "seq_identity_id", sequenceName = "seq_identity_id", allocationSize = 1)
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @Column(name = "user_id")
@@ -42,21 +41,23 @@ public class PaymentEntity {
     private LocalDateTime paymentDate;
 
     @Column(name = "value")
-    BigDecimal value;
+    private BigDecimal value;
 
     @Column(name = "currency")
-    String currency;
+    private String currency;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private PaymentStatus status = PaymentStatus.PENDING;
 
-    public PaymentEntity(Discount discount, TicketDto ticketDto) {
+    public PaymentEntity(DiscountDto discount, TicketDto ticketDto) {
         this.userId = ticketDto.getUserId();
         this.type = ticketDto.getType();
         this.paymentDate = ticketDto.getPaymentDate();
-        this.value = calculatePrice(discount, ticketDto);
+        this.value = ticketDto.getPrice().getValue();
         this.currency = ticketDto.getPrice().getCurrency().getCurrencyCode();
+        applyDiscount(discount);
+
     }
 
     public Receipt toReceipt() {
@@ -67,10 +68,10 @@ public class PaymentEntity {
         return new PaymentDto(userId, type, paymentDate, new Amount(value, Currency.getInstance(currency)), status);
     }
 
-    private BigDecimal calculatePrice(Discount discount, TicketDto ticketDto) {
-        return  discount == null ?
-                ticketDto.getPrice().getValue() :
-                ticketDto.getPrice().getValue().subtract(ticketDto.getPrice().getValue().multiply(
-                        BigDecimal.valueOf(discount.getPercentage())).divide(new BigDecimal(100), RoundingMode.UP));
+    private void applyDiscount(DiscountDto discount) {
+        if (discount != null) {
+            this.value = value.subtract(value.multiply(BigDecimal.valueOf(discount.getPercentage()))
+                .divide(new BigDecimal(100), RoundingMode.UP));
+        }
     }
 }

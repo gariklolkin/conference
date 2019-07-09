@@ -2,14 +2,11 @@ package com.kyriba.conference.payment.dao;
 
 import com.kyriba.conference.payment.domain.PaymentMethodEntity;
 import com.kyriba.conference.payment.domain.PaymentMethodType;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface PaymentMethodRepository extends CrudRepository<PaymentMethodEntity, Long> {
-    List<PaymentMethodEntity> findAll();
-
+public interface PaymentMethodRepository extends JpaRepository<PaymentMethodEntity, Long> {
     Optional<PaymentMethodEntity> findByType(PaymentMethodType type);
 
     void deleteByType(PaymentMethodType type);

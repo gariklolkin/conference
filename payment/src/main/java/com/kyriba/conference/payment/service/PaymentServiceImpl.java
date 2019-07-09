@@ -1,13 +1,11 @@
 package com.kyriba.conference.payment.service;
 
-import com.kyriba.conference.payment.api.dto.PaymentDto;
-import com.kyriba.conference.payment.api.dto.PaymentStatusUpdateDto;
-import com.kyriba.conference.payment.api.dto.Receipt;
-import com.kyriba.conference.payment.api.dto.TicketDto;
+import com.kyriba.conference.payment.api.dto.*;
 import com.kyriba.conference.payment.dao.PaymentRepository;
-import com.kyriba.conference.payment.domain.Discount;
+import com.kyriba.conference.payment.domain.dto.DiscountDto;
 import com.kyriba.conference.payment.domain.PaymentEntity;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,8 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Receipt createPayment(TicketDto ticketDto) {
-        Discount discount = restTemplate.getForObject(
-                "http://discount/api/v1/discounts/" + ticketDto.getDiscountType(), Discount.class);
+        DiscountDto discount = restTemplate.getForObject(ticketDto.getDiscountType().name(), DiscountDto.class);
         PaymentEntity entity = new PaymentEntity(discount, ticketDto);
         return paymentRepository.save(entity).toReceipt();
     }
@@ -49,7 +46,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void updatePayment(long paymentId, PaymentStatusUpdateDto statusUpdateDto) {
         PaymentEntity entity = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new NoSuchPaymentException("Payment", Long.toString(paymentId)));
+                .orElseThrow(() -> new NoSuchPaymentException("Payment", String.valueOf(paymentId)));
         entity.setStatus(statusUpdateDto.getStatus());
         paymentRepository.save(entity);
     }
