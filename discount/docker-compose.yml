@@ -1,5 +1,10 @@
 version: "3.7"
 services:
+  eureka-server:
+    image:  springcloud/eureka
+    hostname: eureka-server
+    ports:
+      - "8761:8761"
   db:
     image: postgres:latest
     container_name: "discount_postgres"
@@ -11,9 +16,11 @@ services:
     environment:
       - PGHOST=db
       - PORT=5432
-      - APPPORT=8082
+      - APP_PORT=8082
+      - EUREKA=eureka-server
     build: .
     ports:
-      - "8082:8080"
+      - "8082:8082"
     depends_on:
+      - eureka-server
       - db

@@ -26,7 +26,6 @@ import java.util.List;
 public class DiscountController {
     private final DiscountService discountService;
 
-    @ResponseStatus(value = HttpStatus.OK)
     @GetMapping
     List<DiscountDto> getDiscounts() {
         return discountService.getAllDiscounts();
