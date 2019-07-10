@@ -4,7 +4,7 @@ package com.kyriba.conference.management.domain;
 import com.kyriba.conference.management.domain.dto.PresentationRequest;
 import com.kyriba.conference.management.domain.dto.PresentationResponse;
 import com.kyriba.conference.management.domain.dto.TopicDto;
-import com.kyriba.conference.management.domain.exception.InvalidPresentationTime;
+import com.kyriba.conference.management.domain.exception.InvalidPresentationTimeException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -65,7 +65,7 @@ public class Presentation
   private void checkTime(LocalTime endTime, LocalTime startTime)
   {
     if (endTime.isBefore(startTime))
-      throw new InvalidPresentationTime("End time is before start time");
+      throw new InvalidPresentationTimeException("End time is before start time");
   }
 
 

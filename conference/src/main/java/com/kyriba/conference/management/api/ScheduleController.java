@@ -3,9 +3,9 @@ package com.kyriba.conference.management.api;
 
 import com.kyriba.conference.management.domain.dto.PresentationRequest;
 import com.kyriba.conference.management.domain.dto.PresentationResponse;
-import com.kyriba.conference.management.domain.exception.EntityNotFound;
-import com.kyriba.conference.management.domain.exception.InvalidPresentationTime;
-import com.kyriba.conference.management.domain.exception.LinkedEntityNotFound;
+import com.kyriba.conference.management.domain.exception.EntityNotFoundException;
+import com.kyriba.conference.management.domain.exception.InvalidPresentationTimeException;
+import com.kyriba.conference.management.domain.exception.LinkedEntityNotFoundException;
 import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
 import com.kyriba.conference.management.service.ScheduleService;
 import io.swagger.annotations.Api;
@@ -96,7 +96,7 @@ public class ScheduleController
   }
 
 
-  @ExceptionHandler({ LinkedEntityNotFound.class, InvalidPresentationTime.class,
+  @ExceptionHandler({ LinkedEntityNotFoundException.class, InvalidPresentationTimeException.class,
       PresentationTimeIntersectionException.class })
   void handleException(HttpServletResponse response, RuntimeException e) throws IOException
   {
@@ -111,7 +111,7 @@ public class ScheduleController
   }
 
 
-  @ExceptionHandler(EntityNotFound.class)
+  @ExceptionHandler(EntityNotFoundException.class)
   @ResponseStatus(value = NOT_FOUND, reason = "Presentation not found.")
   void handleEntityNotFound()
   {

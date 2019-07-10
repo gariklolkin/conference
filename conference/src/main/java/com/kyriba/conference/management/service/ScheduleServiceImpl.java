@@ -6,8 +6,8 @@ import com.kyriba.conference.management.domain.Hall;
 import com.kyriba.conference.management.domain.Presentation;
 import com.kyriba.conference.management.domain.dto.PresentationRequest;
 import com.kyriba.conference.management.domain.dto.PresentationResponse;
-import com.kyriba.conference.management.domain.exception.EntityNotFound;
-import com.kyriba.conference.management.domain.exception.LinkedEntityNotFound;
+import com.kyriba.conference.management.domain.exception.EntityNotFoundException;
+import com.kyriba.conference.management.domain.exception.LinkedEntityNotFoundException;
 import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,12 +61,11 @@ public class ScheduleServiceImpl implements ScheduleService
   }
 
 
-  @Transactional
   @Override
   public void updatePresentation(long id, PresentationRequest presentationRequest)
   {
     Presentation presentation = presentationRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFound("Presentation not found."));
+        .orElseThrow(() -> new EntityNotFoundException("Presentation not found."));
     presentation.update(presentationRequest);
     setPresentationHall(presentation, presentationRequest.getHall());
     validateTimeIntersection(presentation);
@@ -78,7 +77,7 @@ public class ScheduleServiceImpl implements ScheduleService
   private void setPresentationHall(Presentation presentation, long hallId)
   {
     Hall hall = hallRepository.findById(hallId)
-        .orElseThrow(() -> new LinkedEntityNotFound("Hall not found."));
+        .orElseThrow(() -> new LinkedEntityNotFoundException("Hall not found."));
     presentation.setHall(hall);
   }
 
@@ -105,7 +104,7 @@ public class ScheduleServiceImpl implements ScheduleService
           .ifPresent(pr -> {
                 throw new PresentationTimeIntersectionException(
                     format("Presentation time intersection: wanted %s - %s, already reserved %s - %s.",
-                        presentation.getStartTime(), presentation.getEndTime(), pr.getStartTime(), pr.getEndTime()));
+                        startTime, endTime, pr.getStartTime(), pr.getEndTime()));
               }
           );
 

@@ -3,7 +3,7 @@ package com.kyriba.conference.management.api;
 
 import com.kyriba.conference.management.domain.dto.HallRequest;
 import com.kyriba.conference.management.domain.dto.HallResponse;
-import com.kyriba.conference.management.domain.exception.EntityNotFound;
+import com.kyriba.conference.management.domain.exception.EntityNotFoundException;
 import com.kyriba.conference.management.service.HallService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -98,7 +98,7 @@ public class HallController
   }
 
 
-  @ExceptionHandler(EntityNotFound.class)
+  @ExceptionHandler(EntityNotFoundException.class)
   @ResponseStatus(value = NOT_FOUND, reason = "Hall not found.")
   void handleEntityNotFound()
   {
