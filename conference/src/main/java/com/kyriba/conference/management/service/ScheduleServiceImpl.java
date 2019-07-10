@@ -96,7 +96,7 @@ public class ScheduleServiceImpl implements ScheduleService
     final LocalTime endTime = presentation.getEndTime();
 
     try (Stream<Presentation> intersections = presentationRepository
-        .findByHallAndStartTimeBetweenOrEndTimeBetween(presentation.getHall(), startTime, endTime, startTime, endTime)) {
+        .findByHallAndStartTimeOrEndTimeBetween(presentation.getHall(), startTime, endTime)) {
 
       Predicate<Presentation> anotherPresentation = pr -> !pr.getId().equals(presentation.getId());
       intersections
