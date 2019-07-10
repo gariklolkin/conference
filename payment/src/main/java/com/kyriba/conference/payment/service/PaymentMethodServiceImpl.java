@@ -44,7 +44,6 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
         PaymentMethodEntity entity = paymentMethodRepository.findByType(type)
                 .orElseThrow(() -> new NoSuchPaymentException("Payment method", type.name()));
         entity.setUrl(urlUpdateDto.getUrl());
-        paymentMethodRepository.save(entity);
     }
 
     @Override
