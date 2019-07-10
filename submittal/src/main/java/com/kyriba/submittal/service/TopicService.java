@@ -1,6 +1,8 @@
 package com.kyriba.submittal.service;
 
 import com.kyriba.submittal.domain.Topic;
+import com.kyriba.submittal.domain.TopicStatus;
+import org.springframework.lang.NonNull;
 
 
 /**
@@ -8,21 +10,11 @@ import com.kyriba.submittal.domain.Topic;
  */
 public interface TopicService
 {
-
   /**
-   * Approves a {@link Topic topic } with the  given {@code id}
+   * Approves or rejects a {@link Topic topic} with the given {@code topicId}
    *
-   * @param topicId an id of the topic to approve
+   * @param topicId an id of the topic to transit
+   * @param status a new {@link TopicStatus status}
    */
-  // TODO: NOTIFICATION-MS: notify a speaker that a topic was approved
-  void approve(long topicId);
-
-
-  /**
-   * Rejects a {@link Topic topic } with the  given {@code id}
-   *
-   * @param topicId an id of the topic to approve
-   */
-  // TODO: NOTIFICATION-MS: notify a speaker that a topic was rejected
-  void reject(long topicId);
+  void transit(long topicId, @NonNull TopicStatus status);
 }
