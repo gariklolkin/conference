@@ -47,7 +47,6 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentEntity entity = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new NoSuchPaymentException("Payment", String.valueOf(paymentId)));
         entity.setStatus(statusUpdateDto.getStatus());
-        paymentRepository.save(entity);
     }
 
     @Override
