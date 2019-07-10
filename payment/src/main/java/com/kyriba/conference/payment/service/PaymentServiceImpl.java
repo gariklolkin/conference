@@ -5,7 +5,6 @@ import com.kyriba.conference.payment.dao.PaymentRepository;
 import com.kyriba.conference.payment.domain.dto.DiscountDto;
 import com.kyriba.conference.payment.domain.PaymentEntity;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
