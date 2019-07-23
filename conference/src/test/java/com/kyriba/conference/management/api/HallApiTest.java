@@ -17,6 +17,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
+import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
 import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_NO_CONTENT;
 import static org.apache.http.HttpStatus.SC_OK;
@@ -90,6 +91,20 @@ public class HallApiTest
 
 
   @Test
+  public void getInvalidHallId()
+  {
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .when()
+        .get("/api/v1/halls/-11")
+
+        .then()
+        .statusCode(SC_INTERNAL_SERVER_ERROR);
+  }
+
+
+  @Test
   public void getAllHalls()
   {
     HallResponse[] halls = given(documentationSpec)
@@ -136,7 +151,8 @@ public class HallApiTest
         .statusCode(SC_OK)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
 
-        .extract().as(Long.class);
+        .extract().as(HallController.HallCreatedResponse.class)
+        .getId();
 
     // check that Hall is added
     HallResponse newHall = given(documentationSpec)

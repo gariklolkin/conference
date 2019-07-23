@@ -1,6 +1,7 @@
 package com.kyriba.conference.management.api;
 
 
+import com.google.common.annotations.VisibleForTesting;
 import com.kyriba.conference.management.domain.dto.PresentationRequest;
 import com.kyriba.conference.management.domain.dto.PresentationResponse;
 import com.kyriba.conference.management.domain.exception.EntityNotFoundException;
@@ -17,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.List;
 
@@ -43,6 +46,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 @RestController
 @RequestMapping("/api/v1/schedule")
 @SuppressWarnings("unused")
+@Validated
 @AllArgsConstructor
 public class ScheduleController
 {
@@ -59,17 +63,17 @@ public class ScheduleController
 
   @ApiOperation(value = "Add presentation in conference schedule")
   @PostMapping(value = "/presentations", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  long addPresentation(
+  PresentationCreatedResponse addPresentation(
       @ApiParam(value = "Presentation create object", required = true) @RequestBody PresentationRequest presentationRequest)
   {
-    return scheduleService.addPresentation(presentationRequest);
+    return new PresentationCreatedResponse(scheduleService.addPresentation(presentationRequest));
   }
 
 
   @ApiOperation(value = "View presentation information")
   @GetMapping(value = "/presentations/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
   PresentationResponse getPresentation(
-      @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
+      @Positive @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
   {
     return scheduleService.getPresentation(id)
         .orElseThrow(() -> new ResourceNotFoundException("Presentation not found."));
@@ -80,7 +84,7 @@ public class ScheduleController
   @DeleteMapping(value = "/presentations/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
   @ResponseStatus(value = NO_CONTENT)
   void removePresentation(
-      @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
+      @Positive @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
   {
     scheduleService.deletePresentation(id);
   }
@@ -89,7 +93,7 @@ public class ScheduleController
   @ApiOperation(value = "Change presentations parameters")
   @PutMapping(value = "/presentations/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
   void updatePresentation(
-      @ApiParam(value = "Presentation identity", required = true) @PathVariable long id,
+      @Positive @ApiParam(value = "Presentation identity", required = true) @PathVariable long id,
       @ApiParam(value = "Presentation change object", required = true) @RequestBody PresentationRequest presentationRequest)
   {
     scheduleService.updatePresentation(id, presentationRequest);
@@ -118,11 +122,21 @@ public class ScheduleController
   }
 
 
+  @VisibleForTesting
   @ApiModel(description = "Conference schedule response model")
   @Value
   static class ScheduleResponse
   {
     @ApiModelProperty(value = "List of presentation")
     private List<PresentationResponse> presentations;
+  }
+
+
+  @VisibleForTesting
+  @ApiModel(description = "Response model on create presentation operation")
+  @Value
+  static class PresentationCreatedResponse
+  {
+    private long id;
   }
 }

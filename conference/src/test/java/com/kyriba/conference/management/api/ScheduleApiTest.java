@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import static io.restassured.RestAssured.given;
 import static java.time.LocalTime.of;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
+import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
 import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_NO_CONTENT;
 import static org.apache.http.HttpStatus.SC_OK;
@@ -114,7 +115,8 @@ public class ScheduleApiTest
         .statusCode(SC_OK)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
 
-        .extract().as(Long.class);
+        .extract().as(ScheduleController.PresentationCreatedResponse.class)
+        .getId();
 
     // check that Presentation is added
     PresentationResponse presentation = given(documentationSpec)
@@ -187,6 +189,20 @@ public class ScheduleApiTest
       softly.assertThat(presentation.getEndTime()).isEqualTo(of(11, 15));
       softly.assertThat(presentation.getTopic()).isEqualTo(new TopicDto("Spring Data REST", "Andy Wilkinson"));
     });
+  }
+
+
+  @Test
+  public void viewInvalidPresentationId()
+  {
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .when()
+        .get("/api/v1/schedule/presentations/-12")
+
+        .then()
+        .statusCode(SC_INTERNAL_SERVER_ERROR);
   }
 
 
