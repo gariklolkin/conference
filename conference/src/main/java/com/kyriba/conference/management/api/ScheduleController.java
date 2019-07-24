@@ -8,6 +8,7 @@ import com.kyriba.conference.management.domain.exception.EntityNotFoundException
 import com.kyriba.conference.management.domain.exception.InvalidPresentationTimeException;
 import com.kyriba.conference.management.domain.exception.LinkedEntityNotFoundException;
 import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
+import com.kyriba.conference.management.domain.exception.SameEntityExistsException;
 import com.kyriba.conference.management.service.ScheduleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
@@ -16,8 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -76,7 +75,7 @@ public class ScheduleController
       @Positive @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
   {
     return scheduleService.getPresentation(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Presentation not found."));
+        .orElseThrow(() -> new EntityNotFoundException("Presentation not found."));
   }
 
 
@@ -108,7 +107,7 @@ public class ScheduleController
   }
 
 
-  @ExceptionHandler(ConstraintViolationException.class)
+  @ExceptionHandler(SameEntityExistsException.class)
   @ResponseStatus(value = CONFLICT, reason = "The same Topic already exists.")
   void handleDuplicateKeyException()
   {

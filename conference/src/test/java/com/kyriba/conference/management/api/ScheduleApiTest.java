@@ -328,4 +328,17 @@ public class ScheduleApiTest
         .statusCode(SC_BAD_REQUEST)
         .body("message", equalTo(hallNotFound));
   }
+
+
+  @Test
+  public void removeNonexistentPresentationFromSchedule()
+  {
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .when()
+        .delete("/api/v1/schedule/presentations/1001123112")
+        .then()
+        .statusCode(SC_NO_CONTENT);
+  }
 }

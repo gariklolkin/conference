@@ -258,4 +258,18 @@ public class HallApiTest
         .statusCode(SC_NOT_FOUND);
   }
 
+
+  @Test
+  public void removeNonexistentHall()
+  {
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/halls/delete"))
+
+        .when()
+        .delete("/api/v1/halls/1331313")
+        .then()
+        .statusCode(SC_NO_CONTENT);
+  }
+
 }

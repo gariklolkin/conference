@@ -4,6 +4,8 @@ package com.kyriba.conference.management.api;
 import com.google.common.annotations.VisibleForTesting;
 import com.kyriba.conference.management.domain.dto.HallRequest;
 import com.kyriba.conference.management.domain.dto.HallResponse;
+import com.kyriba.conference.management.domain.exception.EntityIsUsedException;
+import com.kyriba.conference.management.domain.exception.SameEntityExistsException;
 import com.kyriba.conference.management.domain.exception.EntityNotFoundException;
 import com.kyriba.conference.management.service.HallService;
 import io.swagger.annotations.Api;
@@ -12,8 +14,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -90,14 +90,14 @@ public class HallController
   }
 
 
-  @ExceptionHandler(ConstraintViolationException.class)
+  @ExceptionHandler(SameEntityExistsException.class)
   @ResponseStatus(value = CONFLICT, reason = "Hall with the same name already exists.")
   void handleDuplicateKeyException()
   {
   }
 
 
-  @ExceptionHandler(DataIntegrityViolationException.class)
+  @ExceptionHandler(EntityIsUsedException.class)
   @ResponseStatus(value = CONFLICT, reason = "Cannot remove Hall because it is used.")
   void handleInUseException()
   {
