@@ -7,24 +7,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
  * @author Igor Lizura
  */
-@ApiModel(value = "Discount", description = "Discount creation request")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class DiscountDto {
+@AllArgsConstructor
+@ApiModel(value = "DiscountType", description = "Discount response")
+public class DiscountResponse {
     @ApiModelProperty(value = "Discount type")
     @NotNull
     private DiscountType type;
-
-    @ApiModelProperty(value = "Discount percentage")
-    @Min(0)
-    @Max(100)
-    int percentage;
 }
