@@ -1,63 +1,56 @@
 package com.kyriba.conference.payment.api;
 
-import com.kyriba.conference.payment.api.dto.PaymentMethodUpdateParamsDto;
-import com.kyriba.conference.payment.domain.PaymentMethodType;
 import com.kyriba.conference.payment.api.dto.PaymentMethodDto;
+import com.kyriba.conference.payment.api.dto.PaymentMethodResponse;
+import com.kyriba.conference.payment.api.dto.PaymentMethodUrlUpdateDto;
+import com.kyriba.conference.payment.domain.PaymentMethodType;
+import com.kyriba.conference.payment.service.PaymentMethodService;
 import io.swagger.annotations.ApiParam;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
-
-import static com.kyriba.conference.payment.domain.PaymentMethodType.CREDIT_CARD;
-import static com.kyriba.conference.payment.domain.PaymentMethodType.WIRE_TRANSFER;
 
 /**
  * @author Garik Lizura
  */
 @RestController
 @RequestMapping("/api/v1/paymentMethods")
+@RequiredArgsConstructor
 public class PaymentMethodController {
-    @ResponseStatus(HttpStatus.OK)
+    private final PaymentMethodService paymentMethodService;
+
     @ResponseBody
     @GetMapping
     List<PaymentMethodDto> getPaymentMethods() {
-        PaymentMethodDto transfer = new PaymentMethodDto(WIRE_TRANSFER, "http://wrtransfer.com");
-        PaymentMethodDto creditCard = new PaymentMethodDto(CREDIT_CARD,"https://webpay.by/en/");
-        return Arrays.asList(transfer, creditCard);
+        return paymentMethodService.findAll();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     PaymentMethodResponse createPaymentMethod(@ApiParam(value = "Payment method creation object", required = true)
                                                         @Valid @RequestBody PaymentMethodDto paymentMethod) {
-        return new PaymentMethodResponse(CREDIT_CARD);
+        return paymentMethodService.createPaymentMethod(paymentMethod);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{type}")
     PaymentMethodDto getPaymentMethod(@ApiParam(value = "Payment method type", required = true)
-                                                 @PathVariable String type) {
-        return new PaymentMethodDto(WIRE_TRANSFER, "http://wrtransfer.com");
+                                                 @PathVariable PaymentMethodType type) {
+        return paymentMethodService.getPaymentMethod(type);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/{type}")
-    void updatePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable String type,
+    void updatePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable PaymentMethodType type,
                                     @ApiParam(value = "Payment method update parameters", required = true)
-                                    @Valid @RequestBody PaymentMethodUpdateParamsDto params) {
+                                    @Valid @RequestBody PaymentMethodUrlUpdateDto urlUpdateDto) {
+        paymentMethodService.updatePaymentMethod(type, urlUpdateDto);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{type}")
-    void deletePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable String type) {
-    }
-
-    @Value
-    private static class PaymentMethodResponse {
-        private PaymentMethodType type;
+    void deletePaymentMethod(@ApiParam(value = "Payment method type", required = true) @PathVariable PaymentMethodType type) {
+        paymentMethodService.deletePaymentMethod(type);
     }
 }

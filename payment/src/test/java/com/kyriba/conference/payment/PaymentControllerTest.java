@@ -1,7 +1,11 @@
 package com.kyriba.conference.payment;
 
-import com.kyriba.conference.payment.domain.PaymentStatus;
 import com.kyriba.conference.payment.api.dto.PaymentDto;
+import com.kyriba.conference.payment.api.dto.Receipt;
+import com.kyriba.conference.payment.api.dto.TicketDto;
+import com.kyriba.conference.payment.domain.dto.Amount;
+import com.kyriba.conference.payment.service.PaymentService;
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -9,13 +13,23 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Collections;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
+import static com.kyriba.conference.payment.domain.PaymentMethodType.CREDIT_CARD;
+import static com.kyriba.conference.payment.domain.PaymentStatus.PENDING;
 import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
@@ -26,8 +40,13 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  * @author Igor Lizura
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PaymentControllerTest {
+    @LocalServerPort
+    private int port;
+
+    @MockBean
+    private PaymentService paymentService;
 
     private RequestSpecification spec;
 
@@ -36,6 +55,7 @@ public class PaymentControllerTest {
 
     @Before
     public void setUp() {
+        RestAssured.port = port;
         this.spec = new RequestSpecBuilder().addFilter(
                 documentationConfiguration(this.restDocumentation))
                 .build();
@@ -43,6 +63,13 @@ public class PaymentControllerTest {
 
     @Test
     public void getPayments() {
+        Mockito.doReturn(Collections.singletonList(
+                new PaymentDto(123,
+                        CREDIT_CARD,
+                        LocalDateTime.of(2019, Month.MAY, 12, 20, 30),
+                        new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)),
+                        PENDING))).when(paymentService).findAll();
+
         List<PaymentDto> payments = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("payments/getPayments"))
@@ -54,11 +81,16 @@ public class PaymentControllerTest {
                 .body()
                 .jsonPath().getList(".", PaymentDto.class);
         assertEquals(1, payments.size());
-        assertEquals(PaymentStatus.PENDING, payments.get(0).getStatus());
+        assertEquals(PENDING, payments.get(0).getStatus());
     }
 
     @Test
     public void createPayment() {
+        Mockito.doReturn(new Receipt(
+                new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)),
+                LocalDateTime.of(2019, Month.MAY, 12, 20, 30),
+                PENDING)).when(paymentService).createPayment(Mockito.any(TicketDto.class));
+
         String status = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("payments/createPayment"))
@@ -83,6 +115,12 @@ public class PaymentControllerTest {
 
     @Test
     public void getPayment() {
+        Mockito.doReturn(new PaymentDto(123,
+                CREDIT_CARD,
+                LocalDateTime.of(2019, Month.MAY, 12, 20, 30),
+                new Amount(new BigDecimal(250), Currency.getInstance(Locale.FRANCE)),
+                PENDING)).when(paymentService).getPayment(Mockito.anyLong());
+
         String status = given(this.spec)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .filter(document("payments/getPayment"))
