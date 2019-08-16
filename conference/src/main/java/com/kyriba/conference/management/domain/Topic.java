@@ -1,18 +1,27 @@
 package com.kyriba.conference.management.domain;
 
 
-import lombok.EqualsAndHashCode;
+import com.kyriba.conference.management.domain.dto.TopicDto;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Embeddable;
 
 
-//@Entity
+@Embeddable
 @Getter
-@ToString
-@EqualsAndHashCode
+@Setter
+@NoArgsConstructor
 public class Topic
 {
-  private Long id;
   private String title;
   private String author;
+
+
+  Topic(TopicDto dto)
+  {
+    title = dto.getTitle();
+    author = dto.getAuthor();
+  }
 }

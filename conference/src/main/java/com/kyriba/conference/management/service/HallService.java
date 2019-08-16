@@ -1,22 +1,20 @@
 package com.kyriba.conference.management.service;
 
-
-import com.kyriba.conference.management.api.dto.HallRequest;
-import com.kyriba.conference.management.domain.Hall;
+import com.kyriba.conference.management.domain.dto.HallRequest;
+import com.kyriba.conference.management.domain.dto.HallResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface HallService
 {
-  List<Hall> findAll();
+  HallResponse findHall(long id);
 
-  Hall createHall(HallRequest hall);
+  List<HallResponse> findAllHalls();
 
-  void updateHall(Long id, HallRequest hall);
+  long createHall(HallRequest hallRequest);
 
-  void deleteHall(Long id);
+  void updateHall(long id, HallRequest hallRequest);
 
-  Optional<Hall> find(Long id);
+  void removeHall(long id);
 }

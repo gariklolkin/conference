@@ -1,0 +1,3 @@
+INSERT INTO hall
+SELECT 13 AS id, 'test13' AS name, 13 AS places
+WHERE NOT EXISTS (SELECT 1 FROM hall WHERE id = 13);

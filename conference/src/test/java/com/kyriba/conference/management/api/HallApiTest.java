@@ -1,44 +1,38 @@
 package com.kyriba.conference.management.api;
 
 
-import com.kyriba.conference.management.api.dto.HallRequest;
-import com.kyriba.conference.management.api.dto.HallResponse;
-import com.kyriba.conference.management.domain.Hall;
-import com.kyriba.conference.management.service.HallServiceImpl;
+import com.kyriba.conference.management.domain.dto.HallResponse;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
-import static java.util.Arrays.asList;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
+import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
+import static org.apache.http.HttpStatus.SC_NOT_FOUND;
+import static org.apache.http.HttpStatus.SC_NO_CONTENT;
+import static org.apache.http.HttpStatus.SC_OK;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("integrationtest")
 public class HallApiTest
 {
   @Rule
@@ -59,16 +53,9 @@ public class HallApiTest
   }
 
 
-  @MockBean
-  HallServiceImpl hallService;
-
-
   @Test
   public void getExistingHall()
   {
-    Hall hall = new Hall(11L).withName("test11").withPlaces(10);
-    doReturn(of(hall)).when(hallService).find(11L);
-
     HallResponse existingHall = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/halls/getOne"))
@@ -77,42 +64,49 @@ public class HallApiTest
         .get("/api/v1/halls/11")
 
         .then()
-        .statusCode(HttpStatus.SC_OK)
+        .statusCode(SC_OK)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
 
         .extract().body().as(HallResponse.class);
 
-    assertNotNull(existingHall);
-    assertEquals(hall.getName(), existingHall.getName());
-    assertEquals(hall.getPlaces(), existingHall.getPlaces());
+    assertThat(existingHall).isNotNull();
+    assertThat(existingHall.getName()).isEqualTo("test11");
+    assertThat(existingHall.getPlaces()).isEqualTo(10);
   }
 
 
   @Test
   public void getNonexistentHall()
   {
-    doReturn(empty()).when(hallService).find(anyLong());
-
     given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/halls/getNonexistent"))
 
         .when()
-        .get("/api/v1/halls/11")
+        .get("/api/v1/halls/110099")
 
         .then()
-        .statusCode(HttpStatus.SC_NOT_FOUND);
+        .statusCode(SC_NOT_FOUND);
+  }
+
+
+  @Test
+  public void getInvalidHallId()
+  {
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .when()
+        .get("/api/v1/halls/-11")
+
+        .then()
+        .statusCode(SC_INTERNAL_SERVER_ERROR);
   }
 
 
   @Test
   public void getAllHalls()
   {
-    List<Hall> existingHalls = asList(
-        new Hall(11L).withName("test11").withPlaces(10),
-        new Hall(12L).withName("test12").withPlaces(12));
-    doReturn(existingHalls).when(hallService).findAll();
-
     HallResponse[] halls = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/halls/getAll"))
@@ -121,75 +115,127 @@ public class HallApiTest
         .get("/api/v1/halls")
 
         .then()
-        .statusCode(HttpStatus.SC_OK)
+        .statusCode(SC_OK)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
 
         .extract().body().as(HallResponse[].class);
 
-    assertNotNull(halls);
-    assertEquals(2, halls.length);
-    assertEquals("test11", halls[0].getName());
-    assertEquals(10, halls[0].getPlaces().intValue());
-    assertEquals("test12", halls[1].getName());
-    assertEquals(12, halls[1].getPlaces().intValue());
+    assertThat(halls).isNotNull();
+    assertThat(halls).extracting("name", "places")
+        .containsOnly(
+            tuple("test11", 10),
+            tuple("test13", 13),
+            tuple("test12", 12));
   }
 
 
   @Test
+  @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:afterAddHall.sql")
   public void addHall()
   {
-    Long hallId = 1L;
-    String hallName = "Audience 01";
-    int hallPlaces = 40;
-    doReturn(new Hall(hallId).withName(hallName).withPlaces(hallPlaces))
-        .when(hallService).createHall(any(HallRequest.class));
+    final String name = "Audience 01";
+    final int places = 40;
 
-    Long responseHallId = given(documentationSpec)
+    Long newHallId = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/halls/add"))
         .body("{\n" +
-            "  \"name\": \"" + hallName + "\",\n" +
-            "  \"places\": \"" + hallPlaces + "\"\n" +
+            "  \"name\": \"" + name + "\",\n" +
+            "  \"places\": \"" + places + "\"\n" +
             "}")
 
         .when()
         .post("/api/v1/halls")
 
         .then()
-        .statusCode(HttpStatus.SC_OK)
+        .statusCode(SC_OK)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
 
-        .extract().as(Long.class);
+        .extract().as(HallController.HallCreatedResponse.class)
+        .getId();
 
-    assertEquals(hallId, responseHallId);
+    // check that Hall is added
+    HallResponse newHall = given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .when()
+        .get("/api/v1/halls/" + newHallId)
+
+        .then()
+        .statusCode(SC_OK)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .extract().body().as(HallResponse.class);
+
+    assertThat(newHall).isNotNull();
+    assertThat(newHall.getName()).isEqualTo(name);
+    assertThat(newHall.getPlaces()).isEqualTo(places);
   }
 
 
   @Test
+  @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:afterUpdateHallPlaceCount.sql")
   public void updateHallPlaceCount()
   {
-    Long hallId = 1011L;
-    String hallName = "Audience 101";
-    int hallPlaces = 45;
-    doNothing().when(hallService).updateHall(eq(hallId), any(HallRequest.class));
+    final String name = "Audience 101";
+    final int places = 45;
 
     given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/halls/update"))
         .body("{\n" +
-            "  \"name\": \"" + hallName + "\",\n" +
-            "  \"places\": \"" + hallPlaces + "\"\n" +
+            "  \"name\": \"" + name + "\",\n" +
+            "  \"places\": \"" + places + "\"\n" +
             "}")
 
         .when()
-        .put("/api/v1/halls/" + hallId)
+        .put("/api/v1/halls/11")
 
         .then()
-        .statusCode(HttpStatus.SC_OK);
+        .statusCode(SC_OK);
+
+    // check that Hall is updated
+    HallResponse newHall = given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .when()
+        .get("/api/v1/halls/11")
+
+        .then()
+        .statusCode(SC_OK)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .extract().body().as(HallResponse.class);
+
+
+    assertThat(newHall).isNotNull();
+    assertThat(newHall.getName()).isEqualTo(name);
+    assertThat(newHall.getPlaces()).isEqualTo(places);
   }
 
 
   @Test
+  public void updateNonexistentHall()
+  {
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/halls/updateNonexistent"))
+        .body("{\n" +
+            "  \"name\": \"Audience 101\",\n" +
+            "  \"places\": \"45\"\n" +
+            "}")
+
+        .when()
+        .put("/api/v1/halls/10112323232")
+
+        .then()
+        .statusCode(SC_NOT_FOUND)
+        .body("message", equalTo("Hall not found."));
+  }
+
+
+  @Test
+  @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:afterRemoveHall.sql")
   public void removeHall()
   {
     given(documentationSpec)
@@ -197,9 +243,33 @@ public class HallApiTest
         .filter(document("api/v1/halls/delete"))
 
         .when()
-        .delete("/api/v1/halls/1101")
+        .delete("/api/v1/halls/13")
         .then()
-        .statusCode(HttpStatus.SC_OK);
+        .statusCode(SC_NO_CONTENT);
+
+    // check that Hall is removed
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+
+        .when()
+        .get("/api/v1/halls/13")
+
+        .then()
+        .statusCode(SC_NOT_FOUND);
+  }
+
+
+  @Test
+  public void removeNonexistentHall()
+  {
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("api/v1/halls/delete"))
+
+        .when()
+        .delete("/api/v1/halls/1331313")
+        .then()
+        .statusCode(SC_NO_CONTENT);
   }
 
 }

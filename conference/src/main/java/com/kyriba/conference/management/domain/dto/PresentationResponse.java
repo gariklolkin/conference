@@ -1,37 +1,40 @@
-package com.kyriba.conference.management.api.dto;
+package com.kyriba.conference.management.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
-@ApiModel(description = "Request model for presentation operation action")
+
+@ApiModel(description = "Response model on a presentation operation action")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PresentationRequest
+public class PresentationResponse
 {
   @ApiModelProperty(value = "Hall identity")
-  @NotNull
-  private Long hall;
+  @JsonInclude(NON_EMPTY)
+  private long hall;
 
   @ApiModelProperty(value = "Presentation topic")
-  @NotNull
+  @JsonInclude(NON_EMPTY)
   private TopicDto topic;
 
   @ApiModelProperty(value = "Presentation start time")
   @JsonFormat(pattern = "HH:mm")
-  @NotNull
+  @JsonInclude(NON_NULL)
   private LocalTime startTime;
 
   @ApiModelProperty(value = "Presentation end time")
   @JsonFormat(pattern = "HH:mm")
-  @NotNull
+  @JsonInclude(NON_NULL)
   private LocalTime endTime;
 }

@@ -1,4 +1,4 @@
-package com.kyriba.conference.management.api.dto;
+package com.kyriba.conference.management.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kyriba.conference.management.domain.Hall;
@@ -23,7 +23,7 @@ public class HallResponse
 
   @ApiModelProperty(value = "Hall place count")
   @JsonInclude(NON_EMPTY)
-  private Integer places;
+  private int places;
 
 
   public HallResponse(Hall hall)

@@ -109,17 +109,17 @@ A `PUT` request is used to update presentation
 
 ==== Example curl request
 
-include::{snippets}/api/v1/schedule/presentations/changeHall/curl-request.adoc[]
+include::{snippets}/api/v1/schedule/presentations/updateToNonexistentHall/curl-request.adoc[]
 include::{snippets}/api/v1/schedule/presentations/updateTime/curl-request.adoc[]
 
 ==== Example HTTP request
 
-include::{snippets}/api/v1/schedule/presentations/changeHall/http-request.adoc[]
+include::{snippets}/api/v1/schedule/presentations/updateToNonexistentHall/http-request.adoc[]
 include::{snippets}/api/v1/schedule/presentations/updateTime/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/api/v1/schedule/presentations/changeHall/http-response.adoc[]
+include::{snippets}/api/v1/schedule/presentations/updateToNonexistentHall/http-response.adoc[]
 include::{snippets}/api/v1/schedule/presentations/updateTime/http-response.adoc[]
 
 

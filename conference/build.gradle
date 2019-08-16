@@ -2,6 +2,7 @@ plugins {
 	id 'org.asciidoctor.convert' version '1.5.3'
 	id 'org.springframework.boot' version '2.1.4.RELEASE'
 	id 'java'
+    id 'com.palantir.docker' version '0.22.1'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -27,6 +28,7 @@ ext {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
@@ -34,11 +36,15 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	compile 'mysql:mysql-connector-java'
+	compile 'org.flywaydb:flyway-core'
+	compile("org.aspectj:aspectjweaver:1.9.2")
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'io.rest-assured:rest-assured:3.3.0'
 	testCompile 'org.springframework.restdocs:spring-restdocs-restassured'
 	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE'
+	testCompile("org.assertj:assertj-core:3.11.1")
 }
 
 test {
@@ -51,4 +57,12 @@ asciidoctor {
 	outputDir("build/apidoc")
 	sourceDir("src/docs/asciidoc")
 	dependsOn test
+}
+
+docker {
+	dependsOn build
+	name "hub.docker.com/ilyaa87/conference:$project.version"
+	files bootJar.archivePath
+	buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+
 }
