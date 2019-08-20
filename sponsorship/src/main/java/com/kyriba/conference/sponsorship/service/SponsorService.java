@@ -1,14 +1,30 @@
+/****************************************************************************
+ * Copyright 2000 - 2019 Kyriba Corp. All Rights Reserved.                  *
+ * The content of this file is copyrighted by Kyriba Corporation            *
+ * and can not be reproduced, distributed, altered or used in any form,     *
+ * in whole or in part.                                                     *
+ *                                                                          *
+ * Date          Author         Changes                                     *
+ * 2019-07-09    M-ASL          Created                                     *
+ *                                                                          *
+ ****************************************************************************/
 package com.kyriba.conference.sponsorship.service;
 
-import org.springframework.stereotype.Service;
+import com.kyriba.conference.sponsorship.domain.Sponsor;
+import com.kyriba.conference.sponsorship.domain.dto.SponsorDto;
+
+import javax.validation.constraints.NotBlank;
+import java.util.Optional;
 
 
 /**
- * @author M-ASL
- * @since v1.0
+ * @author Aliaksandr Samal
  */
-@Service
-public class SponsorService
+public interface SponsorService
 {
-  // todo-asl
+  long createSponsor(@NotBlank String name, @NotBlank String email);
+
+  void sendEmailNotification(Sponsor sponsor);
+
+  Optional<SponsorDto> readSponsor(long id);
 }

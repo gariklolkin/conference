@@ -1,14 +1,19 @@
 package com.kyriba.conference.sponsorship.service;
 
-import org.springframework.stereotype.Service;
+import com.kyriba.conference.sponsorship.domain.PlanCategory;
+import com.kyriba.conference.sponsorship.domain.dto.PlanDto;
+
+import java.util.Optional;
 
 
 /**
- * @author M-ASL
- * @since v1.0
+ * @author Aliaksandr Samal
  */
-@Service
-public class PlanService
+public interface PlanService
 {
-  // todo-asl
+  Optional<PlanDto> readPlan(long id);
+
+  long createPlan(PlanCategory category, String sponsorEmail);
+
+  void deletePlan(long id);
 }

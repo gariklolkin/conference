@@ -3,7 +3,6 @@ package com.kyriba.conference.sponsorship.api;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
@@ -24,7 +27,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  */
 @ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class SponsorControllerTest
+//@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
+@ActiveProfiles("test")
+class SponsorControllerApiTest extends AbstractContainerBaseTest
 {
   private RequestSpecification specification;
 
@@ -41,21 +46,57 @@ class SponsorControllerTest
   @Test
   void registerSponsor()
   {
-    String id = given(specification)
+    Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/sponsors"))
+        .filter(document("/api/v1/sponsors"))
         .body("{\n" +
             "  \"name\": \"Alexander Samal\" ,\n" +
             "  \"email\": \"aaa@bbb.by\"\n" +
             "}")
         .when()
-        .post("/api/v1/sponsorship/sponsors")
+        .post("/api/v1/sponsors")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         .extract()
         .jsonPath()
         .get("id");
-    Assertions.assertNotNull(id);
+    assertNotNull(id);
+  }
+
+
+  @Test
+  void getSponsor404()
+  {
+    Number id = given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/sponsors/{id}"))
+        .when()
+        .get("/api/v1/sponsors/404")
+        .then()
+        .statusCode(HttpStatus.SC_NOT_FOUND)
+        .extract()
+        .jsonPath()
+        .get("id");
+    assertNull(id);
+  }
+
+
+  @Test
+  @Sql("/test_data_sponsor.sql")
+  void getSponsor()
+  {
+    Number id = given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/sponsors/{id}"))
+        .when()
+        .get("/api/v1/sponsors/100")
+        .then()
+        .statusCode(HttpStatus.SC_OK)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .extract()
+        .jsonPath()
+        .get("id");
+    assertNotNull(id);
   }
 }

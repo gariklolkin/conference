@@ -3,7 +3,6 @@ package com.kyriba.conference.sponsorship.api;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
@@ -24,7 +27,9 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  */
 @ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class PlanControllerTest
+//@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
+@ActiveProfiles("test")
+class PlanControllerApiTest extends AbstractContainerBaseTest
 {
   private RequestSpecification specification;
 
@@ -41,57 +46,100 @@ class PlanControllerTest
   @Test
   void registerPlan()
   {
-    String id = given(specification)
+    Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/plans"))
+        .filter(document("/api/v1/plans"))
         .body("{\n" +
             "  \"category\": \"GENERAL\" ,\n" +
             "  \"sponsorEmail\": \"aaa@bbb.org\"\n" +
             "}")
         .when()
-        .post("/api/v1/sponsorship/plans")
+        .post("/api/v1/plans")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         .extract()
         .jsonPath()
         .get("id");
-    Assertions.assertNotNull(id);
+    assertNotNull(id);
   }
 
 
   @Test
-  void cancelPlan()
+  void registerAndRegisteredPlan()
   {
-    String id = given(specification)
+    Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/plans/{id}/cancellation"))
+        .filter(document("/api/v1/plans"))
+        .body("{\n" +
+            "  \"category\": \"GENERAL\" ,\n" +
+            "  \"sponsorEmail\": \"aaa@bbb.org\"\n" +
+            "}")
         .when()
-        .put("/api/v1/sponsorship/plans/123/cancellation")
+        .post("/api/v1/plans")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         .extract()
         .jsonPath()
         .get("id");
-    Assertions.assertNotNull(id);
+
+    given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/plans/{id}"))
+        .when()
+        .delete("/api/v1/plans/" + id)
+        .then()
+        .statusCode(HttpStatus.SC_OK);
   }
 
 
   @Test
+  void cancelNotExistingPlan()
+  {
+    given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/plans/{id}"))
+        .when()
+        .delete("/api/v1/plans/123")
+        .then()
+        .statusCode(HttpStatus.SC_NOT_FOUND);
+  }
+
+
+  @Test
+  void getPlan404()
+  {
+    Number id = given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("/api/v1/plans/{id}"))
+        .when()
+        .get("/api/v1/plans/404")
+        .then()
+        .statusCode(HttpStatus.SC_NOT_FOUND)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .extract()
+        .jsonPath()
+        .get("id");
+    assertNull(id);
+  }
+
+
+  @Test
+  @Sql("/test_data_plan.sql")
   void getPlan()
   {
-    String id = given(specification)
+    Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsorship/plans/{id}"))
+        .filter(document("/api/v1/plans/{id}"))
         .when()
-        .get("/api/v1/sponsorship/plans/123")
+        .get("/api/v1/plans/102")
         .then()
         .statusCode(HttpStatus.SC_OK)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
         .extract()
         .jsonPath()
         .get("id");
-    Assertions.assertNotNull(id);
+    assertNotNull(id);
   }
 }
