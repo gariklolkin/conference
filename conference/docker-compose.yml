@@ -8,10 +8,12 @@ services:
       MYSQL_PORT: 3306
       MYSQL_USER: root
       MYSQL_PWD: 123123
+      EUREKA: eureka-server
     ports:
       - "8080:8080"
     depends_on:
       - conference-db
+      - eureka-server
   conference-db:
     image: mysql:8
     environment:
@@ -19,3 +21,12 @@ services:
       MYSQL_DATABASE: conference
     ports:
       - "3306:3306"
+    volumes:
+      - mysql-datavolume:/var/lib/mysql
+  eureka-server:
+    image:  springcloud/eureka
+    hostname: eureka-server
+    ports:
+      - "8761:8761"
+volumes:
+  mysql-datavolume:
