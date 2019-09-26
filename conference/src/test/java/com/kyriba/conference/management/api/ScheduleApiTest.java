@@ -23,7 +23,6 @@ import java.time.format.DateTimeFormatter;
 import static io.restassured.RestAssured.given;
 import static java.time.LocalTime.of;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
-import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
 import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_NO_CONTENT;
 import static org.apache.http.HttpStatus.SC_OK;
@@ -38,7 +37,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@ActiveProfiles("integrationtest")
+@ActiveProfiles("apitest")
 public class ScheduleApiTest
 {
   @Rule
@@ -80,7 +79,9 @@ public class ScheduleApiTest
 
     assertThat(schedule).isNotNull();
     assertThat(schedule.getPresentations()).hasSize(3);
-    assertThat(schedule.getPresentations()).extracting("topic").extracting("title")
+    assertThat(schedule.getPresentations())
+        .extracting("topic").isNotNull()
+        .extracting("title")
         .containsOnly("Spring Data REST", "Microservices in practice", "All about Spring workshop");
   }
 
@@ -202,7 +203,7 @@ public class ScheduleApiTest
         .get("/api/v1/schedule/presentations/-12")
 
         .then()
-        .statusCode(SC_INTERNAL_SERVER_ERROR);
+        .statusCode(SC_BAD_REQUEST);
   }
 
 

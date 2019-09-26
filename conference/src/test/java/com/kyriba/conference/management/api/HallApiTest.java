@@ -17,7 +17,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
-import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
+import static org.apache.http.HttpStatus.SC_CONFLICT;
 import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_NO_CONTENT;
 import static org.apache.http.HttpStatus.SC_OK;
@@ -32,7 +33,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("integrationtest")
+@ActiveProfiles("apitest")
 public class HallApiTest
 {
   @Rule
@@ -100,7 +101,7 @@ public class HallApiTest
         .get("/api/v1/halls/-11")
 
         .then()
-        .statusCode(SC_INTERNAL_SERVER_ERROR);
+        .statusCode(SC_BAD_REQUEST);
   }
 
 
@@ -272,4 +273,25 @@ public class HallApiTest
         .statusCode(SC_NO_CONTENT);
   }
 
+
+  @Test
+  @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:afterUpdateHallPlaceCount.sql")
+  public void updateHallNameToExistingOne()
+  {
+    final String name = "test11";
+    final int places = 10;
+
+    given(documentationSpec)
+        .contentType(APPLICATION_JSON_UTF8_VALUE)
+        .body("{\n" +
+            "  \"name\": \"" + name + "\",\n" +
+            "  \"places\": \"" + places + "\"\n" +
+            "}")
+
+        .when()
+        .put("/api/v1/halls/12")
+
+        .then()
+        .statusCode(SC_CONFLICT);
+  }
 }
