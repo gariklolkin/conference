@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalTime;
 
 
@@ -18,11 +20,12 @@ import java.time.LocalTime;
 public class PresentationRequest
 {
   @ApiModelProperty(value = "Hall identity")
-  @NotNull
+  @Positive
   private long hall;
 
   @ApiModelProperty(value = "Presentation topic")
   @NotNull
+  @Valid
   private TopicDto topic;
 
   @ApiModelProperty(value = "Presentation start time")

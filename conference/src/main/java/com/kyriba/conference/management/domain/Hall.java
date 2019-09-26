@@ -27,12 +27,6 @@ public class Hall
   private Integer places;
 
 
-  public Hall(Long id)
-  {
-    this.id = id;
-  }
-
-
   public Hall(HallRequest hallRequest)
   {
     checkNotNull(hallRequest);

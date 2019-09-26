@@ -8,7 +8,11 @@ import com.kyriba.conference.management.domain.exception.EntityNotFoundException
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @AllArgsConstructor
+@Validated
 public class HallServiceImpl implements HallService
 {
   private static final String HALL_NOT_FOUND = "Hall not found.";
@@ -24,7 +29,7 @@ public class HallServiceImpl implements HallService
 
 
   @Override
-  public HallResponse findHall(long id)
+  public HallResponse findHall(@Valid @Positive long id)
   {
     return hallRepository.findById(id)
         .map(HallResponse::new)
@@ -42,7 +47,7 @@ public class HallServiceImpl implements HallService
 
 
   @Override
-  public long createHall(HallRequest hallRequest)
+  public long createHall(@Valid HallRequest hallRequest)
   {
     Hall hall = new Hall(hallRequest);
     return hallRepository.save(hall).getId();
@@ -50,7 +55,7 @@ public class HallServiceImpl implements HallService
 
 
   @Override
-  public void updateHall(long id, HallRequest hallRequest)
+  public void updateHall(@Valid @Positive long id, @Valid HallRequest hallRequest)
   {
     Hall hall = hallRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(HALL_NOT_FOUND));
@@ -61,7 +66,7 @@ public class HallServiceImpl implements HallService
 
 
   @Override
-  public void removeHall(long id)
+  public void removeHall(@Valid @Positive long id)
   {
     hallRepository.deleteById(id);
   }
