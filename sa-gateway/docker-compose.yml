@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  api-gateway:
+    container_name: "api-gateway"
+    build: .
+    depends_on:
+      - eureka-server
+    networks:
+      - conference-network
+    ports:
+      - "8082:8082"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+  eureka-server:
+    container_name: "eureka-server"
+    image:  springcloud/eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - conference-network
+networks:
+  conference-network:
