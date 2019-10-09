@@ -5,18 +5,43 @@ services:
     build: .
     depends_on:
       - eureka-server
-    networks:
-      - conference-network
     ports:
-      - "8082:8082"
+      - 8082:8082
     environment:
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: 'true'
+      EUREKA_CLIENT_FETCH_REGISTRY: 'true'
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
   eureka-server:
     container_name: "eureka-server"
-    image:  springcloud/eureka
+    image: taskbeez/eureka-server:master
     ports:
-      - "8761:8761"
-    networks:
-      - conference-network
-networks:
-  conference-network:
+      - 8761:8761
+  sponsorship-db:
+    container_name: "sponsorship-db"
+    image: postgres
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  sponsorship-service:
+    container_name: "sponsorship-service"
+    environment:
+      SPONSORSHIP_DB_USERNAME: postgres
+      SPONSORSHIP_DB_PASSWORD: postgres
+      SPONSORSHIP_DB_HOST: sponsorship-db
+      SPONSORSHIP_DB_NAME: postgres
+      SPONSORSHIP_DB_PORT: 5432
+      SPONSORSHIP_SERVICE_PORT: 8080
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: 'true'
+      EUREKA_CLIENT_FETCH_REGISTRY: 'true'
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    image: sanek555/sponsorship:1
+    ports:
+      - 8080:8080
+    depends_on:
+      - eureka-server
+      - sponsorship-db
+volumes:
+  db-data:
