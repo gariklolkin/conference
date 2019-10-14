@@ -15,74 +15,66 @@ pipeline {
                 parallel (
                     conference: {
                         dir("conference") {
-                            step("Build Conference Microservice") {
-                                sh script: '''
-                                    ./gradlew -b ./build.gradle clean build test
-                                '''
-                            }
+                            sh script: '''
+                                # Build Conference Microservice
+                                ./gradlew -b ./build.gradle clean build test
+                            '''
                         }
                     },
                     discount: {
                         dir("discount") {
-                            step("Build Discount Microservice") {
-                                sh script: '''
-                                    ./gradlew -b ./build.gradle clean build test
-                                '''
-                            }
+                            sh script: '''
+                                # Build Discount Microservice
+                                ./gradlew -b ./build.gradle clean build test
+                            '''
                         }
                     },
                     notification: {
                         dir("notification") {
-                            step("Build Notification Microservice") {
-                                sh script: '''
-                                    ./gradlew -b ./build.gradle clean build test
-                                '''
-                            }
+                            sh script: '''
+                                # Build Notification Microservice
+                                ./gradlew -b ./build.gradle clean build test
+                            '''
                         }
                     },
                     payment: {
                         dir("payment") {
-                            step("Build Payment Microservice") {
-                                sh script: '''
-                                    ./gradlew -b ./build.gradle clean build test
-                                '''
-                            }
+                            sh script: '''
+                                # Build Payment Microservice
+                                ./gradlew -b ./build.gradle clean build test
+                            '''
                         }
                     },
                     registration: {
                         dir("registration") {
-                            step("Build Registration Microservice") {
-                                sh script: '''
-                                    ./gradlew -b ./build.gradle clean build test
-                                '''
-                            }
+                            sh script: '''
+                                # Build Registration Microservice
+                                ./gradlew -b ./build.gradle clean build test
+                            '''
                         }
                     },
                     sagateway: {
                         dir("sa-gateway") {
-                            step("Build Gateway Microservice") {
-                                sh script: '''
-                                    ./gradlew -b ./build.gradle clean build test
-                                '''
-                            }
+                            sh script: '''
+                                # Build Gateway Microservice
+                                ./gradlew -b ./build.gradle clean build test
+                            '''
                         }
                     },
                     sponsorship: {
                         dir("sponsorship") {
-                            step("Build Sponsorship Microservice") {
-                                sh script: '''
-                                    ./gradlew -b ./build.gradle clean build test
-                                '''
-                            }
+                            sh script: '''
+                                # Build Sponsorship Microservice
+                                ./gradlew -b ./build.gradle clean build test
+                            '''
                         }
                     },
                     submittal: {
                         dir("submittal") {
-                            step("Build Submittal Microservice") {
-                                sh script: '''
-                                    ./gradlew -b ./build.gradle clean build test
-                                '''
-                            }
+                            sh script: '''
+                                # Build Submittal Microservice
+                                ./gradlew -b ./build.gradle clean build test
+                            '''
                         }
                     }, failFast: false
                 )
