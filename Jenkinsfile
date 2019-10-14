@@ -56,7 +56,7 @@ pipeline {
                     }
                 }
             },
-            sa-gateway: {
+            sagateway: {
                 dir("sa-gateway") {
                     stage("Build Gateway Microservice") {
                         sh script: '''
