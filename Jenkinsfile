@@ -15,7 +15,7 @@ pipeline {
                 parallel (
                     conference: {
                         dir("conference") {
-                            stage("Build Conference Microservice") {
+                            step("Build Conference Microservice") {
                                 sh script: '''
                                     ./gradlew -b ./build.gradle clean build test
                                 '''
@@ -24,7 +24,7 @@ pipeline {
                     },
                     discount: {
                         dir("discount") {
-                            stage("Build Discount Microservice") {
+                            step("Build Discount Microservice") {
                                 sh script: '''
                                     ./gradlew -b ./build.gradle clean build test
                                 '''
@@ -33,7 +33,7 @@ pipeline {
                     },
                     notification: {
                         dir("notification") {
-                            stage("Build Notification Microservice") {
+                            step("Build Notification Microservice") {
                                 sh script: '''
                                     ./gradlew -b ./build.gradle clean build test
                                 '''
@@ -42,7 +42,7 @@ pipeline {
                     },
                     payment: {
                         dir("payment") {
-                            stage("Build Payment Microservice") {
+                            step("Build Payment Microservice") {
                                 sh script: '''
                                     ./gradlew -b ./build.gradle clean build test
                                 '''
@@ -51,7 +51,7 @@ pipeline {
                     },
                     registration: {
                         dir("registration") {
-                            stage("Build Registration Microservice") {
+                            step("Build Registration Microservice") {
                                 sh script: '''
                                     ./gradlew -b ./build.gradle clean build test
                                 '''
@@ -60,7 +60,7 @@ pipeline {
                     },
                     sagateway: {
                         dir("sa-gateway") {
-                            stage("Build Gateway Microservice") {
+                            step("Build Gateway Microservice") {
                                 sh script: '''
                                     ./gradlew -b ./build.gradle clean build test
                                 '''
@@ -69,7 +69,7 @@ pipeline {
                     },
                     sponsorship: {
                         dir("sponsorship") {
-                            stage("Build Sponsorship Microservice") {
+                            step("Build Sponsorship Microservice") {
                                 sh script: '''
                                     ./gradlew -b ./build.gradle clean build test
                                 '''
@@ -78,7 +78,7 @@ pipeline {
                     },
                     submittal: {
                         dir("submittal") {
-                            stage("Build Submittal Microservice") {
+                            step("Build Submittal Microservice") {
                                 sh script: '''
                                     ./gradlew -b ./build.gradle clean build test
                                 '''
