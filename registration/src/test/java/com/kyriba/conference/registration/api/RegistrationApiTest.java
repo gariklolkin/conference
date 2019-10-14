@@ -1,6 +1,7 @@
 package com.kyriba.conference.registration.api;
 
 
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -21,10 +23,14 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class RegistrationApiTest
 {
+
+  @LocalServerPort
+  int port;
+
   @Rule
   public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
 
@@ -34,6 +40,7 @@ public class RegistrationApiTest
   @Before
   public void setUp()
   {
+    RestAssured.port = port;
     documentationSpec = new RequestSpecBuilder()
         .addFilter(documentationConfiguration(restDocumentation)).build();
   }
