@@ -5,7 +5,6 @@ out/
 ### Gradle ###
 # Exclude Folder List #
 .gradle/
-gradle/
 
 # Compiled class file
 *.class
@@ -21,6 +20,7 @@ gradle/
 
 # Package Files #
 *.jar
+!gradle-wrapper.jar
 *.war
 *.nar
 *.ear
