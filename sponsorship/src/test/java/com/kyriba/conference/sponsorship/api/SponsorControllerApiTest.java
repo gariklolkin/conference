@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -48,7 +49,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsors"))
+        .filter(document("./api/v1/sponsors"))
         .body("{\n" +
             "  \"name\": \"Alexander Samal\" ,\n" +
             "  \"email\": \"aaa@bbb.by\"\n" +
@@ -70,7 +71,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsors/{id}"))
+        .filter(document("./api/v1/sponsors/{id}"))
         .when()
         .get("/api/v1/sponsors/404")
         .then()
@@ -88,7 +89,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/sponsors/{id}"))
+        .filter(document("./api/v1/sponsors/{id}"))
         .when()
         .get("/api/v1/sponsors/100")
         .then()

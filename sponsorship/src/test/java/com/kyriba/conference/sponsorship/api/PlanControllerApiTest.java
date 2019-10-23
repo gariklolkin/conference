@@ -48,7 +48,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/plans"))
+        .filter(document("./api/v1/plans"))
         .body("{\n" +
             "  \"category\": \"GENERAL\" ,\n" +
             "  \"sponsorEmail\": \"aaa@bbb.org\"\n" +
@@ -70,7 +70,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/plans"))
+        .filter(document("./api/v1/plans"))
         .body("{\n" +
             "  \"category\": \"GENERAL\" ,\n" +
             "  \"sponsorEmail\": \"aaa@bbb.org\"\n" +
@@ -86,7 +86,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
     given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/plans/{id}"))
+        .filter(document("./api/v1/plans/{id}"))
         .when()
         .delete("/api/v1/plans/" + id)
         .then()
@@ -99,7 +99,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   {
     given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/plans/{id}"))
+        .filter(document("./api/v1/plans/{id}"))
         .when()
         .delete("/api/v1/plans/123")
         .then()
@@ -112,7 +112,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/plans/{id}"))
+        .filter(document("./api/v1/plans/{id}"))
         .when()
         .get("/api/v1/plans/404")
         .then()
@@ -131,7 +131,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-        .filter(document("/api/v1/plans/{id}"))
+        .filter(document("./api/v1/plans/{id}"))
         .when()
         .get("/api/v1/plans/102")
         .then()
