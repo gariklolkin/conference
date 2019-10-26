@@ -22,6 +22,8 @@ spec:
     spec:
       containers:
       - env:
+        - name: EUREKA_INSTANCE_PREFERIPADDRESS
+          value: "true"
         - name: EUREKA_CLIENT_FETCH_REGISTRY
           value: "true"
         - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
