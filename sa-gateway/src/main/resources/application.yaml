@@ -2,8 +2,10 @@ spring:
   application:
     name: api-gateway
 server:
-  port: ${API_GATEWAY_PORT:8082}
+  port: 8082
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:${EUREKA_PORT:8761}/eureka
