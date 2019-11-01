@@ -11,10 +11,12 @@ metadata:
 spec:
   ports:
   - name: "8082"
+    nodePort: 31001
     port: 8082
     targetPort: 8082
   selector:
     io.kompose.service: api-gateway
+  type: NodePort
 status:
   loadBalancer: {}
 ---
@@ -31,10 +33,12 @@ metadata:
 spec:
   ports:
   - name: "8761"
+    nodePort: 31000
     port: 8761
     targetPort: 8761
   selector:
     io.kompose.service: eureka-server
+  type: NodePort
 status:
   loadBalancer: {}
 ---
@@ -71,10 +75,12 @@ metadata:
 spec:
   ports:
   - name: "8080"
+    nodePort: 31002
     port: 8080
     targetPort: 8080
   selector:
     io.kompose.service: sponsorship-service
+  type: NodePort
 status:
   loadBalancer: {}
 ---

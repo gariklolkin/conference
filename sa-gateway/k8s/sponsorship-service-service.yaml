@@ -9,8 +9,10 @@ metadata:
     io.kompose.service: sponsorship-service
   name: sponsorship-service
 spec:
+  type: NodePort
   ports:
   - name: "8080"
+    nodePort: 31002
     port: 8080
     targetPort: 8080
   selector:

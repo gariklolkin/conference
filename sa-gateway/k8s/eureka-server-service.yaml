@@ -9,8 +9,10 @@ metadata:
     io.kompose.service: eureka-server
   name: eureka-server
 spec:
+  type: NodePort
   ports:
   - name: "8761"
+    nodePort: 31000
     port: 8761
     targetPort: 8761
   selector:
