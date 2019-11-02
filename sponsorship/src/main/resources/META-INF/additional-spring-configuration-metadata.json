@@ -4,6 +4,11 @@
       "name": "api.version.path",
       "type": "java.lang.String",
       "description": "Sponsorship API version path."
+    },
+    {
+      "name": "notification.sync",
+      "type": "java.lang.Boolean",
+      "description": "true - use synchronous notification, false - asynchronous."
     }
   ]
 }

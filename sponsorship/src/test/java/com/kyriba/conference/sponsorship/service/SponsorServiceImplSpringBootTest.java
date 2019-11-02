@@ -26,7 +26,9 @@ class SponsorServiceImplSpringBootTest
 //  MockRestServiceServer server;
 
   @MockBean
-  private EmailClient emailClient;
+  private EmailClientSync emailClientSync;
+  @MockBean
+  private EmailClientAsync emailClientAsync;
   @MockBean
   private SponsorRepository sponsorRepository;
   @Autowired

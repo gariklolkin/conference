@@ -28,3 +28,8 @@ eureka:
     fetch-registry: false
     service-url:
       defaultZone: http://localhost:${EUREKA_PORT:9090}/eureka
+notification:
+  sync: ${IS_SYNC_NOTIFICATION:false}
+  kafka:
+    topic: ${KAFKA_NOTIFICATION_TOPIC:NotificationTopic}
+    bootstrap.servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka0:31005,localhost:9092,localhost:31003}
