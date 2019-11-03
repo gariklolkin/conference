@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -28,7 +27,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  */
 @ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-//@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
 @ActiveProfiles("test")
 class SponsorControllerApiTest extends AbstractContainerBaseTest
 {
@@ -48,7 +46,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   void registerSponsor()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/sponsors"))
         .body("{\n" +
             "  \"name\": \"Alexander Samal\" ,\n" +
@@ -58,7 +56,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
         .post("/api/v1/sponsors")
         .then()
         .statusCode(HttpStatus.SC_OK)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .extract()
         .jsonPath()
         .get("id");
@@ -70,7 +68,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   void getSponsor404()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/sponsors/{id}"))
         .when()
         .get("/api/v1/sponsors/404")
@@ -88,13 +86,13 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   void getSponsor()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/sponsors/{id}"))
         .when()
         .get("/api/v1/sponsors/100")
         .then()
         .statusCode(HttpStatus.SC_OK)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .extract()
         .jsonPath()
         .get("id");

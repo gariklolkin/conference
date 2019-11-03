@@ -15,6 +15,8 @@ spring:
     properties.hibernate.temp.use_jdbc_metadata_defaults: false
     # Because detection is disabled you have to set correct dialect by hand.
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka0:31005,localhost:9092,localhost:31003}
 logging:
   level:
     root: warn
@@ -32,4 +34,3 @@ notification:
   sync: ${IS_SYNC_NOTIFICATION:false}
   kafka:
     topic: ${KAFKA_NOTIFICATION_TOPIC:NotificationTopic}
-    bootstrap.servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka0:31005,localhost:9092,localhost:31003}

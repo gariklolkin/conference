@@ -27,7 +27,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  */
 @ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-//@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
 @ActiveProfiles("test")
 class PlanControllerApiTest extends AbstractContainerBaseTest
 {
@@ -47,7 +46,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   void registerPlan()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/plans"))
         .body("{\n" +
             "  \"category\": \"GENERAL\" ,\n" +
@@ -57,7 +56,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
         .post("/api/v1/plans")
         .then()
         .statusCode(HttpStatus.SC_OK)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .extract()
         .jsonPath()
         .get("id");
@@ -69,7 +68,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   void registerAndRegisteredPlan()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/plans"))
         .body("{\n" +
             "  \"category\": \"GENERAL\" ,\n" +
@@ -79,13 +78,13 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
         .post("/api/v1/plans")
         .then()
         .statusCode(HttpStatus.SC_OK)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .extract()
         .jsonPath()
         .get("id");
 
     given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/plans/{id}"))
         .when()
         .delete("/api/v1/plans/" + id)
@@ -98,7 +97,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   void cancelNotExistingPlan()
   {
     given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/plans/{id}"))
         .when()
         .delete("/api/v1/plans/123")
@@ -111,13 +110,13 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   void getPlan404()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/plans/{id}"))
         .when()
         .get("/api/v1/plans/404")
         .then()
         .statusCode(HttpStatus.SC_NOT_FOUND)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .extract()
         .jsonPath()
         .get("id");
@@ -130,13 +129,13 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
   void getPlan()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/plans/{id}"))
         .when()
         .get("/api/v1/plans/102")
         .then()
         .statusCode(HttpStatus.SC_OK)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .extract()
         .jsonPath()
         .get("id");

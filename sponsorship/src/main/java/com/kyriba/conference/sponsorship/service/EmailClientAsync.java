@@ -1,5 +1,9 @@
 package com.kyriba.conference.sponsorship.service;
 
-public interface EmailClientAsync extends EmailClient
+import com.kyriba.conference.sponsorship.domain.EmailMessage;
+
+
+public interface EmailClientAsync
 {
+  void sendNotification(EmailMessage emailMessage);
 }

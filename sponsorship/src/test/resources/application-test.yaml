@@ -12,3 +12,5 @@ spring:
 logging:
   level:
     org.springframework.test.context.cache: DEBUG
+notification:
+  sync: true
