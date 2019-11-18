@@ -1,0 +1,14 @@
+apiVersion: skaffold/v1
+kind: Config
+metadata:
+  name: conference
+build:
+  artifacts:
+  - image: sanek555/api-gateway
+    context: sa-gateway
+  - image: sanek555/sponsorship
+    context: sponsorship
+deploy:
+  kubectl:
+    manifests:
+    - sa-gateway/k8s/compiled.yaml
