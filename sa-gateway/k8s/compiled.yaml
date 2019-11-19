@@ -24,6 +24,46 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: conference
+  name: conference
+spec:
+  ports:
+  - name: "8080"
+    port: 8080
+    targetPort: 8080
+  selector:
+    io.kompose.service: conference
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: conference-db
+  name: conference-db
+spec:
+  ports:
+  - name: "3306"
+    port: 3306
+    targetPort: 3306
+  selector:
+    io.kompose.service: conference-db
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
     kompose.cmd: kompose convert -f docker-compose.yml
     kompose.version: 1.19.0 ()
   creationTimestamp: null
@@ -168,6 +208,100 @@ spec:
         - containerPort: 8082
         resources: {}
       restartPolicy: Always
+status: {}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: conference
+  name: conference
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.19.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: conference
+    spec:
+      containers:
+      - env:
+        - name: EUREKA_INSTANCE_PREFERIPADDRESS
+          value: "true"
+        - name: EUREKA_CLIENT_FETCH_REGISTRY
+          value: "true"
+        - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+          value: "true"
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value: http://eureka-server:8761/eureka
+        - name: EUREKA
+          value: eureka-server
+        - name: MYSQL_HOST
+          value: conference-db
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_PWD
+          value: "123123"
+        - name: MYSQL_USER
+          value: root
+        image: conference
+        name: conference
+        ports:
+        - containerPort: 8080
+        resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: conference-db
+  name: conference-db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.19.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: conference-db
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_DATABASE
+          value: conference
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123123"
+        image: mysql:8
+        name: conference-db
+        ports:
+        - containerPort: 3306
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-datavolume
+      restartPolicy: Always
+      volumes:
+      - name: mysql-datavolume
+        persistentVolumeClaim:
+          claimName: mysql-datavolume
 status: {}
 ---
 apiVersion: extensions/v1beta1
@@ -397,6 +531,21 @@ metadata:
   labels:
     io.kompose.service: kafka0-claim0
   name: kafka0-claim0
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mysql-datavolume
+  name: mysql-datavolume
 spec:
   accessModes:
   - ReadWriteOnce

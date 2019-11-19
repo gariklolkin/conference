@@ -8,6 +8,8 @@ build:
     context: sa-gateway
   - image: sanek555/sponsorship
     context: sponsorship
+  - image: conference
+    context: conference
 deploy:
   kubectl:
     manifests:

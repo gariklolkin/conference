@@ -16,3 +16,8 @@ resources:
   - kafka0-service.yaml
   - zookeeper-deployment.yaml
   - zookeeper-service.yaml
+  - conference-db-deployment.yaml
+  - conference-db-service.yaml
+  - conference-deployment.yaml
+  - conference-service.yaml
+  - mysql-datavolume-persistentvolumeclaim.yaml

@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="404ad89f-fc8c-4910-886a-ab39fbbf5c06" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/skaffold.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sa-gateway/k8s/conference-db-deployment.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sa-gateway/k8s/conference-db-service.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sa-gateway/k8s/conference-deployment.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sa-gateway/k8s/conference-service.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sa-gateway/k8s/mysql-datavolume-persistentvolumeclaim.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sa-gateway/k8s/compiled.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/sa-gateway/k8s/compiled.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sa-gateway/k8s/kustomization.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/sa-gateway/k8s/kustomization.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skaffold.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/skaffold.yaml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -143,6 +149,16 @@
       <item itemvalue="Cloud Code: Kubernetes.Run on Kubernetes" />
     </list>
   </component>
+  <component name="ServiceViewManager">
+    <option name="allServicesViewState">
+      <serviceView>
+        <treeState>
+          <expand />
+          <select />
+        </treeState>
+      </serviceView>
+    </option>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="404ad89f-fc8c-4910-886a-ab39fbbf5c06" name="Default Changelist" comment="" />
@@ -151,7 +167,9 @@
       <option name="presentableId" value="Default" />
       <updated>1574097400818</updated>
       <workItem from="1574097402096" duration="3235000" />
-      <workItem from="1574100811513" duration="332000" />
+      <workItem from="1574100811513" duration="941000" />
+      <workItem from="1574165760635" duration="1662000" />
+      <workItem from="1574172485030" duration="586000" />
     </task>
     <task id="LOCAL-00001" summary="Skaffold addad">
       <created>1574097642123</created>
@@ -167,7 +185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574097825636</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Glogal: skaffold added">
+      <created>1574101165335</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1574101165335</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,7 +209,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="HEAD" />
                       </list>
                     </value>
                   </entry>
@@ -203,6 +228,11 @@
             <list>
               <RecentGroup>
                 <option name="FILTER_VALUES">
+                  <option value="HEAD" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
                   <option value="master" />
                 </option>
               </RecentGroup>
@@ -216,7 +246,8 @@
     <MESSAGE value="Add Sponsorship service" />
     <MESSAGE value="Skaffold addad" />
     <MESSAGE value="Skaffold added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Skaffold added" />
+    <MESSAGE value="Global: skaffold added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Global: skaffold added" />
   </component>
   <component name="masterDetails">
     <states>
