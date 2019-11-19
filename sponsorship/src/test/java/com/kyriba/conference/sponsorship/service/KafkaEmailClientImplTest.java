@@ -32,7 +32,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EmbeddedKafka(partitions = 1, topics = { "NotificationTopic" },
     brokerProperties = {
         "listeners=PLAINTEXT://localhost:${kafka.broker.port:31003}",
-        "auto.create.topics.enable=${kafka.broker.topics-enable:true}" })
+        "auto.create.topics.enable=${kafka.broker.topics-enable:true}",
+        "log.dir=out/embedded-kafka"})
 public class KafkaEmailClientImplTest
 {
   @Autowired
