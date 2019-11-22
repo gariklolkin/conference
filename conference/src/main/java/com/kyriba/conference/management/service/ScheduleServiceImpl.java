@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService
 
 
   @Override
-  public long addPresentation(@Valid PresentationRequest presentationRequest)
+  public long addPresentation(PresentationRequest presentationRequest)
   {
     Presentation presentation = new Presentation(presentationRequest);
     setPresentationHall(presentation, presentationRequest.getHall());
@@ -58,7 +56,7 @@ public class ScheduleServiceImpl implements ScheduleService
 
 
   @Override
-  public Optional<PresentationResponse> getPresentation(@Valid @Positive long id)
+  public Optional<PresentationResponse> getPresentation(long id)
   {
     return presentationRepository.findById(id)
         .map(Presentation::toDto);
@@ -66,7 +64,7 @@ public class ScheduleServiceImpl implements ScheduleService
 
 
   @Override
-  public void updatePresentation(@Valid @Positive long id, @Valid PresentationRequest presentationRequest)
+  public void updatePresentation(long id, PresentationRequest presentationRequest)
   {
     Presentation presentation = presentationRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Presentation not found."));
@@ -78,7 +76,7 @@ public class ScheduleServiceImpl implements ScheduleService
   }
 
 
-  private void setPresentationHall(@Valid Presentation presentation, @Valid @Positive long hallId)
+  private void setPresentationHall(Presentation presentation, long hallId)
   {
     Hall hall = hallRepository.findById(hallId)
         .orElseThrow(() -> new LinkedEntityNotFoundException("Hall not found."));
@@ -87,7 +85,7 @@ public class ScheduleServiceImpl implements ScheduleService
 
 
   @Override
-  public void deletePresentation(@Valid @Positive long id)
+  public void deletePresentation(long id)
   {
     presentationRepository.deleteById(id);
   }

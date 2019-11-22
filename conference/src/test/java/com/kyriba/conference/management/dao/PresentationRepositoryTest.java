@@ -1,23 +1,16 @@
 package com.kyriba.conference.management.dao;
 
 
-import com.github.database.rider.core.DBUnitRule;
 import com.kyriba.conference.management.domain.Hall;
 import com.kyriba.conference.management.domain.Presentation;
 import com.kyriba.conference.management.domain.Topic;
 import org.hamcrest.Matchers;
 import org.hibernate.exception.ConstraintViolationException;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalTime;
@@ -29,22 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
-@ActiveProfiles("persistencetest")
-public class PresentationRepositoryTest
+public class PresentationRepositoryTest extends BaseRepositoryTest
 {
-  @Autowired
-  protected JdbcTemplate jdbcTemplate;
-
-  @Rule
-  public DBUnitRule dbUnitRule = DBUnitRule.instance(() -> jdbcTemplate.getDataSource().getConnection());
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
-
-  @Autowired
-  protected TestEntityManager em;
-
   @Autowired
   protected PresentationRepository dao;
 

@@ -15,9 +15,9 @@ public interface ScheduleService
 
   long addPresentation(@Valid PresentationRequest presentation);
 
-  Optional<PresentationResponse> getPresentation(@Valid @Positive long id);
+  Optional<PresentationResponse> getPresentation(@Positive long id);
 
-  void updatePresentation(@Valid @Positive long id, @Valid PresentationRequest presentation);
+  void updatePresentation(@Positive long id, @Valid PresentationRequest presentation);
 
-  void deletePresentation(@Valid @Positive long id);
+  void deletePresentation(@Positive long id);
 }

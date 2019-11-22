@@ -12,7 +12,6 @@ import com.kyriba.conference.management.domain.dto.TopicDto;
 import com.kyriba.conference.management.domain.exception.EntityNotFoundException;
 import com.kyriba.conference.management.domain.exception.LinkedEntityNotFoundException;
 import com.kyriba.conference.management.domain.exception.PresentationTimeIntersectionException;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -63,7 +62,6 @@ public class ScheduleServiceImplTest
   @Test
   public void getSchedule()
   {
-    // given
     Hall hall = createHall();
     Presentation pr1 = createPresentation(TITLE_1, AUTHOR_1, START_TIME, END_TIME, hall);
     Presentation pr2 = createPresentation(TITLE_2, AUTHOR_2, START_TIME.plusHours(1), END_TIME.plusHours(1), hall);
@@ -75,10 +73,8 @@ public class ScheduleServiceImplTest
 
     doReturn(asList(pr1, pr2)).when(presentationRepository).findAll();
 
-    // when
     List<PresentationResponse> result = scheduleService.getSchedule();
 
-    // then
     assertThat(result).isNotEmpty()
         .containsExactlyInAnyOrder(presentation1, presentation2);
   }
@@ -87,7 +83,6 @@ public class ScheduleServiceImplTest
   @Test
   public void getPresentation()
   {
-    // given
     long id = 2L;
 
     Hall hall = createHall();
@@ -95,10 +90,8 @@ public class ScheduleServiceImplTest
 
     doReturn(Optional.of(pr1)).when(presentationRepository).findById(eq((id)));
 
-    // when
     Optional<PresentationResponse> result = scheduleService.getPresentation(id);
 
-    // then
     assertThat(result).isNotEmpty()
         .usingFieldByFieldValueComparator()
         .contains(new PresentationResponse(hall.getId(), new TopicDto(TITLE_1, AUTHOR_1), START_TIME, END_TIME));
@@ -106,7 +99,7 @@ public class ScheduleServiceImplTest
 
 
   @Test
-  public void getPresentation_ifNotFoundReturnEmpty()
+  public void ifNotFoundReturnEmpty()
   {
     long id = 2L;
     doReturn(empty()).when(presentationRepository).findById(eq((id)));
@@ -118,7 +111,6 @@ public class ScheduleServiceImplTest
   @Test
   public void addPresentation()
   {
-    // given
     Hall hall = new Hall();
     PresentationRequest request = createPresentationRequest();
     Presentation presentationToCreate = new Presentation(request);
@@ -130,17 +122,15 @@ public class ScheduleServiceImplTest
     doReturn(Optional.of(hall)).when(hallRepository).findById(anyLong());
     doReturn(createdPresentation).when(presentationRepository).save(any(Presentation.class));
 
-    // when
     final long id = scheduleService.addPresentation(request);
 
-    // then
     assertThat(id).isEqualTo(createdId);
     verify(presentationRepository).save(refEq(presentationToCreate, "topic"));
   }
 
 
   @Test
-  public void addPresentation_ifHallNotFoundThrowException()
+  public void ifHallNotFoundThrowException()
   {
     PresentationRequest request = createPresentationRequest();
     doReturn(empty()).when(hallRepository).findById(anyLong());
@@ -153,7 +143,7 @@ public class ScheduleServiceImplTest
 
 
   @Test
-  public void addPresentation_ifTimeIsNotAvailableThrowException()
+  public void ifTimeIsNotAvailableThrowException()
   {
     PresentationRequest request = createPresentationRequest();
     Presentation intersectedPresentation = new Presentation(request);
@@ -173,7 +163,6 @@ public class ScheduleServiceImplTest
   @Test
   public void updatePresentation()
   {
-    // given
     Hall hall = new Hall();
 
     PresentationRequest request = createPresentationRequest();
@@ -184,16 +173,14 @@ public class ScheduleServiceImplTest
     doReturn(Optional.of(hall)).when(hallRepository).findById(anyLong());
     doReturn(Optional.of(presentationToUpdate)).when(presentationRepository).findById(eq(id));
 
-    // when
     scheduleService.updatePresentation(id, request);
 
-    // then
     verify(presentationRepository).save(refEq(presentationToUpdate));
   }
 
 
   @Test
-  public void updatePresentation_ifNotFoundThrowException()
+  public void ifNotFoundThrowException()
   {
     PresentationRequest request = createPresentationRequest();
     long id = 4L;
@@ -208,7 +195,7 @@ public class ScheduleServiceImplTest
 
 
   @Test
-  public void updatePresentation_ifHallNotFoundThrowException()
+  public void ifHallNotFoundInUpdateThrowException()
   {
     PresentationRequest request = createPresentationRequest();
     Presentation presentationToUpdate = new Presentation(request);
@@ -226,7 +213,7 @@ public class ScheduleServiceImplTest
 
 
   @Test
-  public void updatePresentation_ifTimeIsNotAvailableThrowException()
+  public void ifTimeIsNotAvailableInUpdateThrowException()
   {
     Hall hall = new Hall();
     long id = 4L;
@@ -261,14 +248,12 @@ public class ScheduleServiceImplTest
   }
 
 
-  @NotNull
   private PresentationRequest createPresentationRequest()
   {
     return new PresentationRequest(1, new TopicDto(TITLE_1, AUTHOR_1), START_TIME, END_TIME);
   }
 
 
-  @NotNull
   private Hall createHall()
   {
     Hall hall = new Hall();
@@ -279,7 +264,6 @@ public class ScheduleServiceImplTest
   }
 
 
-  @NotNull
   private Presentation createPresentation(String title1, String author1, LocalTime startTime, LocalTime endTime,
                                           Hall hall)
   {

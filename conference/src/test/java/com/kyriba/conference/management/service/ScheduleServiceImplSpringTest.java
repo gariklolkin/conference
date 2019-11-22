@@ -37,7 +37,7 @@ public class ScheduleServiceImplSpringTest
 
 
   @Test
-  public void findPresentation_ifIdNotPositiveThrowException()
+  public void ifIdNotPositiveThrowException()
   {
     thrown.expect(ConstraintViolationException.class);
     thrown.expectMessage("id: must be greater than 0");
@@ -47,7 +47,7 @@ public class ScheduleServiceImplSpringTest
 
 
   @Test
-  public void createPresentation_negativeIdAndEmptyAuthor()
+  public void ifNegativeIdAndEmptyAuthorThrowException()
   {
     final long hallId = -13;
     TopicDto topic = new TopicDto("Concurrency", "");
@@ -62,7 +62,7 @@ public class ScheduleServiceImplSpringTest
 
 
   @Test
-  public void removePresentation_negativeId()
+  public void ifNegativeIdThrowException()
   {
     thrown.expect(ConstraintViolationException.class);
     thrown.expectMessage("id: must be greater than 0");

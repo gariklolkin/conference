@@ -70,7 +70,6 @@ public class HallApiTest
 
         .extract().body().as(HallResponse.class);
 
-    assertThat(existingHall).isNotNull();
     assertThat(existingHall.getName()).isEqualTo("test11");
     assertThat(existingHall.getPlaces()).isEqualTo(10);
   }
@@ -121,7 +120,6 @@ public class HallApiTest
 
         .extract().body().as(HallResponse[].class);
 
-    assertThat(halls).isNotNull();
     assertThat(halls).extracting("name", "places")
         .containsOnly(
             tuple("test11", 10),
@@ -132,7 +130,7 @@ public class HallApiTest
 
   @Test
   @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:afterAddHall.sql")
-  public void addHall()
+  public void addHallSuccessfully()
   {
     final String name = "Audience 01";
     final int places = 40;
@@ -168,7 +166,6 @@ public class HallApiTest
 
         .extract().body().as(HallResponse.class);
 
-    assertThat(newHall).isNotNull();
     assertThat(newHall.getName()).isEqualTo(name);
     assertThat(newHall.getPlaces()).isEqualTo(places);
   }
@@ -209,7 +206,6 @@ public class HallApiTest
         .extract().body().as(HallResponse.class);
 
 
-    assertThat(newHall).isNotNull();
     assertThat(newHall.getName()).isEqualTo(name);
     assertThat(newHall.getPlaces()).isEqualTo(places);
   }
@@ -237,7 +233,7 @@ public class HallApiTest
 
   @Test
   @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:afterRemoveHall.sql")
-  public void removeHall()
+  public void removeHallSuccessfully()
   {
     given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
@@ -278,14 +274,11 @@ public class HallApiTest
   @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:afterUpdateHallPlaceCount.sql")
   public void updateHallNameToExistingOne()
   {
-    final String name = "test11";
-    final int places = 10;
-
     given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .body("{\n" +
-            "  \"name\": \"" + name + "\",\n" +
-            "  \"places\": \"" + places + "\"\n" +
+            "  \"name\": \"test11\",\n" +
+            "  \"places\": \"10\"\n" +
             "}")
 
         .when()

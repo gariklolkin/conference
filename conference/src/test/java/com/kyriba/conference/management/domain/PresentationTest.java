@@ -3,7 +3,6 @@ package com.kyriba.conference.management.domain;
 import com.kyriba.conference.management.domain.dto.PresentationRequest;
 import com.kyriba.conference.management.domain.dto.TopicDto;
 import com.kyriba.conference.management.domain.exception.InvalidPresentationTimeException;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,7 +23,7 @@ public class PresentationTest
 
 
   @Test
-  public void ifEndTimeBeforeStartTimeThrowException()
+  public void ifEndTimeBeforeStartTimeInCreateThrowException()
   {
     PresentationRequest request = new PresentationRequest();
     request.setStartTime(of(9, 0));
@@ -38,9 +37,8 @@ public class PresentationTest
 
 
   @Test
-  public void testUpdate()
+  public void updatePresentation()
   {
-    // given
     String title = "New Title";
     String author = "New Author";
     LocalTime startTime = of(8, 0);
@@ -55,10 +53,8 @@ public class PresentationTest
 
     Presentation presentation = createPresentation(hall);
 
-    // when
     presentation.update(request);
 
-    // then
     assertThat(presentation.getTopic()).isNotNull();
     assertThat(presentation.getTopic().getTitle()).isEqualTo(title);
     assertThat(presentation.getTopic().getAuthor()).isEqualTo(author);
@@ -68,7 +64,7 @@ public class PresentationTest
 
 
   @Test
-  public void testUpdate_ifEndTimeBeforeStartTimeThrowException()
+  public void ifEndTimeBeforeStartTimeInUpdateThrowException()
   {
     Presentation presentation = createPresentation(new Hall());
 
@@ -83,7 +79,6 @@ public class PresentationTest
   }
 
 
-  @NotNull
   private Presentation createPresentation(Hall hall)
   {
     Presentation presentation = new Presentation();

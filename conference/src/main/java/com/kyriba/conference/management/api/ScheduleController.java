@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -100,7 +99,7 @@ public class ScheduleController
 
 
   @ExceptionHandler({ LinkedEntityNotFoundException.class, InvalidPresentationTimeException.class,
-      PresentationTimeIntersectionException.class, ConstraintViolationException.class })
+      PresentationTimeIntersectionException.class })
   void handleException(HttpServletResponse response, RuntimeException e) throws IOException
   {
     response.sendError(BAD_REQUEST.value(), e.getMessage());
