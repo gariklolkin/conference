@@ -27,7 +27,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  */
 @ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-//@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
 @ActiveProfiles("test")
 class PlanControllerApiTest extends AbstractContainerBaseTest
 {
@@ -44,7 +43,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void registerPlan()
+  void registerPlan_isOk()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -66,7 +65,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void registerAndRegisteredPlan()
+  void registerAndDeleteRegisteredPlan_isOk()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -95,7 +94,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void cancelNotExistingPlan()
+  void deletePlan_isNotFound()
   {
     given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -108,7 +107,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void getPlan404()
+  void getPlan_isNotFound()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -127,7 +126,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
   @Test
   @Sql("/test_data_plan.sql")
-  void getPlan()
+  void getPlan_isOk()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)

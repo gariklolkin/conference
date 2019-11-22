@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -28,7 +27,6 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
  */
 @ExtendWith({ SpringExtension.class, RestDocumentationExtension.class })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-//@ContextConfiguration(initializers = { AbstractContainerBaseTest.Initializer.class })
 @ActiveProfiles("test")
 class SponsorControllerApiTest extends AbstractContainerBaseTest
 {
@@ -45,7 +43,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void registerSponsor()
+  void registerSponsor_isOk()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -67,7 +65,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void getSponsor404()
+  void getSponsor_isNotFound()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -85,7 +83,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
 
   @Test
   @Sql("/test_data_sponsor.sql")
-  void getSponsor()
+  void getSponsor_isOk()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -99,5 +97,47 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
         .jsonPath()
         .get("id");
     assertNotNull(id);
+  }
+
+
+  @Test
+  void registerAndDeleteRegisteredSponsor_isOk()
+  {
+    Number id = given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("./api/v1/sponsors"))
+        .body("{\n" +
+            "  \"name\": \"Alexander Samal\" ,\n" +
+            "  \"email\": \"aaa@bbb.by\"\n" +
+            "}")
+        .when()
+        .post("/api/v1/sponsors")
+        .then()
+        .statusCode(HttpStatus.SC_OK)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .extract()
+        .jsonPath()
+        .get("id");
+
+    given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("./api/v1/sponsors/{id}"))
+        .when()
+        .delete("/api/v1/sponsors/" + id)
+        .then()
+        .statusCode(HttpStatus.SC_OK);
+  }
+
+
+  @Test
+  void deleteSponsor_isNotFound()
+  {
+    given(specification)
+        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .filter(document("./api/v1/sponsors/{id}"))
+        .when()
+        .delete("/api/v1/sponsors/123")
+        .then()
+        .statusCode(HttpStatus.SC_NOT_FOUND);
   }
 }

@@ -40,11 +40,15 @@ public class ExceptionTranslationAspect
   public void deletePlan() { }
 
 
-  @Around("deletePlan() ")
-  public void handleNonexistentEntityDeletion(ProceedingJoinPoint pjp) throws Throwable
+  @Pointcut("execution(* com.kyriba.conference.sponsorship.service.SponsorService.deleteSponsor(..))")
+  public void deleteSponsor() { }
+
+
+  @Around("deletePlan() || deleteSponsor()")
+  public Object handleNonexistentEntityDeletion(ProceedingJoinPoint pjp) throws Throwable
   {
     try {
-      pjp.proceed();
+      return pjp.proceed();
     }
     catch (EmptyResultDataAccessException e) {
       throw new ObjectNotFoundException(e);
