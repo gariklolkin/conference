@@ -30,7 +30,7 @@ public class HallServiceImplSpringTest
 
 
   @Test
-  public void findHall_ifHallIdNotPositiveThrowException()
+  public void ifHallIdNotPositiveThrowException()
   {
     thrown.expect(ConstraintViolationException.class);
     thrown.expectMessage("id: must be greater than 0");
@@ -40,7 +40,7 @@ public class HallServiceImplSpringTest
 
 
   @Test
-  public void createHall_blankNameAndNotEnoughPlaces()
+  public void ifBlankNameAndNotEnoughPlacesThrowException()
   {
     HallRequest hallRequest = new HallRequest();
     hallRequest.setName("");
@@ -55,7 +55,7 @@ public class HallServiceImplSpringTest
 
 
   @Test
-  public void updateHall_blankNameAndNotEnoughPlacesAndNegativeId()
+  public void ifBlankNameAndNotEnoughPlacesAndNegativeIdThrowException()
   {
     HallRequest hallRequest = new HallRequest();
     hallRequest.setName("");
@@ -71,7 +71,7 @@ public class HallServiceImplSpringTest
 
 
   @Test
-  public void removeHall_negativeId()
+  public void ifNegativeIdInRemoveThrowException()
   {
     thrown.expect(ConstraintViolationException.class);
     thrown.expectMessage("id: must be greater than 0");

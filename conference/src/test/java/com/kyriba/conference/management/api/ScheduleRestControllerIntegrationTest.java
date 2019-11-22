@@ -19,21 +19,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAmount;
 import java.util.Optional;
 
+import static com.kyriba.conference.management.api.TestHelper.getPresentationJson;
 import static java.time.LocalTime.of;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -69,7 +67,7 @@ public class ScheduleRestControllerIntegrationTest
 
 
   @Test
-  public void addPresentationEndpointTest() throws Exception
+  public void addPresentationWithUniqueId() throws Exception
   {
     final long hallId = 13;
     final String topicTitle = "Concurrency";
@@ -82,15 +80,7 @@ public class ScheduleRestControllerIntegrationTest
 
     mockMvc.perform(post("/api/v1/schedule/presentations")
         .contentType(APPLICATION_JSON_UTF8_VALUE)
-        .content("{\n" +
-            "  \"hall\": " + hallId + ",\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"" + topicTitle + "\",\n" +
-            "    \"author\" : \"" + topicAuthor + "\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"" + startTime.format(HHmm) + "\",\n" +
-            "  \"endTime\" : \"" + endTime.format(HHmm) + "\"\n" +
-            "}"))
+        .content(getPresentationJson(hallId, topicTitle, topicAuthor, startTime, endTime)))
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
         .andExpect(content().json("{\"id\":7}"));
@@ -98,7 +88,7 @@ public class ScheduleRestControllerIntegrationTest
 
 
   @Test
-  public void addPresentation_ifHallNotExistsResponseBadRequest() throws Exception
+  public void ifHallNotExistsResponseBadRequest() throws Exception
   {
     final String error = "Hall not found.";
     doThrow(new LinkedEntityNotFoundException(error)).when(scheduleService)
@@ -106,22 +96,14 @@ public class ScheduleRestControllerIntegrationTest
 
     mockMvc.perform(post("/api/v1/schedule/presentations")
         .contentType(APPLICATION_JSON_UTF8_VALUE)
-        .content("{\n" +
-            "  \"hall\": 13,\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"Concurrency\",\n" +
-            "    \"author\" : \"Brian Goetz\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"" + of(9, 0).format(HHmm) + "\",\n" +
-            "  \"endTime\" : \"" + of(10, 0).format(HHmm) + "\"\n" +
-            "}"))
+        .content(getPresentationJson(13, "Concurrency", "Brian Goetz", of(9, 0), of(10, 0))))
         .andExpect(status().isBadRequest())
         .andExpect(status().reason(error));
   }
 
 
   @Test
-  public void addPresentation_ifTopicNotCorrectResponseBadRequest() throws Exception
+  public void ifTopicNotCorrectResponseBadRequest() throws Exception
   {
     mockMvc.perform(post("/api/v1/schedule/presentations")
         .contentType(APPLICATION_JSON_UTF8_VALUE)
@@ -139,7 +121,7 @@ public class ScheduleRestControllerIntegrationTest
 
 
   @Test
-  public void addPresentation_ifTimeNotCorrectResponseBadRequest() throws Exception
+  public void ifTimeNotCorrectResponseBadRequest() throws Exception
   {
     final String error = "End time is before start time";
     doThrow(new InvalidPresentationTimeException(error)).when(scheduleService)
@@ -147,22 +129,14 @@ public class ScheduleRestControllerIntegrationTest
 
     mockMvc.perform(post("/api/v1/schedule/presentations")
         .contentType(APPLICATION_JSON_UTF8_VALUE)
-        .content("{\n" +
-            "  \"hall\": 11,\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"Concurrency\",\n" +
-            "    \"author\" : \"Brian Goetz\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"" + of(10, 0).format(HHmm) + "\",\n" +
-            "  \"endTime\" : \"" + of(9, 0).format(HHmm) + "\"\n" +
-            "}"))
+        .content(getPresentationJson(11L, "Concurrency", "Brian Goetz", of(10, 0), of(9, 0))))
         .andExpect(status().isBadRequest())
         .andExpect(status().reason(error));
   }
 
 
   @Test
-  public void addPresentation_ifTimeIntersectionResponseBadRequest() throws Exception
+  public void ifTimeIntersectionResponseBadRequest() throws Exception
   {
     final LocalTime startTime = of(9, 0);
     final LocalTime endTime = of(10, 0);
@@ -171,22 +145,14 @@ public class ScheduleRestControllerIntegrationTest
 
     mockMvc.perform(post("/api/v1/schedule/presentations")
         .contentType(APPLICATION_JSON_UTF8_VALUE)
-        .content("{\n" +
-            "  \"hall\": 11,\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"Concurrency\",\n" +
-            "    \"author\" : \"Brian Goetz\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"" + startTime.format(HHmm) + "\",\n" +
-            "  \"endTime\" : \"" + endTime.format(HHmm) + "\"\n" +
-            "}"))
+        .content(getPresentationJson(11L, "Concurrency", "Brian Goetz", startTime, endTime)))
         .andExpect(status().isBadRequest())
         .andExpect(status().reason("Time intersection"));
   }
 
 
   @Test
-  public void getPresentationEndpointTest() throws Exception
+  public void getPresentationById() throws Exception
   {
     final long hallId = 13L;
     final String topicTitle = "Concurrency";
@@ -200,20 +166,12 @@ public class ScheduleRestControllerIntegrationTest
     mockMvc.perform(get("/api/v1/schedule/presentations/13"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
-        .andExpect(content().json("{\n" +
-            "  \"hall\": " + hallId + ",\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"" + topicTitle + "\",\n" +
-            "    \"author\" : \"" + topicAuthor + "\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"" + startTime.format(HHmm) + "\",\n" +
-            "  \"endTime\" : \"" + endTime.format(HHmm) + "\"\n" +
-            "}"));
+        .andExpect(content().json(getPresentationJson(hallId, topicTitle, topicAuthor, startTime, endTime)));
   }
 
 
   @Test
-  public void getPresentation_ifPresentationNotExistResponseNotFound() throws Exception
+  public void ifPresentationNotExistResponseNotFound() throws Exception
   {
     doReturn(Optional.empty()).when(scheduleService).getPresentation(anyLong());
 
@@ -223,7 +181,7 @@ public class ScheduleRestControllerIntegrationTest
 
 
   @Test
-  public void getPresentation_ifIncorrectIdResponseBadRequest() throws Exception
+  public void ifIncorrectIdResponseBadRequest() throws Exception
   {
     doThrow(mock(ConstraintViolationException.class)).when(scheduleService).getPresentation(anyLong());
 
@@ -233,32 +191,31 @@ public class ScheduleRestControllerIntegrationTest
 
 
   @Test
-  public void removePresentationEndpointTest() throws Exception
+  public void removePresentationById() throws Exception
   {
     mockMvc.perform(delete("/api/v1/schedule/presentations/1000"))
         .andExpect(status().isNoContent())
         .andExpect(jsonPath("$").doesNotExist());
 
-    verify(scheduleService).deletePresentation(eq(1000L));
+    verify(scheduleService).deletePresentation(1000L);
   }
 
 
   @Test
-  public void removePresentation_ifIncorrectIdResponseBadRequest() throws Exception
+  public void ifIncorrectIdInDeletionResponseBadRequest() throws Exception
   {
-
     doThrow(mock(ConstraintViolationException.class))
         .when(scheduleService).deletePresentation(anyLong());
 
     mockMvc.perform(delete("/api/v1/schedule/presentations/-1000"))
         .andExpect(status().isBadRequest());
 
-    verify(scheduleService).deletePresentation(eq(-1000L));
+    verify(scheduleService).deletePresentation(-1000L);
   }
 
 
   @Test
-  public void getScheduleEndpointTest() throws Exception
+  public void getSchedule() throws Exception
   {
     TopicDto topic = new TopicDto("Concurrency", "Brian Goetz");
     final LocalTime startTime = of(9, 0);
@@ -267,34 +224,29 @@ public class ScheduleRestControllerIntegrationTest
     PresentationResponse presentation2 = new PresentationResponse(12, topic, startTime.plusHours(1), endTime.plusHours(1));
     doReturn(asList(presentation1, presentation2)).when(scheduleService).getSchedule();
 
-    MvcResult result = mockMvc.perform(get("/api/v1/schedule"))
+    String result = mockMvc.perform(get("/api/v1/schedule"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
-        .andReturn();
+        .andReturn().getResponse()
+        .getContentAsString();
 
-    String contentAsString = result.getResponse().getContentAsString();
-    ScheduleController.ScheduleResponse schedule = objectMapper.readValue(contentAsString, ScheduleController.ScheduleResponse.class);
+    ScheduleController.ScheduleResponse schedule = objectMapper.readValue(result, ScheduleController.ScheduleResponse.class);
 
-    assertThat(schedule).isNotNull();
     assertThat(schedule.getPresentations()).isNotEmpty()
         .containsExactlyInAnyOrder(presentation1, presentation2);
   }
 
 
   @Test
-  public void getSchedule_empty() throws Exception
+  public void getEmptySchedule() throws Exception
   {
     doReturn(emptyList()).when(scheduleService).getSchedule();
 
-    MvcResult result = mockMvc.perform(get("/api/v1/schedule"))
+    mockMvc.perform(get("/api/v1/schedule"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
-        .andReturn();
-
-    String contentAsString = result.getResponse().getContentAsString();
-    ScheduleController.ScheduleResponse schedule = objectMapper.readValue(contentAsString, ScheduleController.ScheduleResponse.class);
-
-    assertThat(schedule).isNotNull();
-    assertThat(schedule.getPresentations()).isEmpty();
+        .andExpect(content().json("{\n" +
+            "  \"presentations\" : [ ]\n" +
+            "}"));
   }
 }

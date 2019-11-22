@@ -43,17 +43,14 @@ public class HallServiceImplTest
   @Test
   public void findHall()
   {
-    // given
     final String hallName = "Hall 1";
     final int places = 10;
     final long id = 22L;
-    Hall hall = newHall(hallName, places);
+    Hall hall = new Hall(hallName, places);
     doReturn(Optional.of(hall)).when(hallRepository).findById(eq(id));
 
-    // when
     HallResponse result = hallService.findHall(id);
 
-    // then
     assertThat(result).isNotNull();
     assertThat(result.getName()).isEqualTo(hallName);
     assertThat(result.getPlaces()).isEqualTo(places);
@@ -61,7 +58,7 @@ public class HallServiceImplTest
 
 
   @Test
-  public void findHall_ifHallNotFoundThrowException()
+  public void ifHallNotFoundThrowException()
   {
     final long id = 22L;
     doReturn(empty()).when(hallRepository).findById(id);
@@ -76,22 +73,19 @@ public class HallServiceImplTest
   @Test
   public void findAllHalls()
   {
-    // given
-    Hall hall1 = newHall("Hall 1", 11);
-    Hall hall2 = newHall("Hall 2", 12);
+    Hall hall1 = new Hall("Hall 1", 11);
+    Hall hall2 = new Hall("Hall 2", 12);
     doReturn(asList(hall1, hall2)).when(hallRepository).findAll();
 
-    // when
     List<HallResponse> result = hallService.findAllHalls();
 
-    // then
     assertThat(result).isNotNull()
         .containsExactlyInAnyOrder(new HallResponse(hall1), new HallResponse(hall2));
   }
 
 
   @Test
-  public void findAllHalls_emptyListIfHallsNotFound()
+  public void emptyListIfHallsNotFound()
   {
     doReturn(emptyList()).when(hallRepository).findAll();
 
@@ -104,7 +98,6 @@ public class HallServiceImplTest
   @Test
   public void createHall()
   {
-    // given
     final long id = 22L;
     HallRequest hallRequest = new HallRequest();
     hallRequest.setName("h1");
@@ -116,10 +109,8 @@ public class HallServiceImplTest
 
     doReturn(createdHall).when(hallRepository).save(any(Hall.class));
 
-    // when
     long createdHallId = hallService.createHall(hallRequest);
 
-    // then
     assertThat(createdHallId).isEqualTo(id);
     verify(hallRepository).save(refEq(hallToCreate));
   }
@@ -128,9 +119,8 @@ public class HallServiceImplTest
   @Test
   public void updateHall()
   {
-    // given
     final long id = 22L;
-    Hall storedHall = newHall("Stored Hall", 11);
+    Hall storedHall = new Hall("Stored Hall", 11);
     doReturn(Optional.of(storedHall)).when(hallRepository).findById(eq(id));
 
     HallRequest hallRequest = new HallRequest();
@@ -138,10 +128,8 @@ public class HallServiceImplTest
     hallRequest.setPlaces(11);
     Hall updatedHall = new Hall(hallRequest);
 
-    // when
     hallService.updateHall(id, hallRequest);
 
-    // then
     verify(hallRepository).save(refEq(updatedHall));
   }
 
@@ -162,23 +150,10 @@ public class HallServiceImplTest
   @Test
   public void removeHall()
   {
-    // given
     final long id = 22L;
 
-    // when
     hallService.removeHall(id);
 
-    // then
     verify(hallRepository).deleteById(eq(id));
-  }
-
-
-  private Hall newHall(String name, int places)
-  {
-    Hall hall = new Hall();
-    hall.setName(name);
-    hall.setPlaces(places);
-
-    return hall;
   }
 }

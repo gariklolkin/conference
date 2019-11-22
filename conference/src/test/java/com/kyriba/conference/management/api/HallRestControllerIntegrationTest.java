@@ -1,7 +1,6 @@
 package com.kyriba.conference.management.api;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kyriba.conference.management.domain.dto.HallRequest;
 import com.kyriba.conference.management.domain.dto.HallResponse;
 import com.kyriba.conference.management.domain.exception.EntityIsUsedException;
@@ -18,15 +17,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -56,9 +52,6 @@ public class HallRestControllerIntegrationTest
   @Autowired
   private MockMvc mockMvc;
 
-  @Autowired
-  private ObjectMapper objectMapper;
-
   @MockBean
   private HallService hallService;
 
@@ -66,7 +59,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void createHallEndpointTest() throws Exception
+  public void createHallWithUniqueId() throws Exception
   {
     doReturn(7L).when(hallService).createHall(refEq(hallRequest));
 
@@ -83,7 +76,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void createHall_ifNameIsBlankResponseBadRequest() throws Exception
+  public void ifNameIsBlankResponseBadRequest() throws Exception
   {
     mockMvc.perform(post("/api/v1/halls")
         .contentType(APPLICATION_JSON_UTF8_VALUE)
@@ -96,7 +89,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void createHall_ifNameIsAlreadyUsedResponseConflict() throws Exception
+  public void ifNameIsAlreadyUsedResponseConflict() throws Exception
   {
     doThrow(new SameEntityExistsException(new Exception("Unique constraint violation")))
         .when(hallService).createHall(refEq(hallRequest));
@@ -113,7 +106,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void createHall_ifPlacesNotEnoughResponseBadRequest() throws Exception
+  public void ifPlacesNotEnoughResponseBadRequest() throws Exception
   {
     mockMvc.perform(post("/api/v1/halls")
         .contentType(APPLICATION_JSON_UTF8_VALUE)
@@ -126,47 +119,41 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void findAllHallsEndpointTest() throws Exception
+  public void findAllHalls() throws Exception
   {
     List<HallResponse> allHalls = asList(new HallResponse("H1", 10),
         new HallResponse("H2", 20));
     doReturn(allHalls).when(hallService).findAllHalls();
 
-    MvcResult result = mockMvc.perform(get("/api/v1/halls"))
+    mockMvc.perform(get("/api/v1/halls"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
-        .andReturn();
-
-    String contentAsString = result.getResponse().getContentAsString();
-    HallResponse[] foundHalls = objectMapper.readValue(contentAsString, HallResponse[].class);
-
-    assertThat(foundHalls).isNotNull();
-    assertThat(foundHalls).extracting("name", "places")
-        .containsOnly(
-            tuple("H1", 10),
-            tuple("H2", 20));
+        .andExpect(content().json("[{\n" +
+            "  \"name\": \"H1\",\n" +
+            "  \"places\": 10\n" +
+            "},\n" +
+            "{\n" +
+            "  \"name\": \"H2\",\n" +
+            "  \"places\": 20\n" +
+            "}]"
+        ));
   }
 
 
   @Test
-  public void findAllHalls_ifNoHallsExistReturnEmpty() throws Exception
+  public void ifNoHallsExistReturnEmpty() throws Exception
   {
     doReturn(emptyList()).when(hallService).findAllHalls();
 
-    MvcResult result = mockMvc.perform(get("/api/v1/halls"))
+    mockMvc.perform(get("/api/v1/halls"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
-        .andReturn();
-
-    String contentAsString = result.getResponse().getContentAsString();
-    HallResponse[] foundHalls = objectMapper.readValue(contentAsString, HallResponse[].class);
-
-    assertThat(foundHalls).isEmpty();
+        .andExpect(content().json("[]"));
   }
 
 
   @Test
-  public void findHallEndpointTest() throws Exception
+  public void findHallById() throws Exception
   {
     HallResponse hall = new HallResponse("H1", 13);
     doReturn(hall).when(hallService).findHall(anyLong());
@@ -182,7 +169,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void findHall_ifHallNotExistResponseNotFound() throws Exception
+  public void ifHallNotExistResponseNotFound() throws Exception
   {
     doThrow(new EntityNotFoundException("NotFound"))
         .when(hallService).findHall(anyLong());
@@ -194,7 +181,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void findHall_ifIncorrectHallIdResponseBadRequest() throws Exception
+  public void ifIncorrectHallIdResponseBadRequest() throws Exception
   {
     mockMvc.perform(get("/api/v1/halls/-2A2"))
         .andExpect(status().isBadRequest());
@@ -202,7 +189,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void updateHallEndpointTest() throws Exception
+  public void updateHallById() throws Exception
   {
     mockMvc.perform(put("/api/v1/halls/22")
         .contentType(APPLICATION_JSON_UTF8_VALUE)
@@ -218,7 +205,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void updateHall_ifIncorrectHallIdResponseBadRequest() throws Exception
+  public void ifIncorrectHallIdInUpdateResponseBadRequest() throws Exception
   {
     doThrow(mock(ConstraintViolationException.class))
         .when(hallService).updateHall(anyLong(), any(HallRequest.class));
@@ -234,7 +221,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void updateHall_ifChangedNameIsAlreadyUsedResponseConflict() throws Exception
+  public void ifChangedNameIsAlreadyUsedResponseConflict() throws Exception
   {
     doThrow(new SameEntityExistsException(new Exception("Unique constraint violation")))
         .when(hallService).updateHall(eq(22L), refEq(hallRequest));
@@ -251,7 +238,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void deleteHallEndpointTest() throws Exception
+  public void deleteHallById() throws Exception
   {
     mockMvc.perform(delete("/api/v1/halls/22"))
         .andExpect(status().isNoContent())
@@ -262,7 +249,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void deleteHall_ifIncorrectHallIdResponseBadRequest() throws Exception
+  public void ifIncorrectHallIdInDeletionResponseBadRequest() throws Exception
   {
     doThrow(mock(ConstraintViolationException.class))
         .when(hallService).removeHall(anyLong());
@@ -275,7 +262,7 @@ public class HallRestControllerIntegrationTest
 
 
   @Test
-  public void deleteHall_ifUsedResponseConflict() throws Exception
+  public void ifUsedResponseConflict() throws Exception
   {
     doThrow(mock(EntityIsUsedException.class)).when(hallService).removeHall(anyLong());
 

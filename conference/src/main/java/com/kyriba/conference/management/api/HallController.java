@@ -26,13 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -111,15 +107,6 @@ public class HallController
   @ResponseStatus(value = NOT_FOUND, reason = "Hall not found.")
   void handleEntityNotFound()
   {
-  }
-
-
-  // id validation from service level
-  @ExceptionHandler(ConstraintViolationException.class)
-  @ResponseStatus(value = BAD_REQUEST)
-  void handleConstraintViolation(HttpServletResponse response, RuntimeException e) throws IOException
-  {
-    response.sendError(BAD_REQUEST.value(), e.getMessage());
   }
 
 

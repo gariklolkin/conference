@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface HallService
 {
-  HallResponse findHall(@Valid @Positive long id);
+  HallResponse findHall(@Positive long id);
 
   List<HallResponse> findAllHalls();
 
   long createHall(@Valid HallRequest hallRequest);
 
-  void updateHall(@Valid @Positive long id, @Valid HallRequest hallRequest);
+  void updateHall(@Positive long id, @Valid HallRequest hallRequest);
 
-  void removeHall(@Valid @Positive long id);
+  void removeHall(@Positive long id);
 }

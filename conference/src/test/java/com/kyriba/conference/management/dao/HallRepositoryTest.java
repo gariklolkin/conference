@@ -1,17 +1,10 @@
 package com.kyriba.conference.management.dao;
 
-import com.github.database.rider.core.DBUnitRule;
 import com.kyriba.conference.management.domain.Hall;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -21,21 +14,8 @@ import static org.assertj.core.api.Assertions.tuple;
 
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
-@ActiveProfiles("persistencetest")
-public class HallRepositoryTest
+public class HallRepositoryTest extends BaseRepositoryTest
 {
-  @Autowired
-  protected JdbcTemplate jdbcTemplate;
-
-  @Rule
-  public DBUnitRule dbUnitRule = DBUnitRule.instance(() -> jdbcTemplate.getDataSource().getConnection());
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
-
-  @Autowired
-  protected TestEntityManager em;
 
   @Autowired
   protected HallRepository dao;
@@ -94,7 +74,7 @@ public class HallRepositoryTest
 
 
   @Test
-  public void findHallById_retunsEmptyIfNotFound()
+  public void retunsEmptyIfNotFound()
   {
     assertThat(dao.findById(1100L)).isEmpty();
   }

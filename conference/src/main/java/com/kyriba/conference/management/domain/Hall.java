@@ -35,6 +35,13 @@ public class Hall
   }
 
 
+  public Hall(String name, Integer places)
+  {
+    this.name = name;
+    this.places = places;
+  }
+
+
   public void update(HallRequest hallRequest)
   {
     checkNotNull(hallRequest);
