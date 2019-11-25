@@ -72,10 +72,11 @@ public class SponsorController
 
   @ApiOperation(value = "Delete the sponsor")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 204, message = "OK"),
       @ApiResponse(code = 401, message = "Failed to delete the sponsor")
   })
   @DeleteMapping("/{id}")
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
   void cancel(@ApiParam(value = "Id of the sponsor to delete", required = true) @PathVariable Long id)
   {
     sponsorService.deleteSponsor(id);

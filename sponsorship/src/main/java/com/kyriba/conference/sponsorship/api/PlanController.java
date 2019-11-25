@@ -60,10 +60,11 @@ public class PlanController
 
   @ApiOperation(value = "Cancel the plan")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 204, message = "OK"),
       @ApiResponse(code = 401, message = "Failed to cancel the plan")
   })
   @DeleteMapping("/{id}")
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
   void cancel(@ApiParam(value = "Id of the plan to cancel", required = true) @PathVariable Long id)
   {
     planService.deletePlan(id);

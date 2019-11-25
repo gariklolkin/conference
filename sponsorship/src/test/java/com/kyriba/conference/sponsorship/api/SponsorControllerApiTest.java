@@ -101,7 +101,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void registerAndDeleteRegisteredSponsor_isOk()
+  void registerAndDeleteRegisteredSponsor_isNoContent()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -125,7 +125,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
         .when()
         .delete("/api/v1/sponsors/" + id)
         .then()
-        .statusCode(HttpStatus.SC_OK);
+        .statusCode(HttpStatus.SC_NO_CONTENT);
   }
 
 

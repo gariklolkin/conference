@@ -65,7 +65,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void registerAndDeleteRegisteredPlan_isOk()
+  void registerAndDeleteRegisteredPlan_isNoContent()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -89,7 +89,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
         .when()
         .delete("/api/v1/plans/" + id)
         .then()
-        .statusCode(HttpStatus.SC_OK);
+        .statusCode(HttpStatus.SC_NO_CONTENT);
   }
 
 
