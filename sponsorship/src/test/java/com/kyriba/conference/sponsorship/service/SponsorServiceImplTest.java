@@ -25,9 +25,7 @@ class SponsorServiceImplTest
   @Mock
   private SponsorRepository sponsorRepository;
   @Mock
-  private EmailClientSync emailClientSync;
-  @Mock
-  private EmailClientAsync emailClientAsync;
+  private EmailClient emailClient;
 
   private SponsorServiceImpl sponsorService;
 
@@ -35,7 +33,7 @@ class SponsorServiceImplTest
   @BeforeEach
   void setUp()
   {
-    sponsorService = new SponsorServiceImpl(sponsorRepository, emailClientSync, emailClientAsync);
+    sponsorService = new SponsorServiceImpl(sponsorRepository, emailClient);
   }
 
 
@@ -50,7 +48,7 @@ class SponsorServiceImplTest
     long actualSponsorId = sponsorService.createSponsor("Name", "Email");
 
     assertEquals(expectedSponsorId, actualSponsorId);
-    verify(emailClientAsync).sendNotification(any(EmailMessage.class));
+    verify(emailClient).sendNotification(any(EmailMessage.class));
   }
 
 

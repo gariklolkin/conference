@@ -1,11 +1,9 @@
 package com.kyriba.conference.sponsorship.service;
 
 import com.kyriba.conference.sponsorship.dao.SponsorRepository;
-import com.kyriba.conference.sponsorship.domain.EmailMessage;
 import com.kyriba.conference.sponsorship.domain.Sponsor;
 import com.kyriba.conference.sponsorship.domain.dto.SponsorDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -24,11 +22,8 @@ import java.util.Optional;
 @Validated // it works, but may be it should be moved to interface?
 public class SponsorServiceImpl implements SponsorService
 {
-  @Value("${notification.sync}")
-  private boolean isSyncNotification;
   private final SponsorRepository sponsorRepository;
-  private final EmailClientSync emailClientSync;
-  private final EmailClientAsync emailClientAsync;
+  private final EmailClient emailClient;
 
 
   @Override
@@ -37,26 +32,8 @@ public class SponsorServiceImpl implements SponsorService
     Sponsor sponsor = new Sponsor();
     sponsor.setName(name);
     sponsor.setEmail(email);
-    sendEmailNotification(sponsor);
+    emailClient.sendNotification(sponsor.toEmailMessage());
     return sponsorRepository.save(sponsor).getId();
-  }
-
-
-  private void sendEmailNotification(Sponsor sponsor)
-  {
-    EmailMessage emailMessage = sponsor.toEmailMessage();
-    if (isSyncNotification) {
-      try {
-        emailClientSync.sendNotification(emailMessage);
-      }
-      catch (Exception e) {
-        //todo it is workaround, what behavior is expected when the other service is not available?
-        e.printStackTrace();
-      }
-    }
-    else {
-      emailClientAsync.sendNotification(emailMessage);
-    }
   }
 
 
