@@ -39,7 +39,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "${api.version.path}/plans",
-    consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
+    produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 @Api(value = "Register a new sponsorship plan")
 public class PlanController
 {
@@ -60,10 +60,11 @@ public class PlanController
 
   @ApiOperation(value = "Cancel the plan")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 204, message = "OK"),
       @ApiResponse(code = 401, message = "Failed to cancel the plan")
   })
   @DeleteMapping("/{id}")
+  @ResponseStatus(value = HttpStatus.NO_CONTENT)
   void cancel(@ApiParam(value = "Id of the plan to cancel", required = true) @PathVariable Long id)
   {
     planService.deletePlan(id);
