@@ -34,7 +34,7 @@ class SponsorRepositoryTest
 
 
   @Test
-  @DataSet("datasets/empty.xml")
+  @DataSet("datasets/sponsor-empty.xml")
   @ExpectedDataSet("datasets/sponsor-created.xml")
   void sponsorMayBeCreated()
   {

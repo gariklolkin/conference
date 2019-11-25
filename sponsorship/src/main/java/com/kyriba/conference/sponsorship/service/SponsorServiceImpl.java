@@ -42,4 +42,11 @@ public class SponsorServiceImpl implements SponsorService
   {
     return sponsorRepository.findById(id).map(Sponsor::toDto);
   }
+
+
+  @Override
+  public void deleteSponsor(long id)
+  {
+    sponsorRepository.deleteById(id);
+  }
 }

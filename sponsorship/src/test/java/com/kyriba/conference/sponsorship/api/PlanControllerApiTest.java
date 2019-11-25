@@ -43,7 +43,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void registerPlan()
+  void registerPlan_isOk()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -65,7 +65,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void registerAndRegisteredPlan()
+  void registerAndDeleteRegisteredPlan_isNoContent()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -89,12 +89,12 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
         .when()
         .delete("/api/v1/plans/" + id)
         .then()
-        .statusCode(HttpStatus.SC_OK);
+        .statusCode(HttpStatus.SC_NO_CONTENT);
   }
 
 
   @Test
-  void cancelNotExistingPlan()
+  void deletePlan_isNotFound()
   {
     given(specification)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -107,7 +107,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
 
   @Test
-  void getPlan404()
+  void getPlan_isNotFound()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -126,7 +126,7 @@ class PlanControllerApiTest extends AbstractContainerBaseTest
 
   @Test
   @Sql("/test_data_plan.sql")
-  void getPlan()
+  void getPlan_isOk()
   {
     Number id = given(specification)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
