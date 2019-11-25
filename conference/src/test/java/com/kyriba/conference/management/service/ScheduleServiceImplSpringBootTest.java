@@ -22,7 +22,7 @@ import static java.time.LocalTime.of;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { ScheduleServiceImpl.class, ValidationAutoConfiguration.class })
-public class ScheduleServiceImplSpringTest
+public class ScheduleServiceImplSpringBootTest
 {
   @MockBean
   private PresentationRepository presentationRepository;

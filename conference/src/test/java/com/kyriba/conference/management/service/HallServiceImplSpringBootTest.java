@@ -17,7 +17,7 @@ import javax.validation.ConstraintViolationException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { HallServiceImpl.class, ValidationAutoConfiguration.class })
-public class HallServiceImplSpringTest
+public class HallServiceImplSpringBootTest
 {
   @MockBean
   private HallRepository dao;

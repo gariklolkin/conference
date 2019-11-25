@@ -215,7 +215,7 @@ public class ScheduleRestControllerIntegrationTest
 
 
   @Test
-  public void getSchedule() throws Exception
+  public void getScheduleSuccessfully() throws Exception
   {
     TopicDto topic = new TopicDto("Concurrency", "Brian Goetz");
     final LocalTime startTime = of(9, 0);
