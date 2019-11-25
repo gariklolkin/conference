@@ -42,7 +42,7 @@ public class PlanControllerIntegrationTest
     when(planService.readPlan(5L))
         .thenReturn(Optional.of(new PlanDto(5L, PlanCategory.GENERAL, 5L)));
     this.mockMvc.perform(get("/api/v1/plans/5")
-        .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(5L));
   }
@@ -54,7 +54,7 @@ public class PlanControllerIntegrationTest
     when(planService.readPlan(1L))
         .thenReturn(Optional.empty());
     this.mockMvc.perform(get("/api/v1/plans/1")
-        .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound());
   }
 
@@ -63,7 +63,7 @@ public class PlanControllerIntegrationTest
   void getPlanById_isBadRequest() throws Exception
   {
     this.mockMvc.perform(get("/api/v1/plans/ID")
-        .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isBadRequest());
   }
 }
