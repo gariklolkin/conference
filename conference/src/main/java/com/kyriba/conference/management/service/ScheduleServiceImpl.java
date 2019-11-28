@@ -12,6 +12,7 @@ import com.kyriba.conference.management.domain.exception.PresentationTimeInterse
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -26,6 +27,7 @@ import static java.lang.String.format;
 @Service
 @Transactional
 @AllArgsConstructor
+@Validated
 public class ScheduleServiceImpl implements ScheduleService
 {
   private final PresentationRepository presentationRepository;

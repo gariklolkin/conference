@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Positive;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class ScheduleController
   @ApiOperation(value = "Add presentation in conference schedule")
   @PostMapping(value = "/presentations", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
   PresentationCreatedResponse addPresentation(
-      @ApiParam(value = "Presentation create object", required = true) @RequestBody PresentationRequest presentationRequest)
+      @Valid @ApiParam(value = "Presentation create object", required = true) @RequestBody PresentationRequest presentationRequest)
   {
     return new PresentationCreatedResponse(scheduleService.addPresentation(presentationRequest));
   }
@@ -72,7 +72,7 @@ public class ScheduleController
   @ApiOperation(value = "View presentation information")
   @GetMapping(value = "/presentations/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
   PresentationResponse getPresentation(
-      @Positive @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
+      @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
   {
     return scheduleService.getPresentation(id)
         .orElseThrow(() -> new EntityNotFoundException("Presentation not found."));
@@ -80,10 +80,9 @@ public class ScheduleController
 
 
   @ApiOperation(value = "Remove presentation from conference schedule")
-  @DeleteMapping(value = "/presentations/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
+  @DeleteMapping(value = "/presentations/{id}")
   @ResponseStatus(value = NO_CONTENT)
-  void removePresentation(
-      @Positive @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
+  void removePresentation(@ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
   {
     scheduleService.deletePresentation(id);
   }
@@ -92,8 +91,8 @@ public class ScheduleController
   @ApiOperation(value = "Change presentations parameters")
   @PutMapping(value = "/presentations/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
   void updatePresentation(
-      @Positive @ApiParam(value = "Presentation identity", required = true) @PathVariable long id,
-      @ApiParam(value = "Presentation change object", required = true) @RequestBody PresentationRequest presentationRequest)
+      @ApiParam(value = "Presentation identity", required = true) @PathVariable long id,
+      @Valid @ApiParam(value = "Presentation change object", required = true) @RequestBody PresentationRequest presentationRequest)
   {
     scheduleService.updatePresentation(id, presentationRequest);
   }

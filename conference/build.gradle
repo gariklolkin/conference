@@ -47,6 +47,8 @@ dependencies {
 	testCompile 'org.springframework.restdocs:spring-restdocs-restassured'
 	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE'
 	testCompile("org.assertj:assertj-core:3.11.1")
+	testCompile "org.testcontainers:mysql:1.11.3"
+	testCompile("com.github.database-rider:rider-core:1.7.2")
 }
 
 dependencyManagement {

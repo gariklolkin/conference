@@ -8,6 +8,7 @@ import com.kyriba.conference.management.domain.exception.EntityNotFoundException
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @AllArgsConstructor
+@Validated
 public class HallServiceImpl implements HallService
 {
   private static final String HALL_NOT_FOUND = "Hall not found.";

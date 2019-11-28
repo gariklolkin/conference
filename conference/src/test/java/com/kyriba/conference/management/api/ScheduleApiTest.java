@@ -18,12 +18,11 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
+import static com.kyriba.conference.management.api.TestHelper.getPresentationJson;
 import static io.restassured.RestAssured.given;
 import static java.time.LocalTime.of;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
-import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
 import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_NO_CONTENT;
 import static org.apache.http.HttpStatus.SC_OK;
@@ -38,7 +37,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@ActiveProfiles("integrationtest")
+@ActiveProfiles("apitest")
 public class ScheduleApiTest
 {
   @Rule
@@ -48,10 +47,6 @@ public class ScheduleApiTest
 
   @LocalServerPort
   int port;
-
-
-  private static final DateTimeFormatter HHmm = DateTimeFormatter.ofPattern("HH:mm");
-
 
   @Before
   public void setUp()
@@ -78,9 +73,10 @@ public class ScheduleApiTest
 
         .extract().body().as(ScheduleController.ScheduleResponse.class);
 
-    assertThat(schedule).isNotNull();
     assertThat(schedule.getPresentations()).hasSize(3);
-    assertThat(schedule.getPresentations()).extracting("topic").extracting("title")
+    assertThat(schedule.getPresentations())
+        .extracting("topic").isNotNull()
+        .extracting("title")
         .containsOnly("Spring Data REST", "Microservices in practice", "All about Spring workshop");
   }
 
@@ -98,15 +94,7 @@ public class ScheduleApiTest
     Long presentationId = given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/schedule/presentations/add"))
-        .body("{\n" +
-            "  \"hall\": \"" + hallId + "\",\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"" + topicTitle + "\",\n" +
-            "    \"author\" : \"" + topicAuthor + "\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"" + startTime.format(HHmm) + "\",\n" +
-            "  \"endTime\" : \"" + endTime.format(HHmm) + "\"\n" +
-            "}")
+        .body(getPresentationJson(hallId, topicTitle, topicAuthor, startTime, endTime))
 
         .when()
         .post("/api/v1/schedule/presentations")
@@ -131,7 +119,6 @@ public class ScheduleApiTest
 
         .extract().body().as(PresentationResponse.class);
 
-    assertThat(presentation).isNotNull();
     SoftAssertions.assertSoftly(softly -> {
       softly.assertThat(presentation.getHall()).isEqualTo(hallId);
       softly.assertThat(presentation.getStartTime()).isEqualTo(startTime);
@@ -140,22 +127,13 @@ public class ScheduleApiTest
     });
   }
 
-
   @Test
   public void addPresentationWithNonexistentHall()
   {
     given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/schedule/presentations/addWIthNonexistentHall"))
-        .body("{\n" +
-            "  \"hall\": \"1111\",\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"Spring Data REST\",\n" +
-            "    \"author\" : \"Andy Wilkinson\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"10:00\",\n" +
-            "  \"endTime\" : \"11:15\"\n" +
-            "}")
+        .body(getPresentationJson(1111L, "Spring Data REST", "Andy Wilkinson", of(10, 0), of(11, 15)))
 
         .when()
         .post("/api/v1/schedule/presentations")
@@ -182,7 +160,6 @@ public class ScheduleApiTest
 
         .extract().body().as(PresentationResponse.class);
 
-    assertThat(presentation).isNotNull();
     SoftAssertions.assertSoftly(softly -> {
       softly.assertThat(presentation.getHall()).isEqualTo(11);
       softly.assertThat(presentation.getStartTime()).isEqualTo(of(10, 0));
@@ -202,7 +179,7 @@ public class ScheduleApiTest
         .get("/api/v1/schedule/presentations/-12")
 
         .then()
-        .statusCode(SC_INTERNAL_SERVER_ERROR);
+        .statusCode(SC_BAD_REQUEST);
   }
 
 
@@ -241,15 +218,7 @@ public class ScheduleApiTest
     given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/schedule/presentations/updateTime"))
-        .body("{\n" +
-            "  \"hall\": \"11\",\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"Spring Data REST\",\n" +
-            "    \"author\" : \"Andy Wilkinson\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"" + startTime.format(HHmm) + "\",\n" +
-            "  \"endTime\" : \"" + endTime.format(HHmm) + "\"\n" +
-            "}")
+        .body(getPresentationJson(11L, "Spring Data REST", "Andy Wilkinson", startTime, endTime))
 
         .when()
         .put("/api/v1/schedule/presentations/1001")
@@ -270,7 +239,6 @@ public class ScheduleApiTest
 
         .extract().body().as(PresentationResponse.class);
 
-    assertThat(presentation).isNotNull();
     SoftAssertions.assertSoftly(softly -> {
       softly.assertThat(presentation.getStartTime()).isEqualTo(startTime);
       softly.assertThat(presentation.getEndTime()).isEqualTo(endTime);
@@ -284,15 +252,7 @@ public class ScheduleApiTest
     given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/schedule/presentations/updateNonexistent"))
-        .body("{\n" +
-            "  \"hall\": \"11\",\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"Spring Data REST\",\n" +
-            "    \"author\" : \"Andy Wilkinson\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"10:15\",\n" +
-            "  \"endTime\" : \"11:55\"\n" +
-            "}")
+        .body(getPresentationJson(11L, "Spring Data REST", "Andy Wilkinson", of(10, 15), of(11, 55)))
 
         .when()
         .put("/api/v1/schedule/presentations/555")
@@ -306,27 +266,17 @@ public class ScheduleApiTest
   @Test
   public void rearrangePresentationToNonexistentHall()
   {
-    String hallNotFound = "Hall not found.";
-
     given(documentationSpec)
         .contentType(APPLICATION_JSON_UTF8_VALUE)
         .filter(document("api/v1/schedule/presentations/updateToNonexistentHall"))
-        .body("{\n" +
-            "  \"hall\": \"10113242\",\n" +
-            "  \"topic\": {\n" +
-            "    \"title\": \"Spring Data REST\",\n" +
-            "    \"author\" : \"Andy Wilkinson\"\n" +
-            "  },\n" +
-            "  \"startTime\": \"10:15\",\n" +
-            "  \"endTime\" : \"11:55\"\n" +
-            "}")
+        .body(getPresentationJson(10113242L, "Spring Data REST", "Andy Wilkinson", of(10, 15), of(11, 55)))
 
         .when()
         .put("/api/v1/schedule/presentations/1001")
 
         .then()
         .statusCode(SC_BAD_REQUEST)
-        .body("message", equalTo(hallNotFound));
+        .body("message", equalTo("Hall not found."));
   }
 
 

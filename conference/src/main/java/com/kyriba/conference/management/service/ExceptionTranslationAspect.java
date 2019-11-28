@@ -25,6 +25,12 @@ public class ExceptionTranslationAspect
   }
 
 
+  @Pointcut("execution(* com.kyriba.conference.management.service.HallServiceImpl.updateHall(..))")
+  public void updateHall()
+  {
+  }
+
+
   @Pointcut("execution(* com.kyriba.conference.management.service.ScheduleServiceImpl.addPresentation(..))")
   public void createPresentation()
   {
@@ -32,7 +38,7 @@ public class ExceptionTranslationAspect
 
 
   @AfterThrowing(
-      pointcut = "createHall() || createPresentation()",
+      pointcut = "createHall() || updateHall() || createPresentation()",
       throwing = "e")
   public void handleDuplicateKeyConstraint(DataIntegrityViolationException e)
   {

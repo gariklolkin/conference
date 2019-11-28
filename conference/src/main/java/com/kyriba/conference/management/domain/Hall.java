@@ -27,17 +27,18 @@ public class Hall
   private Integer places;
 
 
-  public Hall(Long id)
-  {
-    this.id = id;
-  }
-
-
   public Hall(HallRequest hallRequest)
   {
     checkNotNull(hallRequest);
 
     update(hallRequest);
+  }
+
+
+  public Hall(String name, Integer places)
+  {
+    this.name = name;
+    this.places = places;
   }
 
 

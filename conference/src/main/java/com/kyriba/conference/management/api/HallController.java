@@ -5,8 +5,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.kyriba.conference.management.domain.dto.HallRequest;
 import com.kyriba.conference.management.domain.dto.HallResponse;
 import com.kyriba.conference.management.domain.exception.EntityIsUsedException;
-import com.kyriba.conference.management.domain.exception.SameEntityExistsException;
 import com.kyriba.conference.management.domain.exception.EntityNotFoundException;
+import com.kyriba.conference.management.domain.exception.SameEntityExistsException;
 import com.kyriba.conference.management.service.HallService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -49,7 +48,7 @@ public class HallController
 
   @ApiOperation(value = "Get a conference hall if exists")
   @GetMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-  HallResponse findHall(@Valid @Positive @ApiParam(value = "Hall identity", required = true) @PathVariable long id)
+  HallResponse findHall(@ApiParam(value = "Hall identity", required = true) @PathVariable long id)
   {
     return hallService.findHall(id);
   }
@@ -73,8 +72,8 @@ public class HallController
 
 
   @ApiOperation(value = "Change conference hall parameters")
-  @PutMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  void updateHall(@Valid @Positive @ApiParam(value = "Hall identity", required = true) @PathVariable long id,
+  @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
+  void updateHall(@ApiParam(value = "Hall identity", required = true) @PathVariable long id,
                   @Valid @ApiParam(value = "Hall change object", required = true) @RequestBody HallRequest hallRequest)
   {
     hallService.updateHall(id, hallRequest);
@@ -82,9 +81,9 @@ public class HallController
 
 
   @ApiOperation(value = "Remove conference hall")
-  @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
+  @DeleteMapping(value = "/{id}")
   @ResponseStatus(value = NO_CONTENT)
-  void removeHall(@Valid @Positive @ApiParam(value = "Hall identity", required = true) @PathVariable long id)
+  void removeHall(@ApiParam(value = "Hall identity", required = true) @PathVariable long id)
   {
     hallService.removeHall(id);
   }
