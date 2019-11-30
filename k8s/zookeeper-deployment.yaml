@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: zookeeper
+  name: zookeeper
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        io.kompose.service: zookeeper
+    spec:
+      containers:
+      - image: wurstmeister/zookeeper:latest
+        name: zookeeper
+        ports:
+        - containerPort: 2181
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      io.kompose.service: zookeeper

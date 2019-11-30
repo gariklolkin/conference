@@ -1,24 +1,25 @@
 package com.kyriba.conference.sponsorship.service;
 
+import com.kyriba.conference.sponsorship.configuration.SponsorshipProperties;
 import com.kyriba.conference.sponsorship.domain.EmailMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 
 @Service
 @RequiredArgsConstructor
-public class KafkaEmailClientImpl implements EmailClientAsync
+@ConditionalOnProperty(value = "notification.sync", havingValue = "false", matchIfMissing = true)
+public class KafkaEmailClientImpl implements EmailClient
 {
   private final KafkaTemplate<String, EmailMessage> kafkaTemplate;
-  @Value("${notification.kafka.topic}")
-  private String topic;
+  private final SponsorshipProperties properties;
 
 
   @Override
   public void sendNotification(EmailMessage emailMessage)
   {
-    kafkaTemplate.send(topic, emailMessage);
+    kafkaTemplate.send(properties.getKafka().getTopic(), emailMessage);
   }
 }

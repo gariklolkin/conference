@@ -2,17 +2,16 @@ version: "3.7"
 services:
   zookeeper:
     container_name: "zookeeper"
-    image: wurstmeister/zookeeper
+    image: wurstmeister/zookeeper:latest
     ports:
-      - "2181:2181"
+      - 2181:2181
   kafka0:
     container_name: "kafka"
-    #    build: .
-    image: wurstmeister/kafka
+    image: wurstmeister/kafka:latest
     hostname: kafka0
     ports:
-      - "9092:9092"
-      - "31005:31005"
+      - 9092:9092
+      - 31005:31005
     environment:
       KAFKA_LISTENERS: LISTENER_ALICE://:9092,LISTENER_BOB://:31005
       KAFKA_ADVERTISED_LISTENERS: LISTENER_ALICE://localhost:9092,LISTENER_BOB://kafka0:31005
@@ -24,7 +23,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   api-gateway:
     container_name: "api-gateway"
-#    build: .
     image: sanek555/api-gateway:latest
     depends_on:
       - eureka-server

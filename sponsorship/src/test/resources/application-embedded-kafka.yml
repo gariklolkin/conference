@@ -1,0 +1,6 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:31004
+kafka:
+  broker:
+    port: 31004

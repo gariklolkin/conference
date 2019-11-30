@@ -10,8 +10,6 @@ resources:
   - api-gateway-deployment.yaml
   - sponsorship-db-deployment.yaml
   - sponsorship-service-deployment.yaml
-  - db-data-persistentvolumeclaim.yaml
-  - kafka0-claim0-persistentvolumeclaim.yaml
   - kafka0-deployment.yaml
   - kafka0-service.yaml
   - zookeeper-deployment.yaml
@@ -20,4 +18,3 @@ resources:
   - conference-db-service.yaml
   - conference-deployment.yaml
   - conference-service.yaml
-  - mysql-datavolume-persistentvolumeclaim.yaml

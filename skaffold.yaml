@@ -13,4 +13,19 @@ build:
 deploy:
   kubectl:
     manifests:
-    - sa-gateway/k8s/compiled.yaml
+    - k8s/eureka-server-service.yaml
+    - k8s/api-gateway-service.yaml
+    - k8s/sponsorship-db-service.yaml
+    - k8s/sponsorship-service-service.yaml
+    - k8s/eureka-server-deployment.yaml
+    - k8s/api-gateway-deployment.yaml
+    - k8s/sponsorship-db-deployment.yaml
+    - k8s/sponsorship-service-deployment.yaml
+    - k8s/kafka0-deployment.yaml
+    - k8s/kafka0-service.yaml
+    - k8s/zookeeper-deployment.yaml
+    - k8s/zookeeper-service.yaml
+    - k8s/conference-db-deployment.yaml
+    - k8s/conference-db-service.yaml
+    - k8s/conference-deployment.yaml
+    - k8s/conference-service.yaml

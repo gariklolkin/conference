@@ -1,22 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose.yml
-    kompose.version: 1.19.0 ()
-  creationTimestamp: null
   labels:
     io.kompose.service: eureka-server
   name: eureka-server
 spec:
   replicas: 1
-  strategy: {}
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.yml
-        kompose.version: 1.19.0 ()
-      creationTimestamp: null
       labels:
         io.kompose.service: eureka-server
     spec:
@@ -25,6 +16,8 @@ spec:
         name: eureka-server
         ports:
         - containerPort: 8761
-        resources: {}
+      hostname: eureka-server
       restartPolicy: Always
-status: {}
+  selector:
+    matchLabels:
+      io.kompose.service: eureka-server

@@ -1,10 +1,6 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose.yml
-    kompose.version: 1.19.0 ()
-  creationTimestamp: null
   labels:
     io.kompose.service: sponsorship-db
   name: sponsorship-db
@@ -14,10 +10,6 @@ spec:
     type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.yml
-        kompose.version: 1.19.0 ()
-      creationTimestamp: null
       labels:
         io.kompose.service: sponsorship-db
     spec:
@@ -26,7 +18,6 @@ spec:
         name: sponsorship-db
         ports:
         - containerPort: 5432
-        resources: {}
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: db-data
@@ -35,4 +26,19 @@ spec:
       - name: db-data
         persistentVolumeClaim:
           claimName: db-data
-status: {}
+  selector:
+    matchLabels:
+      io.kompose.service: sponsorship-db
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: db-data
+  name: db-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi

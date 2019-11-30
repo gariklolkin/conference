@@ -1,39 +1,31 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose.yml
-    kompose.version: 1.19.0 ()
-  creationTimestamp: null
   labels:
     io.kompose.service: api-gateway
   name: api-gateway
 spec:
   replicas: 1
-  strategy: {}
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.yml
-        kompose.version: 1.19.0 ()
-      creationTimestamp: null
       labels:
         io.kompose.service: api-gateway
     spec:
       containers:
       - env:
-        - name: EUREKA_INSTANCE_PREFERIPADDRESS
-          value: "true"
         - name: EUREKA_CLIENT_FETCH_REGISTRY
           value: "true"
         - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
           value: "true"
         - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
           value: http://eureka-server:8761/eureka
+        - name: EUREKA_INSTANCE_PREFERIPADDRESS
+          value: "true"
         image: sanek555/api-gateway:latest
         name: api-gateway
         ports:
         - containerPort: 8082
-        resources: {}
       restartPolicy: Always
-status: {}
+  selector:
+    matchLabels:
+      io.kompose.service: api-gateway

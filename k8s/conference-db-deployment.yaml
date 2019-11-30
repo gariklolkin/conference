@@ -1,10 +1,6 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.19.0 ()
-  creationTimestamp: null
   labels:
     io.kompose.service: conference-db
   name: conference-db
@@ -14,10 +10,6 @@ spec:
     type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert
-        kompose.version: 1.19.0 ()
-      creationTimestamp: null
       labels:
         io.kompose.service: conference-db
     spec:
@@ -31,7 +23,6 @@ spec:
         name: conference-db
         ports:
         - containerPort: 3306
-        resources: {}
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: mysql-datavolume
@@ -40,4 +31,19 @@ spec:
       - name: mysql-datavolume
         persistentVolumeClaim:
           claimName: mysql-datavolume
-status: {}
+  selector:
+    matchLabels:
+      io.kompose.service: conference-db
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: mysql-datavolume
+  name: mysql-datavolume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
