@@ -68,7 +68,7 @@ dependencies {
         exclude(module: 'groovy')
     }
     testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version:'2.4.6'
-
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.0.RELEASE'
 }
 
 test {
