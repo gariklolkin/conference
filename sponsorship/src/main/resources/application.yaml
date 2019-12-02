@@ -15,6 +15,10 @@ spring:
     properties.hibernate.temp.use_jdbc_metadata_defaults: false
     # Because detection is disabled you have to set correct dialect by hand.
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092,kafka0:31005}
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 logging:
   level:
     root: warn
@@ -28,3 +32,7 @@ eureka:
     fetch-registry: false
     service-url:
       defaultZone: http://localhost:${EUREKA_PORT:9090}/eureka
+notification:
+  sync: ${IS_SYNC_NOTIFICATION:false}
+  kafka:
+    topic: ${KAFKA_NOTIFICATION_TOPIC:NotificationTopic}

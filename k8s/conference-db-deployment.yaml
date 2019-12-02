@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: conference-db
+  name: conference-db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: conference-db
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_DATABASE
+          value: conference
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123123"
+        image: mysql:8
+        name: conference-db
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-datavolume
+      restartPolicy: Always
+      volumes:
+      - name: mysql-datavolume
+        persistentVolumeClaim:
+          claimName: mysql-datavolume
+  selector:
+    matchLabels:
+      io.kompose.service: conference-db
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: mysql-datavolume
+  name: mysql-datavolume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi

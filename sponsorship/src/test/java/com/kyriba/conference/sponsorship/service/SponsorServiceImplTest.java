@@ -26,7 +26,7 @@ class SponsorServiceImplTest
   private SponsorRepository sponsorRepository;
   @Mock
   private EmailClient emailClient;
-  
+
   private SponsorServiceImpl sponsorService;
 
 
@@ -44,7 +44,7 @@ class SponsorServiceImplTest
     long expectedSponsorId = 6L;
     sponsor.setId(expectedSponsorId);
     when(sponsorRepository.save(notNull())).thenReturn(sponsor);
-    
+
     long actualSponsorId = sponsorService.createSponsor("Name", "Email");
 
     assertEquals(expectedSponsorId, actualSponsorId);

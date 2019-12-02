@@ -32,21 +32,8 @@ public class SponsorServiceImpl implements SponsorService
     Sponsor sponsor = new Sponsor();
     sponsor.setName(name);
     sponsor.setEmail(email);
-    sendEmailNotification(sponsor);
+    emailClient.sendNotification(sponsor.toEmailMessage());
     return sponsorRepository.save(sponsor).getId();
-  }
-
-
-  @Override
-  public void sendEmailNotification(Sponsor sponsor)
-  {
-    try {
-      emailClient.sendNotification(sponsor.toEmailMessage());
-    }
-    catch (Exception e) {
-      //todo it is workaround, what behavior is expected when the other service is not available?
-      e.printStackTrace();
-    }
   }
 
 

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: conference
+  name: conference
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        io.kompose.service: conference
+    spec:
+      containers:
+      - env:
+        - name: EUREKA
+          value: eureka-server
+        - name: MYSQL_HOST
+          value: conference-db
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_PWD
+          value: "123123"
+        - name: MYSQL_USER
+          value: root
+        image: conference
+        name: conference
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      io.kompose.service: conference

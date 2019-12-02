@@ -1,13 +1,35 @@
 version: "3.7"
 services:
+  zookeeper:
+    container_name: "zookeeper"
+    image: wurstmeister/zookeeper:latest
+    ports:
+      - 2181:2181
+  kafka0:
+    container_name: "kafka"
+    image: wurstmeister/kafka:latest
+    hostname: kafka0
+    ports:
+      - 9092:9092
+      - 31005:31005
+    environment:
+      KAFKA_LISTENERS: LISTENER_ALICE://:9092,LISTENER_BOB://:31005
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_ALICE://localhost:9092,LISTENER_BOB://kafka0:31005
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "NotificationTopic:1:1"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_BOB:PLAINTEXT, LISTENER_ALICE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_BOB
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   api-gateway:
     container_name: "api-gateway"
-    build: .
+    image: sanek555/api-gateway:latest
     depends_on:
       - eureka-server
     ports:
       - 8082:8082
     environment:
+      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: 'true'
       EUREKA_CLIENT_FETCH_REGISTRY: 'true'
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
@@ -34,10 +56,11 @@ services:
       SPONSORSHIP_DB_NAME: postgres
       SPONSORSHIP_DB_PORT: 5432
       SPONSORSHIP_SERVICE_PORT: 8080
+      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: 'true'
       EUREKA_CLIENT_FETCH_REGISTRY: 'true'
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-    image: sanek555/sponsorship:1
+    image: sanek555/sponsorship:latest
     ports:
       - 8080:8080
     depends_on:

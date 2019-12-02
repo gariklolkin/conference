@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - eureka-server-service.yaml
+  - api-gateway-service.yaml
+  - sponsorship-db-service.yaml
+  - sponsorship-service-service.yaml
+  - eureka-server-deployment.yaml
+  - api-gateway-deployment.yaml
+  - sponsorship-db-deployment.yaml
+  - sponsorship-service-deployment.yaml
+  - kafka0-deployment.yaml
+  - kafka0-service.yaml
+  - zookeeper-deployment.yaml
+  - zookeeper-service.yaml
+  - conference-db-deployment.yaml
+  - conference-db-service.yaml
+  - conference-deployment.yaml
+  - conference-service.yaml

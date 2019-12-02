@@ -41,7 +41,7 @@ public class SponsorControllerIntegrationTest
     when(sponsorService.readSponsor(5L))
         .thenReturn(Optional.of(new SponsorDto(5L, "A", "B")));
     this.mockMvc.perform(get("/api/v1/sponsors/5")
-        .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(5L));
   }
@@ -53,7 +53,7 @@ public class SponsorControllerIntegrationTest
     when(sponsorService.readSponsor(1L))
         .thenReturn(Optional.empty());
     this.mockMvc.perform(get("/api/v1/sponsors/1")
-        .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isNotFound());
   }
 
@@ -62,7 +62,7 @@ public class SponsorControllerIntegrationTest
   void getSponsorById_isBadRequest() throws Exception
   {
     this.mockMvc.perform(get("/api/v1/sponsors/ID")
-        .accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isBadRequest());
   }
 }

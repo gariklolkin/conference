@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: sponsorship-service
+  name: sponsorship-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        io.kompose.service: sponsorship-service
+    spec:
+      containers:
+      - env:
+        - name: EUREKA_CLIENT_FETCH_REGISTRY
+          value: "true"
+        - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+          value: "true"
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          value: http://eureka-server:8761/eureka
+        - name: EUREKA_INSTANCE_PREFERIPADDRESS
+          value: "true"
+        - name: SPONSORSHIP_DB_HOST
+          value: sponsorship-db
+        - name: SPONSORSHIP_DB_NAME
+          value: postgres
+        - name: SPONSORSHIP_DB_PASSWORD
+          value: postgres
+        - name: SPONSORSHIP_DB_PORT
+          value: "5432"
+        - name: SPONSORSHIP_DB_USERNAME
+          value: postgres
+        - name: SPONSORSHIP_SERVICE_PORT
+          value: "8080"
+        image: sanek555/sponsorship:latest
+        name: sponsorship-service
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      io.kompose.service: sponsorship-service

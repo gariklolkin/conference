@@ -46,7 +46,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   void registerSponsor_isOk()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/sponsors"))
         .body("{\n" +
             "  \"name\": \"Alexander Samal\" ,\n" +
@@ -56,7 +56,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
         .post("/api/v1/sponsors")
         .then()
         .statusCode(HttpStatus.SC_OK)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .extract()
         .jsonPath()
         .get("id");
@@ -68,7 +68,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   void getSponsor_isNotFound()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/sponsors/{id}"))
         .when()
         .get("/api/v1/sponsors/404")
@@ -86,13 +86,13 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   void getSponsor_isOk()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/sponsors/{id}"))
         .when()
         .get("/api/v1/sponsors/100")
         .then()
         .statusCode(HttpStatus.SC_OK)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .extract()
         .jsonPath()
         .get("id");
@@ -104,7 +104,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   void registerAndDeleteRegisteredSponsor_isNoContent()
   {
     Number id = given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/sponsors"))
         .body("{\n" +
             "  \"name\": \"Alexander Samal\" ,\n" +
@@ -114,13 +114,13 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
         .post("/api/v1/sponsors")
         .then()
         .statusCode(HttpStatus.SC_OK)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .extract()
         .jsonPath()
         .get("id");
 
     given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/sponsors/{id}"))
         .when()
         .delete("/api/v1/sponsors/" + id)
@@ -133,7 +133,7 @@ class SponsorControllerApiTest extends AbstractContainerBaseTest
   void deleteSponsor_isNotFound()
   {
     given(specification)
-        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
         .filter(document("./api/v1/sponsors/{id}"))
         .when()
         .delete("/api/v1/sponsors/123")
