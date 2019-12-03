@@ -82,12 +82,11 @@ pipeline {
         }
 
         stage('Publish docker') {
-            stages {
+            parallel {
                 stage('API Gateway') {
                     environment {
                         registry = "kyriconf/api-gateway"
                         registryCredential = 'conference_dockerhub'
-                        dockerImage = ''
                     }
                     agent any
                     steps {
@@ -107,7 +106,6 @@ pipeline {
                     environment {
                         registry = "kyriconf/sponsorship"
                         registryCredential = 'conference_dockerhub'
-                        dockerImage = ''
                     }
                     agent any
                     steps {
@@ -128,7 +126,6 @@ pipeline {
                     environment {
                         registry = "kyriconf/conference"
                         registryCredential = 'conference_dockerhub'
-                        dockerImage = ''
                     }
                     agent any
                     steps {
