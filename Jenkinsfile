@@ -82,7 +82,7 @@ pipeline {
         }
 
         stage('Publish docker') {
-            parallel {
+            stages {
                 stage('API Gateway') {
                     environment {
                         registry = "kyriconf/api-gateway"
