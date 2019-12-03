@@ -97,7 +97,8 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
+//                             dockerImage = docker.build "${registry}:${env.GIT_COMMIT}", "./sa-gateway"
+                            dockerImage.build registry
                             dockerImage.push()
                         }
                     }
