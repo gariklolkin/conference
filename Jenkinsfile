@@ -89,7 +89,7 @@ pipeline {
             }
             agent any
             stages {
-              stage('Build image') {
+              stage('Publish image') {
                 steps{
                   dir("sponsorship") {
                       sh script: '''
@@ -100,15 +100,6 @@ pipeline {
                   script {
                     dockerImage = docker.build( "kyriconf/sponsorship:${env.BUILD_ID}", "./sponsorship")
                     dockerImage.push()
-                  }
-                }
-              }
-              stage('Docker Push') {
-                agent any
-                steps {
-                  withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                    sh 'docker push shanem/spring-petclinic:latest'
                   }
                 }
               }
