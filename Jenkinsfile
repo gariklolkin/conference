@@ -100,7 +100,7 @@ pipeline {
                         }
                         script {
                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
-                            dockerImage.push()
+                            dockerImage.push("${env.GIT_COMMIT}")
                         }
                     }
                 }
@@ -121,7 +121,7 @@ pipeline {
                         }
                         script {
                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sponsorship")
-                            dockerImage.push()
+                            dockerImage.push("${env.GIT_COMMIT}")
                         }
                     }
                 }
@@ -142,7 +142,7 @@ pipeline {
                         }
                         script {
                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./conference")
-                            dockerImage.push()
+                            dockerImage.push("${env.GIT_COMMIT}")
                         }
                     }
                 }
