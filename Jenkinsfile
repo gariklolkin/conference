@@ -83,55 +83,46 @@ pipeline {
 
         stage('Publish docker') {
             parallel {
-                stage('API Gateway') {
-                    node {
-                        checkout scm
-                    }
-                    environment {
-                        registry = "kyriconf/api-gateway"
-                        registryCredential = 'conference_dockerhub'
-                    }
-                    agent any
-                    steps {
-                        dir("sa-gateway") {
-                            sh script: '''
-                                # Build API Gateway Microservice Jar
-                                ./gradlew -b ./build.gradle bootJar
-                            '''
-                        }
-                        script {
-                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
-                            dockerImage.push()
-                        }
-                    }
-                }
-                stage('Sponsorship') {
-                    node {
-                        checkout scm
-                    }
-                    environment {
-                        registry = "kyriconf/sponsorship"
-                        registryCredential = 'conference_dockerhub'
-                    }
-                    agent any
-                    steps {
-                        dir("sponsorship") {
-                            sh script: '''
-                                # Build Sponsorship Microservice Jar
-                                ./gradlew -b ./build.gradle bootJar
-                            '''
-                        }
-                        script {
-                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sponsorship")
-                            dockerImage.push()
-                        }
-                    }
-                }
+//                 stage('API Gateway') {
+//                     environment {
+//                         registry = "kyriconf/api-gateway"
+//                         registryCredential = 'conference_dockerhub'
+//                     }
+//                     agent any
+//                     steps {
+//                         dir("sa-gateway") {
+//                             sh script: '''
+//                                 # Build API Gateway Microservice Jar
+//                                 ./gradlew -b ./build.gradle bootJar
+//                             '''
+//                         }
+//                         script {
+//                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
+//                             dockerImage.push()
+//                         }
+//                     }
+//                 }
+//                 stage('Sponsorship') {
+//                     environment {
+//                         registry = "kyriconf/sponsorship"
+//                         registryCredential = 'conference_dockerhub'
+//                     }
+//                     agent any
+//                     steps {
+//                         dir("sponsorship") {
+//                             sh script: '''
+//                                 # Build Sponsorship Microservice Jar
+//                                 ./gradlew -b ./build.gradle bootJar
+//                             '''
+//                         }
+//                         script {
+//                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sponsorship")
+//                             dockerImage.push()
+//                         }
+//                     }
+//                 }
 
                 stage('Conference') {
-                    node {
-                        checkout scm
-                    }
                     environment {
                         registry = "kyriconf/conference"
                         registryCredential = 'conference_dockerhub'
