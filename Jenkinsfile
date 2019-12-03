@@ -81,7 +81,7 @@ pipeline {
             }
         }
 
-        stage('Publish docker image') {
+        stage('Docker') {
             parallel {
                 stage('api-gateway') {
                     environment {
