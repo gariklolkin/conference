@@ -80,6 +80,40 @@ pipeline {
                 )
             }
         }
+
+        stage('Docker') {
+            environment {
+              registry = "kyriconf/sponsorship"
+              registryCredential = 'conference_dockerhub'
+              dockerImage = ''
+            }
+            agent any
+            stages {
+              stage('Build image') {
+                steps{
+                  dir("sponsorship") {
+                      sh script: '''
+                          # Build Sponsorship Microservice Jar
+                          ./gradlew -b ./build.gradle bootJar
+                      '''
+                  }
+                  script {
+                    dockerImage = docker.build("sponsorship:${env.BUILD_ID}", "./sponsorship")
+                  }
+                }
+              }
+              stage('Deploy image') {
+                steps{
+                  script {
+                    docker.withRegistry( '', registryCredential ) {
+                      dockerImage.push()
+                    }
+                  }
+                }
+              }
+            }
+        }
+
     }
     post {
         always {
