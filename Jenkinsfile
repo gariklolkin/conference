@@ -80,6 +80,74 @@ pipeline {
                 )
             }
         }
+
+        stage('Docker') {
+            parallel {
+                stage('api-gateway') {
+                    environment {
+                        registry = "kyriconf/api-gateway"
+                        registryCredential = 'conference_dockerhub'
+                    }
+                    agent any
+                    steps {
+                        dir("sa-gateway") {
+                            sh script: '''
+                                # Build API Gateway Microservice Jar
+                                ./gradlew -b ./build.gradle bootJar
+                            '''
+                        }
+                        script {
+                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
+                            withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
+                                dockerImage.push()
+                            }
+                        }
+                    }
+                }
+                stage('sponsorship') {
+                    environment {
+                        registry = "kyriconf/sponsorship"
+                        registryCredential = 'conference_dockerhub'
+                    }
+                    agent any
+                    steps {
+                        dir("sponsorship") {
+                            sh script: '''
+                                # Build Sponsorship Microservice Jar
+                                ./gradlew -b ./build.gradle bootJar
+                            '''
+                        }
+                        script {
+                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sponsorship")
+                            withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
+                                dockerImage.push()
+                            }
+                        }
+                    }
+                }
+                stage('conference') {
+                    environment {
+                        registry = "kyriconf/conference"
+                        registryCredential = 'conference_dockerhub'
+                    }
+                    agent any
+                    steps {
+                        dir("conference") {
+                            sh script: '''
+                                # Build Conference Microservice Jar
+                                ./gradlew -b ./build.gradle bootJar
+                            '''
+                        }
+                        script {
+                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./conference")
+                            withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
+                                dockerImage.push()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     post {
         always {
