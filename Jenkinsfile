@@ -87,10 +87,12 @@ pipeline {
                         stage('SonarQube analysis') {
                             steps {
                                 dir("conference") {
-                                    sh script: '''
+                                    withSonarQubeEnv {
+                                        sh script: '''
                                         # Conference Microservice
                                         ./gradlew -b ./build.gradle sonarqube -Dsonar.projectKey=conference -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
-                                    '''
+                                        '''
+                                    }
                                 }
                             }
                         }
