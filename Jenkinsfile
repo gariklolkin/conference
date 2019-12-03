@@ -103,14 +103,46 @@ pipeline {
                         }
                     }
                 }
-//                 stage('Submittal docker') {
-//                     dir("submittal") {
-//                         sh script: '''
-//                             # Build Submittal Microservice
-//                             ./gradlew -b ./build.gradle bootJar
-//                         '''
-//                     }
-//                 }
+                stage('API Gateway docker') {
+                    environment {
+                        registry = "kyriconf/api-gateway"
+                        registryCredential = 'conference_dockerhub'
+                        dockerImage = ''
+                    }
+                    agent any
+                    steps {
+                        dir("sa-gateway") {
+                            sh script: '''
+                                # Build API Gateway Microservice Jar
+                                ./gradlew -b ./build.gradle bootJar
+                            '''
+                        }
+                        script {
+                            dockerImage = docker.build( "kyriconf/api-gateway:${env.GIT_COMMIT}", "./sa-gateway")
+                            dockerImage.push()
+                        }
+                    }
+                }
+                stage('Conference') {
+                    environment {
+                        registry = "kyriconf/conference"
+                        registryCredential = 'conference_dockerhub'
+                        dockerImage = ''
+                    }
+                    agent any
+                    steps {
+                        dir("conference") {
+                            sh script: '''
+                                # Build Conference Microservice Jar
+                                ./gradlew -b ./build.gradle bootJar
+                            '''
+                        }
+                        script {
+                            dockerImage = docker.build( "kyriconf/conference:${env.GIT_COMMIT}", "./conference")
+                            dockerImage.push()
+                        }
+                    }
+                }
             }
         }
     }
