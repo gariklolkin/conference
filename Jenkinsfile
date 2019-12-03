@@ -100,7 +100,7 @@ pipeline {
                                     '''
                                 }
                                 script {
-                                    dockerImage = docker.build( "kyriconf/sponsorship:${env.BUILD_ID}", "./sponsorship")
+                                    dockerImage = docker.build( "kyriconf/sponsorship:${env.GIT_COMMIT}", "./sponsorship")
                                     dockerImage.push()
                                 }
                             }
