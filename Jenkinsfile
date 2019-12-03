@@ -144,7 +144,7 @@ pipeline {
                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./conference")
 //                             dockerImage.push("latest")
                             withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
-                                bat "docker push ${registry}:${env.GIT_COMMIT}"
+                                sh "docker push ${registry}:${env.GIT_COMMIT}"
                             }
                         }
                     }
