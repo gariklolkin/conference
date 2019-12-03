@@ -103,14 +103,14 @@ pipeline {
                         }
                     }
                 }
-                stage('Submittal docker') {
-                    dir("submittal") {
-                        sh script: '''
-                            # Build Submittal Microservice
-                            ./gradlew -b ./build.gradle bootJar
-                        '''
-                    }
-                }
+//                 stage('Submittal docker') {
+//                     dir("submittal") {
+//                         sh script: '''
+//                             # Build Submittal Microservice
+//                             ./gradlew -b ./build.gradle bootJar
+//                         '''
+//                     }
+//                 }
             }
         }
     }
