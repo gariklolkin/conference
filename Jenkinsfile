@@ -84,13 +84,14 @@ pipeline {
         stage('Publish docker') {
             parallel {
                 stage('API Gateway') {
-                    checkout scm
+
                     environment {
                         registry = "kyriconf/api-gateway"
                         registryCredential = 'conference_dockerhub'
                     }
                     agent any
                     steps {
+                        checkout scm
                         dir("sa-gateway") {
                             sh script: '''
                                 # Build API Gateway Microservice Jar
@@ -104,13 +105,14 @@ pipeline {
                     }
                 }
                 stage('Sponsorship') {
-                    checkout scm
+
                     environment {
                         registry = "kyriconf/sponsorship"
                         registryCredential = 'conference_dockerhub'
                     }
                     agent any
                     steps {
+                        checkout scm
                         dir("sponsorship") {
                             sh script: '''
                                 # Build Sponsorship Microservice Jar
@@ -124,13 +126,14 @@ pipeline {
                     }
                 }
                 stage('Conference') {
-                    checkout scm
+
                     environment {
                         registry = "kyriconf/conference"
                         registryCredential = 'conference_dockerhub'
                     }
                     agent any
                     steps {
+                        checkout scm
                         dir("conference") {
                             sh script: '''
                                 # Build Conference Microservice Jar
