@@ -97,7 +97,7 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build( "kyriconf/api-gateway:${env.GIT_COMMIT}", "./sa-gateway")
+                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
                             dockerImage.push()
                         }
                     }
@@ -116,7 +116,7 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build( "kyriconf/sponsorship:${env.GIT_COMMIT}", "./sponsorship")
+                            dockerImage = docker.build("kyriconf/sponsorship:${env.GIT_COMMIT}", "./sponsorship")
                             dockerImage.push()
                         }
                     }
@@ -136,7 +136,7 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build( "kyriconf/conference:${env.GIT_COMMIT}", "./conference")
+                            dockerImage = docker.build "kyriconf/conference:${env.GIT_COMMIT}", "./conference")
                             dockerImage.push()
                         }
                     }
