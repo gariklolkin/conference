@@ -97,8 +97,7 @@ pipeline {
                             '''
                         }
                         script {
-//                             dockerImage = docker.build "${registry}:${env.GIT_COMMIT}", "./sa-gateway"
-                            dockerImage.build registry
+                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
                             dockerImage.push()
                         }
                     }
@@ -137,7 +136,7 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build "kyriconf/conference:${env.GIT_COMMIT}", "./conference")
+                            dockerImage = docker.build("kyriconf/conference:${env.GIT_COMMIT}", "./conference")
                             dockerImage.push()
                         }
                     }
