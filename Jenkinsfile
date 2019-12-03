@@ -89,7 +89,23 @@ pipeline {
             }
             agent any
             stages {
+
+                stage('Decide publish the image') {
+                	agent none
+                	steps {
+                		script {
+                			env.PUBLISH_IMAGE = input message: 'User input required',
+                					submitter: 'authenticated',
+                					parameters: [choice(name: 'Publish the image', choices: 'no\nyes', description: 'Choose "yes" if you want to publish the image')]
+                		}
+                	}
+                }
+
               stage('Publish image') {
+
+                when {
+                	environment name: 'PUBLISH_IMAGE', value: 'yes'
+                }
                 steps{
                   dir("sponsorship") {
                       sh script: '''
