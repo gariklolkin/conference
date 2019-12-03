@@ -99,8 +99,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
                             withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
-                                sh "docker push ${registry}:${env.GIT_COMMIT}"
-                                sh "docker push ${registry}:latest"
+                                dockerImage.push()
+                                dockerImage.push("latest")
                             }
                         }
                     }
@@ -121,8 +121,8 @@ pipeline {
                         script {
                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sponsorship")
                             withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
-                                sh "docker push ${registry}:${env.GIT_COMMIT}"
-                                sh "docker push ${registry}:latest"
+                                dockerImage.push()
+                                dockerImage.push("latest")
                             }
                         }
                     }
