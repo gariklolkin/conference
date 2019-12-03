@@ -89,7 +89,7 @@ pipeline {
             }
             agent any
             stages {
-              stage('Build image') {
+              stage('Build & push image') {
                 steps{
                   dir("sponsorship") {
                       sh script: '''
@@ -99,15 +99,7 @@ pipeline {
                   }
                   script {
                     dockerImage = docker.build("sponsorship:${env.BUILD_ID}", "./sponsorship")
-                  }
-                }
-              }
-              stage('Deploy image') {
-                steps{
-                  script {
-                    docker.withRegistry( '', registryCredential ) {
-                      dockerImage.push()
-                    }
+                    dockerImage.push()
                   }
                 }
               }
