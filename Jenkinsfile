@@ -82,35 +82,33 @@ pipeline {
         }
 
         stage('Publish docker') {
-            steps {
-                parallel {
-                    stage('Sponsorship docker') {
-                        environment {
-                            registry = "kyriconf/sponsorship"
-                            registryCredential = 'conference_dockerhub'
-                            dockerImage = ''
+            parallel {
+                stage('Sponsorship docker') {
+                    environment {
+                        registry = "kyriconf/sponsorship"
+                        registryCredential = 'conference_dockerhub'
+                        dockerImage = ''
+                    }
+                    agent any
+                    steps {
+                        dir("sponsorship") {
+                            sh script: '''
+                                # Build Sponsorship Microservice Jar
+                                ./gradlew -b ./build.gradle bootJar
+                            '''
                         }
-                        agent any
-                        steps {
-                            dir("sponsorship") {
-                                sh script: '''
-                                    # Build Sponsorship Microservice Jar
-                                    ./gradlew -b ./build.gradle bootJar
-                                '''
-                            }
-                            script {
-                                dockerImage = docker.build( "kyriconf/sponsorship:${env.GIT_COMMIT}", "./sponsorship")
-                                dockerImage.push()
-                            }
+                        script {
+                            dockerImage = docker.build( "kyriconf/sponsorship:${env.GIT_COMMIT}", "./sponsorship")
+                            dockerImage.push()
                         }
-                    },
-                    stage('Submittal docker') {
-                        dir("submittal") {
-//                             sh script: '''
-//                                 # Build Submittal Microservice
-//                                 ./gradlew -b ./build.gradle clean build test
-//                             '''
-                        }
+                    }
+                }
+                stage('Submittal docker') {
+                    dir("submittal") {
+                        sh script: '''
+                            # Build Submittal Microservice
+                            ./gradlew -b ./build.gradle bootJar
+                        '''
                     }
                 }
             }
