@@ -81,9 +81,9 @@ pipeline {
             }
         }
 
-        stage('Publish docker') {
+        stage('Publish') {
             parallel {
-                stage('API Gateway') {
+                stage('api-gateway') {
                     environment {
                         registry = "kyriconf/api-gateway"
                         registryCredential = 'conference_dockerhub'
@@ -105,7 +105,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Sponsorship') {
+                stage('sponsorship') {
                     environment {
                         registry = "kyriconf/sponsorship"
                         registryCredential = 'conference_dockerhub'
@@ -127,8 +127,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Conference') {
-
+                stage('conference') {
                     environment {
                         registry = "kyriconf/conference"
                         registryCredential = 'conference_dockerhub'
