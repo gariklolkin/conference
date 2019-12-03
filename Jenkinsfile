@@ -86,14 +86,14 @@ pipeline {
                     stages {
                         stage('SonarQube analysis') {
                             steps {
-                                dir("conference") {
-                                    withSonarQubeEnv {
-                                        sh script: '''
-                                        # Conference Microservice
-                                        ./gradlew -b ./build.gradle sonarqube -Dsonar.projectKey=conference -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
-                                        '''
-                                    }
+//                                dir("conference") {
+                                withSonarQubeEnv {
+                                    sh script: '''
+                                    # Conference Microservice
+                                    ./conference/gradlew -b ./conference/build.gradle sonarqube -Dsonar.projectKey=conference -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
+                                    '''
                                 }
+//                                }
                             }
                         }
 //                        stage('Conference Quality Gate') {
