@@ -84,14 +84,12 @@ pipeline {
         stage('Publish docker') {
             parallel {
                 stage('API Gateway') {
-
                     environment {
                         registry = "kyriconf/api-gateway"
                         registryCredential = 'conference_dockerhub'
                     }
                     agent any
                     steps {
-                        checkout scm
                         dir("sa-gateway") {
                             sh script: '''
                                 # Build API Gateway Microservice Jar
@@ -100,19 +98,19 @@ pipeline {
                         }
                         script {
                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
-                            dockerImage.push("latest")
+                            withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
+                                sh "docker push ${registry}:${env.GIT_COMMIT}"
+                            }
                         }
                     }
                 }
                 stage('Sponsorship') {
-
                     environment {
                         registry = "kyriconf/sponsorship"
                         registryCredential = 'conference_dockerhub'
                     }
                     agent any
                     steps {
-                        checkout scm
                         dir("sponsorship") {
                             sh script: '''
                                 # Build Sponsorship Microservice Jar
@@ -121,7 +119,9 @@ pipeline {
                         }
                         script {
                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sponsorship")
-                            dockerImage.push("latest")
+                            withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
+                                sh "docker push ${registry}:${env.GIT_COMMIT}"
+                            }
                         }
                     }
                 }
@@ -133,7 +133,6 @@ pipeline {
                     }
                     agent any
                     steps {
-                        checkout scm
                         dir("conference") {
                             sh script: '''
                                 # Build Conference Microservice Jar
@@ -142,7 +141,6 @@ pipeline {
                         }
                         script {
                             dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./conference")
-//                             dockerImage.push("latest")
                             withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
                                 sh "docker push ${registry}:${env.GIT_COMMIT}"
                             }
