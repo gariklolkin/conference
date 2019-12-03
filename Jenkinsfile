@@ -83,27 +83,7 @@ pipeline {
 
         stage('Publish docker') {
             parallel {
-                stage('Sponsorship docker') {
-                    environment {
-                        registry = "kyriconf/sponsorship"
-                        registryCredential = 'conference_dockerhub'
-                        dockerImage = ''
-                    }
-                    agent any
-                    steps {
-                        dir("sponsorship") {
-                            sh script: '''
-                                # Build Sponsorship Microservice Jar
-                                ./gradlew -b ./build.gradle bootJar
-                            '''
-                        }
-                        script {
-                            dockerImage = docker.build( "kyriconf/sponsorship:${env.GIT_COMMIT}", "./sponsorship")
-                            dockerImage.push()
-                        }
-                    }
-                }
-                stage('API Gateway docker') {
+                stage('API Gateway') {
                     environment {
                         registry = "kyriconf/api-gateway"
                         registryCredential = 'conference_dockerhub'
@@ -123,6 +103,27 @@ pipeline {
                         }
                     }
                 }
+                stage('Sponsorship') {
+                    environment {
+                        registry = "kyriconf/sponsorship"
+                        registryCredential = 'conference_dockerhub'
+                        dockerImage = ''
+                    }
+                    agent any
+                    steps {
+                        dir("sponsorship") {
+                            sh script: '''
+                                # Build Sponsorship Microservice Jar
+                                ./gradlew -b ./build.gradle bootJar
+                            '''
+                        }
+                        script {
+                            dockerImage = docker.build( "kyriconf/sponsorship:${env.GIT_COMMIT}", "./sponsorship")
+                            dockerImage.push()
+                        }
+                    }
+                }
+
                 stage('Conference') {
                     environment {
                         registry = "kyriconf/conference"
