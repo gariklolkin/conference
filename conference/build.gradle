@@ -4,6 +4,7 @@ plugins {
 	id 'java'
     id 'com.palantir.docker' version '0.22.1'
 	id "org.sonarqube" version "2.7.1"
+	id 'jacoco'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -76,4 +77,9 @@ docker {
 	files bootJar.archivePath
 	buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
 
+}
+
+jacoco {
+	toolVersion = "0.8.5"
+	reportsDir = file("$buildDir/reports/jacoco")
 }

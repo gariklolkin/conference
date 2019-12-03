@@ -94,11 +94,11 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Conference Quality Gate') {
-                            steps {
-                                waitForQualityGate abortPipeline: true
-                            }
-                        }
+//                        stage('Conference Quality Gate') {
+//                            steps {
+//                                waitForQualityGate abortPipeline: true
+//                            }
+//                        }
                     }
                 }
             }
