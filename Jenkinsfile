@@ -84,6 +84,9 @@ pipeline {
         stage('Publish docker') {
             parallel {
                 stage('API Gateway') {
+                    node {
+                        checkout scm
+                    }
                     environment {
                         registry = "kyriconf/api-gateway"
                         registryCredential = 'conference_dockerhub'
@@ -103,6 +106,9 @@ pipeline {
                     }
                 }
                 stage('Sponsorship') {
+                    node {
+                        checkout scm
+                    }
                     environment {
                         registry = "kyriconf/sponsorship"
                         registryCredential = 'conference_dockerhub'
@@ -116,13 +122,16 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build("kyriconf/sponsorship:${env.GIT_COMMIT}", "./sponsorship")
+                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sponsorship")
                             dockerImage.push()
                         }
                     }
                 }
 
                 stage('Conference') {
+                    node {
+                        checkout scm
+                    }
                     environment {
                         registry = "kyriconf/conference"
                         registryCredential = 'conference_dockerhub'
@@ -136,7 +145,7 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build("kyriconf/conference:${env.GIT_COMMIT}", "./conference")
+                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./conference")
                             dockerImage.push()
                         }
                     }
