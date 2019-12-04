@@ -3,12 +3,14 @@ kind: Config
 metadata:
   name: conference
 build:
+  tagPolicy:
+    gitCommit: {}
   artifacts:
-  - image: sanek555/api-gateway
+  - image: kyriconf/api-gateway
     context: sa-gateway
-  - image: sanek555/sponsorship
+  - image: kyriconf/sponsorship
     context: sponsorship
-  - image: conference
+  - image: kyriconf/conference
     context: conference
 deploy:
   kubectl:
