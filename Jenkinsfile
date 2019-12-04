@@ -176,7 +176,9 @@ pipeline {
                     when {
                     	environment name: 'IS_CANDIDATE_APPROVED', value: 'yes'
                     }
-                    //todo: update last stable system version as configuration file in common Git repository
+                    steps {
+                        echo 'todo: update last stable system version as configuration file in common Git repository'
+                    }
                 }
             }
         }
