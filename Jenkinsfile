@@ -85,7 +85,7 @@ pipeline {
             parallel {
                 stage('api-gateway') {
                     environment {
-                        registry = "kyriconf/api-gateway"
+                        registry1 = "kyriconf/api-gateway"
                         registryCredential = 'conference_dockerhub'
                     }
                     agent any
@@ -97,16 +97,17 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sa-gateway")
+                            dockerImage1 = docker.build("${registry1}:${env.GIT_COMMIT}", "./sa-gateway")
                             withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
-                                dockerImage.push()
+                                dockerImage1.push()
+                                dockerImage1.push('latest')
                             }
                         }
                     }
                 }
                 stage('sponsorship') {
                     environment {
-                        registry = "kyriconf/sponsorship"
+                        registry2 = "kyriconf/sponsorship"
                         registryCredential = 'conference_dockerhub'
                     }
                     agent any
@@ -118,16 +119,17 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./sponsorship")
+                            dockerImage2 = docker.build("${registry2}:${env.GIT_COMMIT}", "./sponsorship")
                             withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
-                                dockerImage.push()
+                                dockerImage2.push()
+                                dockerImage2.push('latest')
                             }
                         }
                     }
                 }
                 stage('conference') {
                     environment {
-                        registry = "kyriconf/conference"
+                        registry3 = "kyriconf/conference"
                         registryCredential = 'conference_dockerhub'
                     }
                     agent any
@@ -139,9 +141,10 @@ pipeline {
                             '''
                         }
                         script {
-                            dockerImage = docker.build("${registry}:${env.GIT_COMMIT}", "./conference")
+                            dockerImage3 = docker.build("${registry3}:${env.GIT_COMMIT}", "./conference")
                             withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
-                                dockerImage.push()
+                                dockerImage3.push()
+                                dockerImage3.push('latest')
                             }
                         }
                     }

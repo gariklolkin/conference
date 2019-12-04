@@ -23,7 +23,7 @@ spec:
           value: "123123"
         - name: MYSQL_USER
           value: root
-        image: kyriconf/conference
+        image: kyriconf/conference:latest
         name: conference
         ports:
         - containerPort: 8080

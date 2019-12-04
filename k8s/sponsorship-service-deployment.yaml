@@ -33,7 +33,7 @@ spec:
           value: postgres
         - name: SPONSORSHIP_SERVICE_PORT
           value: "8080"
-        image: kyriconf/sponsorship
+        image: kyriconf/sponsorship:latest
         name: sponsorship-service
         ports:
         - containerPort: 8080
