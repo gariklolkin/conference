@@ -18,3 +18,5 @@ resources:
   - conference-db-service.yaml
   - conference-deployment.yaml
   - conference-service.yaml
+  - zipkin-deployment.yaml
+  - zipkin-service.yaml

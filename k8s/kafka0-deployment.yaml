@@ -16,13 +16,13 @@ spec:
       containers:
       - env:
         - name: KAFKA_ADVERTISED_LISTENERS
-          value: LISTENER_ALICE://localhost:9092,LISTENER_BOB://kafka0:29092
+          value: LISTENER_ALICE://localhost:31003,LISTENER_BOB://kafka0:31005
         - name: KAFKA_CREATE_TOPICS
           value: NotificationTopic:1:1
         - name: KAFKA_INTER_BROKER_LISTENER_NAME
           value: LISTENER_BOB
         - name: KAFKA_LISTENERS
-          value: LISTENER_ALICE://kafka0:9092,LISTENER_BOB://kafka0:29092
+          value: LISTENER_ALICE://:9092,LISTENER_BOB://:31005
         - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
           value: LISTENER_BOB:PLAINTEXT, LISTENER_ALICE:PLAINTEXT
         - name: KAFKA_ZOOKEEPER_CONNECT

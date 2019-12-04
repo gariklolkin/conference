@@ -7,7 +7,13 @@ metadata:
 spec:
   ports:
   - name: "9092"
+    nodePort: 31003
     port: 9092
     targetPort: 9092
+  - name: "31005"
+    nodePort: 31005
+    port: 31005
+    targetPort: 31005
+  type: NodePort
   selector:
     io.kompose.service: kafka0

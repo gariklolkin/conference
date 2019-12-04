@@ -19,6 +19,8 @@ spring:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092,kafka0:31005}
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  zipkin:
+    baseUrl: http://zipkin:9411
 logging:
   level:
     root: warn
