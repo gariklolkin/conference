@@ -151,6 +151,25 @@ pipeline {
                 }
             }
         }
+
+        stage('Sonar') {
+            parallel {
+                stage('sponsorship') {
+                    steps {
+                        withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
+                            sh script: '''
+                            # Sponsorship Microservice
+                            ./sponsorship/gradlew -b ./sponsorship/build.gradle sonarqube -Dsonar.projectKey=sponsorship -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
+                            '''
+                        }
+                        sleep(60)
+                        timeout(time: 5, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: true
+                        }
+                    }
+                }
+            }
+        }
     }
     post {
         always {
