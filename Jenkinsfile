@@ -162,8 +162,36 @@ pipeline {
                             ./sponsorship/gradlew -b ./sponsorship/build.gradle sonarqube -Dsonar.projectKey=sponsorship -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
                             '''
                         }
-                        sleep(60)
-                        timeout(time: 5, unit: 'MINUTES') {
+                        sleep(10)
+                        timeout(time: 3, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: true
+                        }
+                    }
+                }
+                stage('api-gateway') {
+                    steps {
+                        withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
+                            sh script: '''
+                            # API Gateway Microservice
+                            ./sa-gateway/gradlew -b ./sa-gateway/build.gradle sonarqube -Dsonar.projectKey=api-gateway -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
+                            '''
+                        }
+                        sleep(10)
+                        timeout(time: 3, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: true
+                        }
+                    }
+                }
+                stage('conference') {
+                    steps {
+                        withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
+                            sh script: '''
+                            # Conference Microservice
+                            ./conference/gradlew -b ./conference/build.gradle sonarqube -Dsonar.projectKey=sponsorship -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
+                            '''
+                        }
+                        sleep(10)
+                        timeout(time: 3, unit: 'MINUTES') {
                             waitForQualityGate abortPipeline: true
                         }
                     }
