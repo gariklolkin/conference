@@ -92,7 +92,8 @@ pipeline {
                                     ./conference/gradlew -b ./conference/build.gradle sonarqube -Dsonar.projectKey=conference -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
                                     '''
                                 }
-                                timeout(time: 1, unit: 'HOURS') {
+                                sleep(60)
+                                timeout(time: 3, unit: 'MINUTES') {
                                     waitForQualityGate abortPipeline: true
                                 }
                             }
