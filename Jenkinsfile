@@ -178,20 +178,6 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Sonar') {
-                            steps {
-                                withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
-                                    sh script: '''
-                                    # Submittal Microservice
-                                    ./submittal/gradlew -b ./submittal/build.gradle sonarqube -Dsonar.projectKey=submittal -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
-                                    '''
-                                }
-                                sleep(30)
-                                timeout(time: 3, unit: 'MINUTES') {
-                                    waitForQualityGate abortPipeline: true
-                                }
-                            }
-                        }
                     }
                 }
 
@@ -204,20 +190,6 @@ pipeline {
                                         # Build Notification Microservice
                                         ./gradlew -b ./build.gradle clean build test
                                     '''
-                                }
-                            }
-                        }
-                        stage('Sonar') {
-                            steps {
-                                withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
-                                    sh script: '''
-                                    # Notification Microservice
-                                    ./notification/gradlew -b ./notification/build.gradle sonarqube -Dsonar.projectKey=notification -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
-                                    '''
-                                }
-                                sleep(30)
-                                timeout(time: 3, unit: 'MINUTES') {
-                                    waitForQualityGate abortPipeline: true
                                 }
                             }
                         }
@@ -236,20 +208,6 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Sonar') {
-                            steps {
-                                withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
-                                    sh script: '''
-                                    # Payment Microservice
-                                    ./payment/gradlew -b ./payment/build.gradle sonarqube -Dsonar.projectKey=payment -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
-                                    '''
-                                }
-                                sleep(30)
-                                timeout(time: 3, unit: 'MINUTES') {
-                                    waitForQualityGate abortPipeline: true
-                                }
-                            }
-                        }
                     }
                 }
 
@@ -265,20 +223,6 @@ pipeline {
                                 }
                             }
                         }
-                        stage('Sonar') {
-                            steps {
-                                withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
-                                    sh script: '''
-                                    # Registration Microservice
-                                    ./registration/gradlew -b ./registration/build.gradle sonarqube -Dsonar.projectKey=registration -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
-                                    '''
-                                }
-                                sleep(30)
-                                timeout(time: 3, unit: 'MINUTES') {
-                                    waitForQualityGate abortPipeline: true
-                                }
-                            }
-                        }
                     }
                 }
 
@@ -291,20 +235,6 @@ pipeline {
                                         # Build Discount Microservice
                                         ./gradlew -b ./build.gradle clean build test
                                     '''
-                                }
-                            }
-                        }
-                        stage('Sonar') {
-                            steps {
-                                withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
-                                    sh script: '''
-                                    # Discount Microservice
-                                    ./discount/gradlew -b ./discount/build.gradle sonarqube -Dsonar.projectKey=discount -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
-                                    '''
-                                }
-                                sleep(30)
-                                timeout(time: 3, unit: 'MINUTES') {
-                                    waitForQualityGate abortPipeline: true
                                 }
                             }
                         }
