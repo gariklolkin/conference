@@ -51,7 +51,7 @@ public class PlanController
       @ApiResponse(code = 401, message = "Failed to register the plan")
   })
   @PostMapping
-  PlanRegistrationResponse register(@Valid @RequestBody PlanRegistrationRequest request)
+  public PlanRegistrationResponse register(@Valid @RequestBody PlanRegistrationRequest request)
   {
     return new PlanRegistrationResponse(planService.createPlan(request.getCategory(), request.getSponsorEmail()));
   }
@@ -64,7 +64,7 @@ public class PlanController
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  void cancel(@ApiParam(value = "Id of the plan to cancel", required = true) @PathVariable Long id)
+  public void cancel(@ApiParam(value = "Id of the plan to cancel", required = true) @PathVariable Long id)
   {
     planService.deletePlan(id);
   }
@@ -76,7 +76,7 @@ public class PlanController
       @ApiResponse(code = 404, message = "Plan not found")
   })
   @GetMapping("/{id}")
-  PlanDto get(@ApiParam(value = "Id of the plan to get", required = true) @PathVariable Long id)
+  public PlanDto get(@ApiParam(value = "Id of the plan to get", required = true) @PathVariable Long id)
   {
     return planService.readPlan(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plan Not Found"));
