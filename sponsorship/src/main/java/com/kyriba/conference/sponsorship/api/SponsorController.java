@@ -50,7 +50,7 @@ public class SponsorController
       @ApiResponse(code = 401, message = "Failed to register the sponsor")
   })
   @PostMapping
-  SponsorRegistrationResponse register(@Valid @RequestBody SponsorRegistrationRequest request)
+  public SponsorRegistrationResponse register(@Valid @RequestBody SponsorRegistrationRequest request)
   {
     return new SponsorRegistrationResponse(sponsorService.createSponsor(request.getName(), request.getEmail()));
   }
@@ -62,7 +62,7 @@ public class SponsorController
       @ApiResponse(code = 404, message = "Sponsor not found")
   })
   @GetMapping("/{id}")
-  SponsorDto get(@ApiParam(value = "Id of the sponsor to get", required = true) @PathVariable Long id)
+  public SponsorDto get(@ApiParam(value = "Id of the sponsor to get", required = true) @PathVariable Long id)
   {
     return sponsorService.readSponsor(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sponsor Not Found"));
@@ -76,7 +76,7 @@ public class SponsorController
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  void cancel(@ApiParam(value = "Id of the sponsor to delete", required = true) @PathVariable Long id)
+  public void cancel(@ApiParam(value = "Id of the sponsor to delete", required = true) @PathVariable Long id)
   {
     sponsorService.deleteSponsor(id);
   }
