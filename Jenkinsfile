@@ -28,10 +28,16 @@ pipeline {
                         stage('Sonar') {
                             steps {
                                 withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
-                                    sh script: '''
-                                    # Sponsorship Microservice
-                                    ./sponsorship/gradlew -b ./sponsorship/build.gradle sonarqube -Dsonar.projectKey=sponsorship -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
-                                    '''
+                                    sh script: '''# Sponsorship Microservice
+                                    ./sponsorship/gradlew -b ./sponsorship/build.gradle sonarqube \
+                                    -Dsonar.projectKey=sponsorship \
+                                    -Dsonar.organization=kyribamstraining \
+                                    -Dsonar.host.url=https://sonarcloud.io \
+                                    -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9 \
+                                    -Dsonar.pullrequest.provider=GitHub \
+                                    -Dsonar.pullrequest.github.repository=kyribamstraining/conference \
+                                    -Dsonar.pullrequest.key=''' + env.CHANGE_ID + ''' \
+                                    -Dsonar.pullrequest.branch=''' + env.GIT_LOCAL_BRANCH
                                 }
                                 sleep(30)
                                 timeout(time: 3, unit: 'MINUTES') {
