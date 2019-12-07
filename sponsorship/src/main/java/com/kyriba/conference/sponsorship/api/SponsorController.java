@@ -62,7 +62,7 @@ public class SponsorController
       @ApiResponse(code = 404, message = "Sponsor not found")
   })
   @GetMapping("/{id}")
-  public SponsorDto get(@ApiParam(value = "Id of the sponsor to get", required = true) @PathVariable Long id)
+  SponsorDto get(@ApiParam(value = "Id of the sponsor to get", required = true) @PathVariable Long id)
   {
     return sponsorService.readSponsor(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sponsor Not Found"));
