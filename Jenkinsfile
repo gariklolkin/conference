@@ -242,6 +242,32 @@ pipeline {
                 }
             }
         }
+
+        stage('Approve candidate') {
+        	agent none
+        	steps {
+        		script {
+        			env.IS_CANDIDATE_APPROVED = input message: 'User input required',
+        			submitter: 'authenticated',
+        			parameters: [
+        			    choice(
+        			        name: 'Approve candidate',
+        			        choices: 'no\nyes',
+        			        description: 'Choose "yes" if you want to update the last stable system version'
+        			    )
+        			]
+        		}
+        	}
+        }
+
+        stage('Update system version') {
+            when {
+            	environment name: 'IS_CANDIDATE_APPROVED', value: 'yes'
+            }
+            steps {
+                echo 'todo: update last stable system version as configuration file in common Git repository'
+            }
+        }
     }
     post {
         always {
