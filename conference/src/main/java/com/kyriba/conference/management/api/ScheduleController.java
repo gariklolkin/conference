@@ -54,7 +54,7 @@ public class ScheduleController
 
   @ApiOperation(value = "Show conference schedule")
   @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
-  ScheduleResponse showSchedule()
+  public ScheduleResponse showSchedule()
   {
     return new ScheduleResponse(scheduleService.getSchedule());
   }
@@ -62,7 +62,7 @@ public class ScheduleController
 
   @ApiOperation(value = "Add presentation in conference schedule")
   @PostMapping(value = "/presentations", produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  PresentationCreatedResponse addPresentation(
+  public PresentationCreatedResponse addPresentation(
       @Valid @ApiParam(value = "Presentation create object", required = true) @RequestBody PresentationRequest presentationRequest)
   {
     return new PresentationCreatedResponse(scheduleService.addPresentation(presentationRequest));
@@ -71,7 +71,7 @@ public class ScheduleController
 
   @ApiOperation(value = "View presentation information")
   @GetMapping(value = "/presentations/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-  PresentationResponse getPresentation(
+  public PresentationResponse getPresentation(
       @ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
   {
     return scheduleService.getPresentation(id)
@@ -82,7 +82,7 @@ public class ScheduleController
   @ApiOperation(value = "Remove presentation from conference schedule")
   @DeleteMapping(value = "/presentations/{id}")
   @ResponseStatus(value = NO_CONTENT)
-  void removePresentation(@ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
+  public void removePresentation(@ApiParam(value = "Presentation identity", required = true) @PathVariable long id)
   {
     scheduleService.deletePresentation(id);
   }
@@ -90,7 +90,7 @@ public class ScheduleController
 
   @ApiOperation(value = "Change presentations parameters")
   @PutMapping(value = "/presentations/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
-  void updatePresentation(
+  public void updatePresentation(
       @ApiParam(value = "Presentation identity", required = true) @PathVariable long id,
       @Valid @ApiParam(value = "Presentation change object", required = true) @RequestBody PresentationRequest presentationRequest)
   {
