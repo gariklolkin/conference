@@ -102,7 +102,7 @@ pipeline {
                         withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
                             sh script: '''
                             # API Gateway Microservice
-                            ./sa-gateway/gradlew -b ./sa-gateway/build.gradle sonarqube -Dsonar.projectKey=sa-gateway -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
+                            ./sa-gateway/gradlew -b ./sa-gateway/build.gradle sonarqube -Dsonar.projectKey=api-gateway -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
                             '''
                         }
                         sleep(30)
