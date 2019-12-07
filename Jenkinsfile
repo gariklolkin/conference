@@ -165,6 +165,35 @@ pipeline {
                         }
                     }
                 }
+
+                stage('Submittal') {
+                    stages {
+                        stage('Build') {
+                            steps {
+                                dir("submittal") {
+                                    sh script: '''
+                                        # Build Submittal Microservice
+                                        ./gradlew -b ./build.gradle clean build test
+                                    '''
+                                }
+                            }
+                        }
+                        stage('Sonar') {
+                            steps {
+                                withSonarQubeEnv(credentialsId: 'Conference_sonar', installationName: 'SonarQube') {
+                                    sh script: '''
+                                    # Submittal Microservice
+                                    ./sponsorship/gradlew -b ./submittal/build.gradle sonarqube -Dsonar.projectKey=submittal -Dsonar.organization=kyribamstraining -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=bbc606de8949bdabde5cb4f88bf29931c736d2b9
+                                    '''
+                                }
+                                sleep(30)
+                                timeout(time: 3, unit: 'MINUTES') {
+                                    waitForQualityGate abortPipeline: true
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
