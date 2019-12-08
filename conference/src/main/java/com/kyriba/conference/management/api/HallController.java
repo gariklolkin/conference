@@ -48,7 +48,7 @@ public class HallController
 
   @ApiOperation(value = "Get a conference hall if exists")
   @GetMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-  HallResponse findHall(@ApiParam(value = "Hall identity", required = true) @PathVariable long id)
+  public HallResponse findHall(@ApiParam(value = "Hall identity", required = true) @PathVariable long id)
   {
     return hallService.findHall(id);
   }
@@ -56,7 +56,7 @@ public class HallController
 
   @ApiOperation(value = "Show all conference halls", responseContainer = "List")
   @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
-  List<HallResponse> findAllHalls()
+  public List<HallResponse> findAllHalls()
   {
     return hallService.findAllHalls();
   }
@@ -64,7 +64,7 @@ public class HallController
 
   @ApiOperation(value = "Create conference hall")
   @PostMapping(produces = APPLICATION_JSON_UTF8_VALUE, consumes = APPLICATION_JSON_UTF8_VALUE)
-  HallCreatedResponse createHall(
+  public HallCreatedResponse createHall(
       @Valid @ApiParam(value = "Hall creation object", required = true) @RequestBody HallRequest hallRequest)
   {
     return new HallCreatedResponse(hallService.createHall(hallRequest));
@@ -73,7 +73,7 @@ public class HallController
 
   @ApiOperation(value = "Change conference hall parameters")
   @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_UTF8_VALUE)
-  void updateHall(@ApiParam(value = "Hall identity", required = true) @PathVariable long id,
+  public void updateHall(@ApiParam(value = "Hall identity", required = true) @PathVariable long id,
                   @Valid @ApiParam(value = "Hall change object", required = true) @RequestBody HallRequest hallRequest)
   {
     hallService.updateHall(id, hallRequest);
@@ -83,7 +83,7 @@ public class HallController
   @ApiOperation(value = "Remove conference hall")
   @DeleteMapping(value = "/{id}")
   @ResponseStatus(value = NO_CONTENT)
-  void removeHall(@ApiParam(value = "Hall identity", required = true) @PathVariable long id)
+  public void removeHall(@ApiParam(value = "Hall identity", required = true) @PathVariable long id)
   {
     hallService.removeHall(id);
   }
