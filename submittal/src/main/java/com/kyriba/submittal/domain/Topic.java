@@ -6,19 +6,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 
 /**
  * @author M-ABL
  */
+@Entity
 @NoArgsConstructor
 @Getter
 @Setter
 public class Topic
 {
+  @Id
+  @GeneratedValue
   private Long id;
+  @Embedded
   private TopicInfo info;
   private long conferenceId;
+  @Enumerated(EnumType.STRING)
   private TopicStatus status;
+  @ManyToOne(targetEntity = Speaker.class)
+  @JoinColumn(name = "speaker_id")
   private Speaker speaker;
 
 
@@ -36,15 +52,4 @@ public class Topic
     return new TopicDto(id, status, info, conferenceId);
   }
 
-
-  public void approve()
-  {
-    this.status = TopicStatus.APPROVED;
-  }
-
-
-  public void reject()
-  {
-    this.status = TopicStatus.REJECTED;
-  }
 }

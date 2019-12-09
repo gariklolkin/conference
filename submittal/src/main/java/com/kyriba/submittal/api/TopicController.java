@@ -1,15 +1,22 @@
 package com.kyriba.submittal.api;
 
+import com.kyriba.submittal.domain.TopicStatus;
 import com.kyriba.submittal.service.TopicService;
 import com.kyriba.submittal.service.exception.ObjectNotFoundException;
+import com.kyriba.submittal.service.exception.UnsupportedTopicTransitionException;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -34,17 +41,24 @@ public class TopicController
   }
 
 
-  @PostMapping(path = "/{topicId}/approve")
-  void approve(@PathVariable long topicId)
+  @ExceptionHandler(UnsupportedTopicTransitionException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  void handleUnsupportedTopicTransition()
   {
-    topicsService.approve(topicId);
   }
 
 
-  @PostMapping(path = "/{topicId}/reject")
-  void reject(@PathVariable long topicId)
+  @PutMapping(path = "/{topicId}/status")
+  void changeStatus(@PathVariable long topicId, @Valid @RequestBody ChangeStatusRequest statusRequest)
   {
-    topicsService.reject(topicId);
+    topicsService.transit(topicId, statusRequest.status);
   }
 
+
+  @Setter
+  private static class ChangeStatusRequest
+  {
+    @NotNull
+    private TopicStatus status;
+  }
 }

@@ -4,10 +4,22 @@ plugins {
     id 'org.springframework.boot' version '2.1.4.RELEASE'
 }
 apply plugin: 'io.spring.dependency-management'
+
+sourceSets {
+    intTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
 idea {
     module {
         outputDir file('build/classes/main')
         testOutputDir file('build/classes/test')
+
+        testSourceDirs += sourceSets.intTest.java.srcDirs
+        testResourceDirs += sourceSets.intTest.resources.srcDirs
+        scopes.TEST.plus += [ configurations.intTestCompile ]
     }
 }
 
@@ -23,21 +35,53 @@ ext {
     set('springCloudVersion', "Greenwich.SR1")
 }
 
-compileJava.dependsOn(processResources)
+
+configurations {
+    intTestImplementation.extendsFrom implementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator',
             'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client',
-            'org.springframework.boot:spring-boot-starter-data-jpa'
+            'org.springframework.boot:spring-boot-starter-data-jpa',
+            'org.springframework.boot:spring-boot-starter-data-rest',
+            'org.springframework.boot:spring-boot-devtools'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok',
             'org.springframework.boot:spring-boot-configuration-processor'
+    runtimeOnly 'com.h2database:h2'
+
+    intTestImplementation 'org.springframework.boot:spring-boot-starter-test',
+            'org.junit.jupiter:junit-jupiter-api'
+    intTestRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine',
+            'com.h2database:h2'
 }
+
+compileJava.dependsOn(processResources)
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
+
+test {
+    useJUnitPlatform()
+}
+
+task integrationTest(type: Test) {
+	description = 'Runs integration tests.'
+	group = 'verification'
+
+	testClassesDirs = sourceSets.intTest.output.classesDirs
+	classpath = sourceSets.intTest.runtimeClasspath
+	shouldRunAfter test
+}
+
+check.dependsOn integrationTest
+
+
 

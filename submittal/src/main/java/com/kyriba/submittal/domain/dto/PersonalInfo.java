@@ -3,6 +3,7 @@ package com.kyriba.submittal.domain.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.Size;
 /**
  * @author M-ABL
  */
+@Embeddable
 @Getter
 @Setter
 public class PersonalInfo

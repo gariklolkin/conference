@@ -1,17 +1,15 @@
 package com.kyriba.submittal.api;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.kyriba.submittal.domain.dto.JobInfo;
+import com.kyriba.submittal.domain.dto.CreatedSpeakerDto;
+import com.kyriba.submittal.domain.dto.CreatedTopicsDto;
 import com.kyriba.submittal.domain.dto.PersonalInfo;
+import com.kyriba.submittal.domain.dto.SpeakerCreationDto;
+import com.kyriba.submittal.domain.dto.TopicCreationDto;
 import com.kyriba.submittal.domain.dto.TopicDto;
-import com.kyriba.submittal.domain.dto.TopicInfo;
 import com.kyriba.submittal.service.SpeakerService;
 import com.kyriba.submittal.service.exception.DuplicateObjectException;
 import com.kyriba.submittal.service.exception.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.Value;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.List;
 
@@ -64,19 +58,17 @@ public class SpeakerController
 
 
   @PostMapping(path = "/register")
-  SpeakerRegistrationResponse register(@Valid @RequestBody SpeakerRequest speaker)
+  CreatedSpeakerDto register(@Valid @RequestBody SpeakerCreationDto speaker)
   {
-    Pair<Long, List<Long>> speakerAndTopics = speakerService.register(speaker.email, speaker.password,
-        speaker.personalInfo, speaker.jobInfo, speaker.topicContainer.topics, speaker.topicContainer.conferenceId);
-    return new SpeakerRegistrationResponse(speakerAndTopics.getFirst(), speakerAndTopics.getSecond());
+    return speakerService.register(speaker);
   }
 
 
   @PostMapping(path = "/{speakerId}/topics")
-  List<Long> proposeTopics(@PathVariable long speakerId,
-                           @Valid @RequestBody TopicRequest topicRequest)
+  CreatedTopicsDto proposeTopics(@PathVariable long speakerId,
+                                 @Valid @RequestBody TopicCreationDto topicRequest)
   {
-    return speakerService.proposeTopics(speakerId, topicRequest.topics, topicRequest.conferenceId);
+    return speakerService.proposeTopics(speakerId, topicRequest);
   }
 
 
@@ -108,37 +100,4 @@ public class SpeakerController
     speakerService.updatePersonalInfo(speakerId, personalInfo);
   }
 
-
-  @Setter
-  private static class TopicRequest
-  {
-    @Positive
-    private long conferenceId;
-    @NotNull
-    @Size(min = 1)
-    private List<TopicInfo> topics;
-  }
-
-  @Setter
-  private static class SpeakerRequest
-  {
-    @NotBlank
-    private String email;
-    @NotBlank
-    private String password;
-    @NotNull
-    private PersonalInfo personalInfo;
-    @NotNull
-    private JobInfo jobInfo;
-    @NotNull
-    @JsonUnwrapped
-    private TopicRequest topicContainer;
-  }
-
-  @Value
-  private static class SpeakerRegistrationResponse
-  {
-    private long speakerId;
-    private List<Long> topics;
-  }
 }
