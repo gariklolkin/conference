@@ -20,7 +20,7 @@ public interface FeignEmailClient extends EmailClient
     }
     catch (Exception e) {
       //todo it is workaround, what behavior is expected when the other service is not available?
-      e.printStackTrace();
+      e.printStackTrace(); //NOSONAR
     }
   }
 
