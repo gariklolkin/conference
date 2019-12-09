@@ -1,26 +1,36 @@
 package com.kyriba.conference.notification.services;
 
-import com.kyriba.conference.notification.api.dto.MessageStatus;
-import com.kyriba.conference.notification.api.dto.MessageType;
-import com.kyriba.conference.notification.api.dto.NotificationStatus;
+import com.kyriba.conference.notification.domain.dto.MessageStatus;
+import com.kyriba.conference.notification.domain.dto.NotificationStatus;
+import com.kyriba.conference.notification.domain.NotificationInfo;
+import com.kyriba.conference.notification.dao.NotificationInfoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class NotificationStatusService
 {
-  public NotificationStatus getStatus(String id) {
-    return NotificationStatus.builder().messageId(id).messageType(MessageType.EMAIL).messageStatus(MessageStatus.DELIVERED).build();
+  private final NotificationInfoRepository notificationInfoRepository;
+
+  public Optional<NotificationStatus> getStatus(String id) {
+    return notificationInfoRepository.findById(Long.parseLong(id)).map(NotificationInfo::toNotificationStatus);
   }
 
   public List<NotificationStatus> getMessagesByStatus(MessageStatus messageStatus) {
+    return notificationInfoRepository.findByStatus(messageStatus).stream().map(NotificationInfo::toNotificationStatus).collect(Collectors.toList());
+  }
 
-    return Arrays.asList(
-        NotificationStatus.builder().messageId("123").messageType(MessageType.EMAIL).messageStatus(messageStatus).build(),
-        NotificationStatus.builder().messageId("345").messageType(MessageType.SMS).messageStatus(messageStatus).build(),
-        NotificationStatus.builder().messageId("456").messageType(MessageType.TELEGA).messageStatus(messageStatus).build());
+  public Set<NotificationInfo> findUnsentNotifications() {
+    Set<MessageStatus> unsentStatuses = Stream.of(MessageStatus.ACCEPTED, MessageStatus.AWAITING_DELIVERY).collect(Collectors.toSet());
+    return notificationInfoRepository.findByStatusIn(unsentStatuses);
   }
 }

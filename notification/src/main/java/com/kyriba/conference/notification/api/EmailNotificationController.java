@@ -1,8 +1,8 @@
 package com.kyriba.conference.notification.api;
 
-import com.kyriba.conference.notification.api.dto.EmailNotificationMessage;
-import com.kyriba.conference.notification.api.dto.NotificationStatus;
-import com.kyriba.conference.notification.services.EmailNotificationService;
+import com.kyriba.conference.notification.domain.dto.EmailNotificationMessage;
+import com.kyriba.conference.notification.domain.dto.NotificationStatus;
+import com.kyriba.conference.notification.services.EmailNotificationRequestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "Email notification endpoint")
 public class EmailNotificationController
 {
-  private final EmailNotificationService emailNotificationService;
+  private final EmailNotificationRequestService emailNotificationRequestService;
 
   @ApiOperation(value = "Sends email notification message", response = NotificationStatus.class)
   @ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", required = true, dataType = "string",
@@ -38,6 +38,6 @@ public class EmailNotificationController
   })
   @PostMapping(value = "/notify")
   public ResponseEntity<NotificationStatus> sendNotification(@Validated @RequestBody @ApiParam(value = "Email notification message object", required = true) EmailNotificationMessage emailNotificationMessage) {
-    return ResponseEntity.ok(emailNotificationService.sendNotification(emailNotificationMessage));
+    return ResponseEntity.ok(emailNotificationRequestService.sendNotification(emailNotificationMessage));
   }
 }

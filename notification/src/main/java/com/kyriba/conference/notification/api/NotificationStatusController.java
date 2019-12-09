@@ -1,7 +1,7 @@
 package com.kyriba.conference.notification.api;
 
-import com.kyriba.conference.notification.api.dto.MessageStatus;
-import com.kyriba.conference.notification.api.dto.NotificationStatus;
+import com.kyriba.conference.notification.domain.dto.MessageStatus;
+import com.kyriba.conference.notification.domain.dto.NotificationStatus;
 import com.kyriba.conference.notification.services.NotificationStatusService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,7 +42,7 @@ public class NotificationStatusController
   })
   @GetMapping(value = "/{id}/status")
   public ResponseEntity<NotificationStatus> getStatus(@ApiParam(value = "Notification message id to look a status for", required = true) @PathVariable(name = "id") String id) {
-    return ResponseEntity.ok(notificationStatusService.getStatus(id));
+    return ResponseEntity.of(notificationStatusService.getStatus(id));
   }
 
   @ApiOperation(value = "Retrieves all messages for a given status", response = NotificationStatus.class,

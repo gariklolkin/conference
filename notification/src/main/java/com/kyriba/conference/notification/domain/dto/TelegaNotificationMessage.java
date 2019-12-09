@@ -1,4 +1,4 @@
-package com.kyriba.conference.notification.api.dto;
+package com.kyriba.conference.notification.domain.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,19 +9,19 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
+import java.util.Set;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ApiModel(description="The body of a SMS message object")
-public class SmsNotificationMessage
+@ApiModel(description="The body of a Telegram messenger message object")
+public class TelegaNotificationMessage
 {
   @ApiModelProperty(required = true, value = "Message recipients list")
   @Size(min = 1)
-  private List<Recipient> recipients;
+  private Set<Recipient> recipients;
 
   @ApiModelProperty(required = true, value = "Message text")
   @NotBlank
