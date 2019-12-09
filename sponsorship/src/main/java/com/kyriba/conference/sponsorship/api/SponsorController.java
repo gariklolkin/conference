@@ -76,7 +76,7 @@ public class SponsorController
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  public void cancel(@ApiParam(value = "Id of the sponsor to delete", required = true) @PathVariable Long id)
+  void cancel(@ApiParam(value = "Id of the sponsor to delete", required = true) @PathVariable Long id)
   {
     sponsorService.deleteSponsor(id);
   }
