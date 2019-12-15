@@ -31,7 +31,7 @@
     </createTable>
 
     <addForeignKeyConstraint baseColumnNames="sponsor_id" baseTableName="plan" constraintName="fk_plan_sponsor"
-                             deferrable="true" initiallyDeferred="true" onDelete="CASCADE" onUpdate="RESTRICT"
+                             deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT"
                              referencedColumnNames="id" referencedTableName="sponsor"/>
   </changeSet>
 

@@ -3,11 +3,11 @@ package com.kyriba.conference.sponsorship.api;
 import com.kyriba.conference.sponsorship.domain.dto.SponsorDto;
 import com.kyriba.conference.sponsorship.service.SponsorService;
 import com.kyriba.conference.sponsorship.service.exception.ObjectNotFoundException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,16 +38,16 @@ import javax.validation.constraints.NotEmpty;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "${api.version.path}/sponsors", produces = { MediaType.APPLICATION_JSON_VALUE })
-@Api(value = "Register a new sponsor")
+@Tag(name = "Register a new sponsor")
 public class SponsorController
 {
   private final SponsorService sponsorService;
 
 
-  @ApiOperation(value = "Register the sponsor")
+  @Operation(summary = "Register the sponsor")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 401, message = "Failed to register the sponsor")
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(responseCode = "401", description = "Failed to register the sponsor")
   })
   @PostMapping
   public SponsorRegistrationResponse register(@Valid @RequestBody SponsorRegistrationRequest request)
@@ -56,27 +56,27 @@ public class SponsorController
   }
 
 
-  @ApiOperation(value = "Get the sponsor")
+  @Operation(summary = "Get the sponsor")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 404, message = "Sponsor not found")
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(responseCode = "404", description = "Sponsor not found")
   })
   @GetMapping("/{id}")
-  public SponsorDto get(@ApiParam(value = "Id of the sponsor to get", required = true) @PathVariable Long id)
+  public SponsorDto get(@Parameter(name = "Id of the sponsor to get", required = true) @PathVariable Long id)
   {
     return sponsorService.readSponsor(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sponsor Not Found"));
   }
 
 
-  @ApiOperation(value = "Delete the sponsor")
+  @Operation(summary = "Delete the sponsor")
   @ApiResponses(value = {
-      @ApiResponse(code = 204, message = "OK"),
-      @ApiResponse(code = 401, message = "Failed to delete the sponsor")
+      @ApiResponse(responseCode = "204", description = "OK"),
+      @ApiResponse(responseCode = "401", description = "Failed to delete the sponsor")
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  public void cancel(@ApiParam(value = "Id of the sponsor to delete", required = true) @PathVariable Long id)
+  public void cancel(@Parameter(name = "Id of the sponsor to delete", required = true) @PathVariable Long id)
   {
     sponsorService.deleteSponsor(id);
   }
