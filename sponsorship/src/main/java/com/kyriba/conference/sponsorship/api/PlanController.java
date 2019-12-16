@@ -2,13 +2,13 @@ package com.kyriba.conference.sponsorship.api;
 
 import com.kyriba.conference.sponsorship.domain.PlanCategory;
 import com.kyriba.conference.sponsorship.domain.dto.PlanDto;
-import com.kyriba.conference.sponsorship.service.exception.ObjectNotFoundException;
 import com.kyriba.conference.sponsorship.service.PlanService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import com.kyriba.conference.sponsorship.service.exception.ObjectNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,16 +39,16 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "${api.version.path}/plans", produces = { MediaType.APPLICATION_JSON_VALUE })
-@Api(value = "Register a new sponsorship plan")
+@Tag(name = "Register a new sponsorship plan")
 public class PlanController
 {
   private final PlanService planService;
 
 
-  @ApiOperation(value = "Register the plan")
+  @Operation(summary = "Register the plan")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 401, message = "Failed to register the plan")
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(responseCode = "401", description = "Failed to register the plan")
   })
   @PostMapping
   public PlanRegistrationResponse register(@Valid @RequestBody PlanRegistrationRequest request)
@@ -57,26 +57,26 @@ public class PlanController
   }
 
 
-  @ApiOperation(value = "Cancel the plan")
+  @Operation(summary = "Cancel the plan")
   @ApiResponses(value = {
-      @ApiResponse(code = 204, message = "OK"),
-      @ApiResponse(code = 401, message = "Failed to cancel the plan")
+      @ApiResponse(responseCode = "204", description = "OK"),
+      @ApiResponse(responseCode = "401", description = "Failed to cancel the plan")
   })
   @DeleteMapping("/{id}")
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  public void cancel(@ApiParam(value = "Id of the plan to cancel", required = true) @PathVariable Long id)
+  public void cancel(@Parameter(name = "Id of the plan to cancel", required = true) @PathVariable Long id)
   {
     planService.deletePlan(id);
   }
 
 
-  @ApiOperation(value = "Get the plan")
+  @Operation(summary = "Get the plan")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 404, message = "Plan not found")
+      @ApiResponse(responseCode = "200", description = "OK"),
+      @ApiResponse(responseCode = "404", description = "Plan not found")
   })
   @GetMapping("/{id}")
-  public PlanDto get(@ApiParam(value = "Id of the plan to get", required = true) @PathVariable Long id)
+  public PlanDto get(@Parameter(name = "Id of the plan to get", required = true) @PathVariable Long id)
   {
     return planService.readPlan(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plan Not Found"));

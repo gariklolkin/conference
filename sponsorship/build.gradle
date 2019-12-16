@@ -44,8 +44,8 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.2.17'
+    compile group: 'org.springdoc', name: 'springdoc-openapi-webmvc-core', version: '1.2.17'
     testCompile 'io.rest-assured:rest-assured:3.3.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
@@ -71,6 +71,7 @@ dependencies {
     }
     testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version:'2.4.6'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.0.RELEASE'
+    runtime group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 
 test {
