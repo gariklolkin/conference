@@ -53,6 +53,8 @@ dependencies {
     }
     testCompile("org.springframework.boot:spring-boot-starter-test")
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.1.6.RELEASE'
+    testCompile group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-stub-runner', version: '2.2.0.RELEASE'
+    testCompile group: 'io.rest-assured', name: 'spring-mock-mvc', version: '4.1.2'
 }
 
 

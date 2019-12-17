@@ -5,6 +5,7 @@ plugins {
     id "org.sonarqube" version "2.7.1"
     id 'jacoco'
     id "org.springframework.cloud.contract" version "2.2.0.RELEASE"
+    id 'maven-publish'
 }
 
 ext {
@@ -68,20 +69,21 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
     compile group: 'org.springframework.kafka', name: 'spring-kafka', version: '2.3.1.RELEASE'
     testCompile group: 'org.springframework.kafka', name: 'spring-kafka-test', version: '2.3.1.RELEASE'
-    testCompile (group: 'io.rest-assured', name: 'rest-assured', version:'3.3.0') {
+    testCompile(group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0') {
         exclude(module: 'groovy')
     }
-    testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version:'2.4.6'
+    testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.6'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.2.0.RELEASE'
     runtime group: 'com.h2database', name: 'h2', version: '1.4.200'
     compile group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: '2.2.0.RELEASE', ext: 'pom'
-    testCompile group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-verifier', version: '2.2.0.RELEASE'
+    testCompile group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-verifier',
+            version: '2.2.0.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-contract-maven-plugin', version: '2.2.0.RELEASE'
 }
 
 contracts {
-    baseClassForTests='com.kyriba.conference.sponsorship.api.ContractBaseTest'
-    testFramework='JUNIT5'
+    baseClassForTests = 'com.kyriba.conference.sponsorship.api.ContractBaseTest'
+    testFramework = 'JUNIT5'
 }
 
 test {
