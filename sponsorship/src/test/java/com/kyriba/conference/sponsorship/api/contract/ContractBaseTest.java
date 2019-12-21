@@ -1,4 +1,4 @@
-package com.kyriba.conference.sponsorship.api;
+package com.kyriba.conference.sponsorship.api.contract;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
  * @author Aliaksandr Samal
  */
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class ContractBaseTest
 {

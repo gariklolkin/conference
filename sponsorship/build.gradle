@@ -83,7 +83,7 @@ dependencies {
 }
 
 contracts {
-    baseClassForTests = 'com.kyriba.conference.sponsorship.api.ContractBaseTest'
+    baseClassForTests = 'com.kyriba.conference.sponsorship.api.contract.ContractBaseTest'
     testFramework = 'JUNIT5'
 }
 

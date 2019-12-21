@@ -19,7 +19,7 @@ Contract.make {
     response {
         status OK()
         body([
-                id: $(regex('\\d+')),
+                id: value(consumer(42), producer(anyPositiveInt())),
         ])
         headers {
             contentType('application/json')

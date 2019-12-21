@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
@@ -28,21 +28,21 @@ class GatewayApplicationTest
   void registerSponsor()
   {
     //
-    String id = RestAssured
+    Number id = RestAssured
         .given()
-          .contentType(MediaType.APPLICATION_JSON_VALUE)
-          .body("{\n" +
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .body("{\n" +
             "  \"name\": \"Aaa Bbb\" ,\n" +
             "  \"email\": \"a@b.org\"\n" +
             "}")
         .when()
-          .post("/api/v1/sponsors")
+        .post("/api/v1/sponsors")
         .then()
-          .statusCode(HttpStatus.SC_OK)
-          .contentType(MediaType.APPLICATION_JSON_VALUE)
-          .extract()
-          .jsonPath()
-          .get("id");
-    assertNotNull(id);
+        .statusCode(HttpStatus.SC_OK)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .extract()
+        .jsonPath()
+        .get("id");
+    assertThat(id).isEqualTo(42);
   }
 }
