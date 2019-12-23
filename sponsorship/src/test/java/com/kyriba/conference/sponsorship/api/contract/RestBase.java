@@ -16,7 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class ContractBaseTest
+public class RestBase
 {
   @Autowired
   private WebApplicationContext context;
