@@ -12,16 +12,7 @@ spec:
         io.kompose.service: api-gateway
     spec:
       containers:
-      - env:
-        - name: EUREKA_CLIENT_FETCH_REGISTRY
-          value: "true"
-        - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-          value: "true"
-        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-          value: http://eureka-server:8761/eureka
-        - name: EUREKA_INSTANCE_PREFERIPADDRESS
-          value: "true"
-        image: kyriconf/api-gateway:latest
+      - image: kyriconf/api-gateway:latest
         name: api-gateway
         ports:
         - containerPort: 8082
