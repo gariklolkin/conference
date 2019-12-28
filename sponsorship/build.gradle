@@ -59,7 +59,6 @@ dependencies {
     testCompile 'org.testcontainers:postgresql:1.11.3'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon'
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.17.0'
     compile group: 'com.github.database-rider', name: 'rider-core', version: '1.7.2'
@@ -80,6 +79,8 @@ dependencies {
     testCompile group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-verifier',
             version: '2.2.0.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-contract-maven-plugin', version: '2.2.0.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-kubernetes', version: '1.1.1.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-kubernetes-ribbon', version: '1.1.1.RELEASE'
 }
 
 contracts {

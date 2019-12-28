@@ -13,8 +13,6 @@ spec:
     spec:
       containers:
       - env:
-        - name: EUREKA
-          value: eureka-server
         - name: MYSQL_HOST
           value: conference-db
         - name: MYSQL_PORT

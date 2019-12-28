@@ -25,20 +25,8 @@ services:
   api-gateway:
     container_name: "api-gateway"
     image: kyriconf/api-gateway:latest
-    depends_on:
-      - eureka-server
     ports:
       - 8082:8082
-    environment:
-      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: 'true'
-      EUREKA_CLIENT_FETCH_REGISTRY: 'true'
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-  eureka-server:
-    container_name: "eureka-server"
-    image: taskbeez/eureka-server:master
-    ports:
-      - 8761:8761
   sponsorship-db:
     container_name: "sponsorship-db"
     image: postgres
@@ -57,15 +45,10 @@ services:
       SPONSORSHIP_DB_NAME: postgres
       SPONSORSHIP_DB_PORT: 5432
       SPONSORSHIP_SERVICE_PORT: 8080
-      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: 'true'
-      EUREKA_CLIENT_FETCH_REGISTRY: 'true'
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
     image: kyriconf/sponsorship:latest
     ports:
       - 8080:8080
     depends_on:
-      - eureka-server
       - sponsorship-db
 volumes:
   db-data:

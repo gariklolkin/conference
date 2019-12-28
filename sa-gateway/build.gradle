@@ -45,7 +45,6 @@ jacoco {
 }
 
 dependencies {
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compile "org.springframework.cloud:spring-cloud-starter-gateway"
     compile("org.springframework.cloud:spring-cloud-starter-netflix-hystrix")
     compile("org.springframework.cloud:spring-cloud-starter-contract-stub-runner"){
@@ -55,6 +54,8 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zipkin', version: '2.1.6.RELEASE'
     testCompile group: 'org.springframework.cloud', name: 'spring-cloud-starter-contract-stub-runner', version: '2.2.0.RELEASE'
     testCompile group: 'io.rest-assured', name: 'spring-mock-mvc', version: '4.1.2'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-kubernetes', version: '1.1.1.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-kubernetes-ribbon', version: '1.1.1.RELEASE'
 }
 
 

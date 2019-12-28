@@ -18,10 +18,6 @@ services:
       SPONSORSHIP_DB_NAME: postgres
       SPONSORSHIP_DB_PORT: 5432
       SPONSORSHIP_SERVICE_PORT: 8080
-      EUREKA_INSTANCE_PREFERIPADDRESS: 'true'
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: 'true'
-      EUREKA_CLIENT_FETCH_REGISTRY: 'true'
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
     build: .
     ports:
       - 8080:8080

@@ -15,11 +15,9 @@ build:
 deploy:
   kubectl:
     manifests:
-    - k8s/eureka-server-service.yaml
     - k8s/api-gateway-service.yaml
     - k8s/sponsorship-db-service.yaml
     - k8s/sponsorship-service-service.yaml
-    - k8s/eureka-server-deployment.yaml
     - k8s/api-gateway-deployment.yaml
     - k8s/sponsorship-db-deployment.yaml
     - k8s/sponsorship-service-deployment.yaml

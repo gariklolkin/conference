@@ -5,13 +5,13 @@
 
 Execute from the root folder:
 ```
-./sponsorship/gradlew -p ./sponsorship bootJar
-./sa-gateway/gradlew -p ./sa-gateway bootJar
-./conference/gradlew -p ./conference bootJar
+./sponsorship/gradlew -p ./sponsorship clean bootJar
+./sa-gateway/gradlew -p ./sa-gateway clean bootJar
+./conference/gradlew -p ./conference clean bootJar
 skaffold run --tail
 ```
 
-## Run with kustomize
+## Run with Kustomize
 
 Execute from the root folder:
 
